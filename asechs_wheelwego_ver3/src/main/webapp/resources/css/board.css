@@ -1,0 +1,88 @@
+@CHARSET "utf-8";	
+      body{
+			font-size:14px;	
+			font-family:돋움;		
+			background: url(../img/iu.jpg) no-repeat center center fixed;
+	        -webkit-background-size: cover;
+	        -moz-background-size: cover;
+	        -o-background-size: cover;
+	        background-size: cover;	        		  	
+		}
+	/* 게시판 목록 테이블 설정 */
+	table.list{	    
+		width:50%;
+		text-align: center; /* 가운데로 정렬 */		
+	}
+	.list caption{font-size:15px; padding:5px; margin-bottom: 15px}
+	.list th,td {padding:5px 10px} /* 상하 여백 5 좌우 여백 10 */
+	/* thead의 배경색과 폰트 색상, 오른쪽 경계선의 색상을 지정한다.  */
+	.list thead th {background:#ABC668; color:#fff; text-align:center; border-right:1px solid #fff}	
+	.list tbody tr {background:#f9f9f9}  /*tbody 배경 색  */
+	.list tbody tr:hover {background:#F3F5BB} /* 각 행에 마우스 커서를 올렸을 때 배경 색  */
+	.list tfoot tr {border-top:6px solid #E9F7F6; color:#1BA6B2}
+	.list .no{
+		width: 10%;
+	}
+	.list .title{
+		width: 45%;
+	}
+	.list .name{
+		width: 15%;
+	}
+	.list .date{
+		width: 20%;
+	}
+	.list .hit{
+		width: 20%;
+	}
+    /* 상세 게시물보기  */
+	table.content{	    
+		width:50%;
+		text-align: left; /* 가운데로 정렬 */		
+	}
+	.content caption{font-size:15px; padding:5px; margin-bottom: 15px}
+	.content th,td {padding:5px 10px} /* 상하 여백 5 좌우 여백 10 */
+	/* thead의 배경색과 폰트 색상, 오른쪽 경계선의 색상을 지정한다.  */
+	.content thead th {background:#ABC668; color:#fff; text-align:center; border-right:1px solid #fff}	
+	.content tbody tr {background:#f4ffee}  /*tbody 배경 색  */
+	/* .content tbody tr:hover {background:#F3F5BB} 각 행에 마우스 커서를 올렸을 때 배경 색  */
+	.content tfoot tr {border-top:6px solid #E9F7F6; color:#1BA6B2}
+	
+	/* 글쓰기 입력폼  */
+	table.inputForm{	    
+		width:35%;
+		text-align: center; /* 가운데로 정렬 */		
+	}
+	.inputForm caption{font-size:15px; padding:5px; margin-bottom: 15px}
+	.inputForm th,td {padding:5px 10px} /* 상하 여백 5 좌우 여백 10 */
+	/* thead의 배경색과 폰트 색상, 오른쪽 경계선의 색상을 지정한다.  */
+	.inputForm thead th {background:#ABC668; color:#fff; text-align:center; border-right:1px solid #fff}	
+	.inputForm tbody tr {background:#f9f9f9}  /*tbody 배경 색  */
+	/* .inputForm tbody tr:hover {background:#F3F5BB} */ /* 각 행에 마우스 커서를 올렸을 때 배경 색  */
+	.inputForm tfoot tr {border-top:6px solid #E9F7F6; color:#1BA6B2}
+	
+	.inputForm 
+	
+	
+	p.paging{
+	    width:50%;
+		text-align: center; /* 가운데로 정렬 */	
+		font-weight: bold;		
+	}
+	/* 한번도 클릭하지 않은 링크, none으로 언더라인 생기지 않게 함 */
+	a:link {color:#888; text-decoration:none;}
+	/* 한번 이상 클릭한 링크, none으로 언더라인 생기지 않게 함 */
+	a:visited {color:#888; text-decoration:none;}	
+	/* 마우스 오버시 링크 색상, none으로 언더라인 생기지 않게 함 */
+	a:hover {color:#333; text-decoration:none;}
+	
+	/* 이미지 마우스 오버시 커서 포인터 변경 */
+	.action{
+	  cursor: pointer;
+	}
+	/* 페이징   */
+		p.paging{
+		width:50%;
+		text-align: center;
+	}
+	

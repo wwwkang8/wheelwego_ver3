@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sql Mapper -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="foodtruck"> 	
+<resultMap type="truckVO" id="truckRM">
+      <result property="foodtruckNumber" column="foodtruck_number" />
+      <result property="sellerId" column="seller_id" />
+      <result property="foodtruckName" column="foodtruck_name"/>     
+	  <result property="fileVO.filepath" column="foodtruck_filepath"/>
+	  <result property="registerTimeposted" column="register_timeposted"/>
+	  <result property="wishlistCount" column="wishlist_cnt"/>
+	  <result property="avgGrade" column="avg_grade"/>
+	  <result property="foodList.fileVO.filepath" column="menu_filename"/>
+</resultMap>
+<resultMap type="foodVO" id="foodRM">
+<result property="menuId" column="menu_id" />
+<result property="foodTruckNumber" column="foodtruck_number" />
+<result property="menuName" column="menu_name"/>
+<result property="menuPrice" column="menu_price"/>
+<result property="fileVO.filepath" column="menu_filename"/>
+</resultMap>
+<resultMap type="reviewVO" id="reviewRM">
+	<result property="reviewNo" column="review_no"/>
+	<result property="foodtruckNumber" column="foodtruck_number"/>
+	<result property="customerId" column="customer_id"/>
+	<result property="reviewContent" column="review_content"/>
+	<result property="reviewTimeposted" column="review_timeposted"/>
+</resultMap>
+<select id="findFoodtruckNameByMenuId" resultMap="truckRM">
+select f.foodtruck_name
+from (select * from menu)fn, foodtruck f
+where fn.foodtruck_number = f.foodtruck_number and fn.menu_id=#{value}
+</select>
+<select id="foodtruckList" resultMap="truckRM">
+		select t.*, f.foodtruck_filepath
+		from(select * from foodtruck)t, foodtruckfile f
+		where t.foodtruck_number=f.foodtruck_number
+</select>
+<select id="searchFoodTruckList" resultMap="truckRM">
+select t.*, f.foodtruck_filepath
+from(select * from foodtruck)t, foodtruckfile f
+where t.foodtruck_number=f.foodtruck_number and t.foodtruck_name like '%' || #{value} || '%' and latitude is not null and longitude is not null
+</select>
+<select id="getTruckListTotalContentCountByName" resultType="Integer" parameterType="string">
+	select count(*) from foodtruck where foodtruck_name like '%' || #{value}|| '%' and latitude is not null and longitude is not null
+</select>	
+<select id="getTruckListTotalContentCount" resultType="Integer" parameterType="string">
+	select count(*) from foodtruck where foodtruck_name like '%' || #{value}|| '%' and latitude is not null and longitude is not null
+</select>
+<select id="getTruckListTotalContentCountByGPS" resultType="Integer" parameterType="truckVO">
+	select count(*) from foodtruck where (latitude between #{latitude}-0.009 and #{latitude}+0.009) and (longitude between #{longitude}-0.012 and #{longitude}+0.012)
+</select>
+
+<select id="getFoodTruckListByName" parameterType="pagingBean" resultMap="truckRM" resultType="truckVO">
+	SELECT f.foodtruck_filepath, t.* FROM
+	(SELECT fo.*, row_number() over(order by foodtruck_number desc) as rnum 
+	from foodtruck fo where foodtruck_name like '%' || #{searchWord} || '%' and latitude is not null and longitude is not null)t, foodtruckfile f  
+	where t.foodtruck_number=f.foodtruck_number and rnum between #{startRowNumber} and #{endRowNumber}
+	order by t.foodtruck_number desc
+</select>
+
+<select id="getFoodTruckListByGPS" parameterType="pagingBean" resultMap="truckRM" resultType="truckVO">
+	SELECT f.foodtruck_filepath, t.* FROM
+	(SELECT fo.*, row_number() over(order by foodtruck_number desc) as rnum 
+	from foodtruck fo where (latitude between #{gpsInfo.latitude}-0.009 and #{gpsInfo.latitude}+0.009) and (longitude between #{gpsInfo.longitude}-0.012 and #{gpsInfo.longitude}+0.012))t, foodtruckfile f  
+	where t.foodtruck_number=f.foodtruck_number and rnum between #{startRowNumber} and #{endRowNumber}
+	order by t.foodtruck_number desc
+</select>
+
+<select id="foodtruckDetail" resultMap="truckRM">
+select t.*, f.foodtruck_filepath
+		from(select * from foodtruck)t, foodtruckfile f
+		where t.foodtruck_number=f.foodtruck_number and t.foodtruck_number=#{value}
+</select>
+<select id="foodListDetail" resultMap="foodRM">
+select * from menu where foodtruck_number=#{value}
+</select>
+
+<select id="foodTruckAndMenuDetail" parameterType="String" resultMap="truckRM">
+select t.*, f.foodtruck_filepath, m.menu_filename
+		from(select * from foodtruck)t, foodtruckfile f, menu m
+		where t.foodtruck_number=f.foodtruck_number and t.foodtruck_number=m.foodtruck_number and t.foodtruck_number=#{value}
+</select>
+
+<insert id="registerReview" parameterType="reviewVO">
+<selectKey order="BEFORE" keyProperty="reviewNo" resultType="String">
+	select review_seq.nextval from dual
+</selectKey>
+insert into review(review_no,foodtruck_number,customer_id,review_content,review_timeposted,grade) 
+values(#{reviewNo},#{foodtruckNumber},#{customerId},#{reviewContent},sysdate,#{grade})
+</insert>
+
+<select id="getReviewListByTruckNumber" resultMap="reviewRM" parameterType="pagingBean">
+	select review_no, foodtruck_number,customer_id,
+	review_content,review_timeposted,grade from(
+	select row_number() over(order by review_timeposted desc) as rnum, review_no,
+	foodtruck_number, customer_id, review_content,
+	to_char(review_timeposted,'YYYY.MM.DD') as review_timeposted, grade
+	from review
+	where foodtruck_number=#{searchWord})
+	where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+
+<select id="getReivewTotalCount" resultType="int">
+	select count(*) from review where foodtruck_number=#{value}
+</select>
+<insert id="registerBookMark" parameterType="wishListVO">
+	insert into wishlist(customer_id,foodtruck_number )
+	  values(#{customerId},#{foodtruckNumber})
+</insert>
+<select id="getBookMarkCount" parameterType="wishListVO" resultType="int">
+	select count(*) from wishlist where foodtruck_number = #{foodtruckNumber} and customer_id = #{customerId} 
+</select>
+
+<select id="findTruckNumberInReview" resultType="int">
+	select count(*) from review where foodtruck_number=#{value}
+</select>
+<select id="filteringByDate" resultMap="truckRM" parameterType="pagingBean">
+	select * from(
+	select row_number() over(order by register_timeposted desc) as rnum,
+	t.foodtruck_name, t.foodtruck_number, t.register_timeposted,t.latitude,t.longitude,
+	f.foodtruck_filepath
+	from foodtruck t, foodtruckfile f where
+	f.foodtruck_number(+)=t.foodtruck_number 
+	<if test='searchWord != null'>
+	and t.foodtruck_name like '%' || #{searchWord}  || '%' and t.latitude is not null and t.longitude is not null
+	</if>
+	<if test='gpsInfo !=null'>
+	and (t.latitude between #{gpsInfo.latitude}-0.009 and #{gpsInfo.latitude}+0.009) and (t.longitude between #{gpsInfo.longitude}-0.012 and #{gpsInfo.longitude}+0.012)
+	</if>
+ 	order by register_timeposted desc
+	) where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+
+<select id="filteringByWishlist" resultMap="truckRM"
+	parameterType="pagingBean">
+	select foodtruck_number, foodtruck_name, wishlist_cnt,foodtruck_filepath,latitude,longitude from(
+	select row_number() over(order by wishlist_cnt desc) as
+	rnum,foodtruck_number, foodtruck_name, wishlist_cnt,
+	foodtruck_filepath,latitude,longitude from(
+	select t.foodtruck_number, t.foodtruck_name, count(customer_id) as
+	wishlist_cnt, f.foodtruck_filepath,t.latitude,t.longitude from foodtruck t, wishlist w, 
+	foodtruckfile f
+	where t.foodtruck_number=w.foodtruck_number(+) and
+	t.foodtruck_number=f.foodtruck_number 
+	<if test='searchWord!=null'>
+	and t.foodtruck_name like '%' || #{searchWord}  || '%' and t.latitude is not null and t.longitude is not null
+	</if>
+	<if test='gpsInfo !=null'>
+	and (t.latitude between #{gpsInfo.latitude}-0.009 and #{gpsInfo.latitude}+0.009) and (t.longitude between #{gpsInfo.longitude}-0.012 and #{gpsInfo.longitude}+0.012)
+	</if>
+	group by t.foodtruck_number,t.foodtruck_name,f.foodtruck_filepath,t.latitude,t.longitude order by
+	wishlist_cnt desc
+	)) where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+
+<select id="filteringByAvgGrade" resultMap="truckRM" parameterType="pagingBean">
+	select * from(
+	select row_number() over(order by avg_grade desc) as rnum,foodtruck_number,
+	foodtruck_name, avg_grade, foodtruck_filepath,latitude,longitude from(
+	select t.foodtruck_number, t.foodtruck_name, nvl(trunc(avg(r.grade),1),0) as
+	avg_grade, f.foodtruck_filepath,t.latitude,t.longitude from foodtruck t, review r, foodtruckfile f
+	where t.foodtruck_number=r.foodtruck_number(+) and
+	t.foodtruck_number=f.foodtruck_number 
+	<if test='searchWord != null'>
+		and t.foodtruck_name like '%' || #{searchWord}  || '%' and t.latitude is not null and t.longitude is not null
+	</if>
+	<if test='gpsInfo !=null'>
+	and (t.latitude between #{gpsInfo.latitude}-0.009 and #{gpsInfo.latitude}+0.009) and (t.longitude between #{gpsInfo.longitude}-0.012 and #{gpsInfo.longitude}+0.012)
+	</if>
+	group by t.foodtruck_number,t.foodtruck_name,f.foodtruck_filepath,t.latitude,t.longitude order by avg_grade desc
+	)) where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+<select id="findAvgGradeByTruckNumber" resultType="double" >
+	select nvl(trunc(avg(r.grade),1),0) as grade
+	from(select * from foodtruck)f, review r
+	where f.foodtruck_number=r.foodtruck_number(+) and
+	f.foodtruck_number=#{value} group by f.foodtruck_number
+</select>
+<select id="findWishlistCountByTruckNumber" resultType="int">
+select nvl(count(customer_id),0) as wishlist_cnt from foodtruck f, wishlist w
+where f.foodtruck_number=w.foodtruck_number(+) and f.foodtruck_number=#{value} group by f.foodtruck_number
+</select>
+<insert id="bookingMenu" parameterType="bookingVO" >
+	<selectKey order="BEFORE" keyProperty="bookingNumber" resultType="string">
+		select booking_seq.nextval from dual
+	</selectKey>
+	insert into booking(booking_number,customer_id,booking_date) values(#{bookingNumber},#{customerId},sysdate)
+</insert>
+<insert id="bookingDetailMenu" parameterType="bookingDetailVO" >
+insert into booking_detail(booking_number,menu_id,menu_quantity) values(#{bookingNumber},#{menuId},#{bookingQuantity})
+</insert>
+<select id="getRecentlyBookingNumberBySellerId" resultType="int">
+select nvl(max(b.booking_number),0)
+from booking b, foodtruck f, menu m, booking_detail bd
+where bd.menu_id=m.menu_id and m.foodtruck_number=f.foodtruck_number 
+and f.seller_id=#{value} and b.booking_state='결제완료'
+</select>
+<select id="getPreviousBookingNumberBySellerId" resultType="int">
+select nvl(max(b.booking_number),0)
+from booking b, foodtruck f, menu m, booking_detail bd
+where bd.menu_id=m.menu_id and m.foodtruck_number=f.foodtruck_number 
+and f.seller_id=#{value} <!-- and b.booking_state='조리완료' -->
+</select>
+<select id="getBookingStateBybookingNumber" resultType="string">
+	select booking_state from booking where booking_number=#{value}
+</select>
+<select id="getFoodtruckNumberList" resultType="string" parameterType="truckVO">
+   select foodtruck_number from foodtruck where (latitude between #{latitude}-0.009 and #{latitude}+0.009) and (longitude between #{longitude}-0.012 and #{longitude}+0.012)
+</select>
+<select id="getPreviousBookingNumberByCustomerId" resultType="string">
+select nvl(max(b.booking_number),0)
+from booking b, foodtruck f, menu m, booking_detail bd
+where bd.menu_id=m.menu_id and m.foodtruck_number=f.foodtruck_number 
+and b.customer_id=#{value} and b.booking_state='결제완료'
+</select>
+</mapper>
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

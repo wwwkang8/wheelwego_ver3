@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sql Mapper -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+<resultMap type="reviewVO" id="reviewRM">
+   <result property="reviewNo" column="review_no"/>
+   <result property="foodtruckNumber" column="foodtruck_number"/>
+   <result property="foodtruckName" column="foodtruck_name"/>
+   <result property="customerId" column="customer_id"/>
+   <result property="reviewContent" column="review_content"/>
+   <result property="reviewTimeposted" column="review_timeposted"/>
+</resultMap>
+<resultMap type="wishlistVO" id="wishlistRM">
+   <result property="foodtruckNumber" column="foodtruck_number"/>
+   <result property="customerId" column="customer_id"/>   
+</resultMap>
+   <resultMap type="truckVO" id="truckRM">
+      <result property="foodtruckNumber" column="foodtruck_number" />
+      <result property="sellerId" column="seller_id" />
+      <result property="foodtruckName" column="foodtruck_name"/>     
+     <result property="registerTimeposted" column="register_timeposted"/>
+     <result property="wishlistCount" column="wishlist_count"/>
+     <result property="avgGrade" column="avg_grade"/>
+     <result property="foodList.fileVO.filepath" column="menu_filename"/>
+   </resultMap>
+   <resultMap type="truckVO" id="truckpageRM" extends="truckRM">
+      <result column="foodtruck_filepath" property="fileVO.filepath"/>
+   </resultMap>
+   <resultMap type="foodVO" id="foodRM">
+      <result column="menu_id" property="menuId"/>
+      <result column="foodtruck_number" property="foodTruckNumber"/>
+      <result column="menu_name" property="menuName"/>
+      <result column="menu_price" property="menuPrice"/>
+      <result column="menu_filename" property="fileVO.filepath"/>
+   </resultMap>
+   <resultMap type="bookingVO" id="bookingRM" >
+		<result property="bookingNumber" column="booking_number"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="bookingDate" column="booking_date"/>
+		<result property="bookingState" column="booking_state"/>
+		<!-- <collection property="bookingDetail" javaType="java.util.ArrayList" column="booking_number" ofType="bookingDetailVO" select="selectBookingDetail"/>
+ -->	</resultMap>
+   <resultMap type="bookingDetailVO" id="bookingDetailRM" extends="bookingRM">
+   		<result column="booking_number" property="bookingNumber"/>
+   		<result column="menu_id" property="menuId"/>
+   		<result column="menu_name" property="menuName"/>
+   		<result column="menu_price" property="menuPrice"/>
+   		<result column="menu_quantity" property="bookingQuantity"/>
+   </resultMap>
+      <resultMap type="pointVO" id="pointRM" >
+   		<result column="booking_number" property="bookingNumber"/>
+   		<result column="foodtruck_name" property="foodtruckName"/>
+   		<result column="point_type" property="pointType"/>
+   		<result column="point_date" property="pointDate"/>
+   </resultMap>
+   
+      <select id = "getCustomerBookingListCount" resultType="int">
+         select count(*) from booking where customer_id = #{value}
+   </select>
+   <select id="customerBookingList" resultMap="bookingRM" parameterType="pagingBean">
+     select t.* from
+      (SELECT b.*, row_number() over(order by booking_date desc) as rnum
+      from booking b where customer_id = #{customerId})t
+      where rnum between #{startRowNumber} and #{endRowNumber} order by booking_date desc
+</select>
+
+   <select  id = "getBookingList" resultMap="bookingRM">
+   select b.*, bd.menu_id, bd.menu_quantity, m.menu_price
+   from booking b, booking_detail bd, menu m
+   where b.booking_number = bd.booking_number and bd.menu_id = m.menu_id
+   and b.booking_number = #{value}
+</select>
+<select id = "getMyPoint" resultType="int" >
+   select nvl(sum(point), 0) from customerpoint where booking_number in 
+   (select booking_number from booking where customer_id = #{value})
+</select>
+
+   <insert id="addPoint" parameterType="hashmap">
+      insert into customerpoint values (#{bookingNumber}, 'add', #{point}, sysdate)
+   </insert>
+   <insert id="minusPoint" parameterType="hashmap">
+      insert into customerpoint values(#{bookingNumber}, 'minus', #{point}, sysdate)
+   </insert>
+   <select id="heartWishList" resultMap="wishlistRM">
+   select * from wishlist where customer_id=#{value}
+   </select>
+   <insert id="registerFoodtruck" parameterType="truckVO">
+      insert into foodtruck(foodtruck_number,seller_id,foodtruck_name,introduction,register_timeposted)
+       values(#{foodtruckNumber},#{sellerId},#{foodtruckName},#{introduction},sysdate)
+   </insert>
+   <select id="showMyTruckpage" resultMap="truckRM">
+      select t.foodtruck_number, t.seller_id, t.foodtruck_name, t.introduction,f.foodtruck_filepath,f.wishlist_count,f.avg_grade from(
+      select foodtruck_number,seller_id,foodtruck_name,introduction,wishlist_count,avg_grade from foodtruck where seller_id=#{value}
+      )t, foodtruckfile f where t.foodtruck_number=f.foodtruck_number
+   </select>
+   <select id="findFoodtruckByTruckNumber" resultMap="truckRM">
+      select * from foodtruck where foodtruck_number=#{value}
+   </select>
+      <select id="findtruckInfoByTruckNumber" resultMap="truckpageRM">
+      select t.*, f.foodtruck_filepath
+      from(select * from foodtruck where foodtruck_number=#{value})t, foodtruckfile f
+      where t.foodtruck_number=f.foodtruck_number
+   </select>
+   <select id="findtruckNumberBySellerId" resultType="String">
+      select foodtruck_number from foodtruck where seller_id=#{value}
+   </select>
+   <insert id="saveFilePath" parameterType="fileVO">
+      insert into foodtruckfile values (#{no},#{filepath})
+   </insert>
+   <update id="updateMyfoodtruck" parameterType="truckVO">
+      update foodtruck set foodtruck_name=#{foodtruckName}, introduction=#{introduction} where foodtruck_number=#{foodtruckNumber}
+   </update>
+   <update id="updateFilePath" parameterType="fileVO">
+      update foodtruckfile set foodtruck_filepath=#{filepath} where foodtruck_number=#{no}
+   </update>
+   <select id="showMenuList" resultMap="foodRM">
+      select menu_id,foodtruck_number,menu_name,menu_price,menu_filename from menu where foodtruck_number=#{value} order by menu_id asc
+   </select>
+   <insert id="registerMenu" parameterType="foodVO">
+      <selectKey keyProperty="menuId" order="BEFORE" resultType="String">
+         select menu_seq.nextval from dual
+      </selectKey>
+      insert into menu(menu_id,foodtruck_number,menu_name,menu_price,menu_filename) 
+      values (#{menuId},#{foodTruckNumber},#{menuName},#{menuPrice},#{fileVO.filepath})
+   </insert>
+   <delete id="deleteAllMenu">
+      delete from menu where foodtruck_number=#{value}
+   </delete>
+   <delete id="deleteMenu">
+      delete from menu where menu_id=#{value}
+   </delete>
+   <update id="updateMenu" parameterType="foodVO">
+      update menu set menu_name=#{menuName}, menu_price=#{menuPrice}
+       where menu_id=#{menuId}
+   </update>
+   <select id="findMenuByMenuId" resultMap="foodRM">
+      select * from menu where menu_id=#{value}
+   </select>
+   <update id="updateMenuFilepath" parameterType="fileVO">
+      update menu set menu_filename=#{filepath}
+       where menu_id=#{no}
+   </update>
+   <delete id="deleteMyTruck">
+      delete from foodtruck where foodtruck_number=#{value}
+   </delete>
+   <select id="getWishList" parameterType="pagingBean" resultMap="truckpageRM" resultType="truckVO">
+      SELECT f.foodtruck_filepath, t.* FROM
+      (SELECT fo.*, row_number() over(order by foodtruck_number desc) as rnum 
+      from foodtruck fo where fo.foodtruck_number in (select foodtruck_number from wishlist where customer_id = #{customerId}))t, foodtruckfile f
+      where t.foodtruck_number=f.foodtruck_number and rnum between #{startRowNumber} and #{endRowNumber}
+      order by t.foodtruck_number desc
+   </select>
+
+<delete id="deleteWishList" parameterType="wishListVO">
+   delete from wishlist where customer_id = #{customerId} and foodtruck_number = #{foodtruckNumber}
+</delete>
+<select id="showMyReview" resultMap="reviewRM" parameterType="pagingBean">
+select review_no, foodtruck_number,foodtruck_name, customer_id, review_content, review_timeposted, grade from(
+select row_number() over(order by r.review_timeposted desc) as rnum,r.review_no,t.foodtruck_number,r.customer_id,r.review_content, to_char(r.review_timeposted,'YYYY.MM.DD HH24:MI:SS') as review_timeposted, r.grade, t.foodtruck_name
+from review r, foodtruck t where r.customer_id=#{searchWord}  and r.foodtruck_number=t.foodtruck_number ) where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+<update id="updateMyReview" parameterType="reviewVO"> 
+   update review set review_content=#{reviewContent}, grade=#{grade} where review_no=#{reviewNo}
+</update>
+<delete id="deleteMyReview" >
+   delete from review where review_no=#{value}
+</delete>
+<select id="findReviewInfoByReviewNo" resultMap="reviewRM">
+   select r.review_no,r.foodtruck_number,r.customer_id,r.review_content, to_char(r.review_timeposted,'YYYY.MM.DD HH24:MI:SS') as review_timeposted, r.grade, t.foodtruck_name
+   from review r, foodtruck t where r.review_no=#{value} and r.foodtruck_number=t.foodtruck_number
+</select>
+<select id = "getGPSInfo" resultType="truckVO">
+   select latitude, longitude from foodtruck where seller_id = #{value}
+</select>
+<update id = "stayFoodtruck" parameterType="truckVO">
+   update foodtruck set latitude=#{latitude}, longitude = #{longitude} where seller_id=#{sellerId}
+</update>
+<update id = "leaveFoodtruck" parameterType="truckVO">
+   update foodtruck set latitude=null, longitude = null where seller_id=#{sellerId}
+</update>
+<select id = "getWishListTotalContentCount" resultType="int">
+   select count(*) from wishlist where customer_id = #{value}
+</select>
+<select id="getTotalReviewCount" resultType="int">
+   select count(*) from review where customer_id=#{value}
+</select>
+<select id="getWishListFlag" resultType="int" parameterType="wishlistVO">
+select count(*) from wishlist where customer_id=#{customerId} and foodtruck_number=#{foodtruckNumber}
+</select>
+
+<update id="updateBookingState" parameterType="bookingVO">
+	update booking set booking_state=#{bookingState} where booking_number=#{bookingNumber}
+</update>
+
+   <select id="selectBookingDetail" resultMap="bookingRM">
+   		select bd.booking_number as bookingNumber, bd.menu_id as menuId, bd.menu_quantity as bookingQuantity, m.menu_price as menuPrice
+   		from booking_detail bd, menu m where bd.booking_number=#{value} and bd.menu_id=m.menu_id
+   </select>
+<!-- 강정호 임시 작성 -->
+	<select id="getBookingVOCount" parameterType="String" resultMap="bookingRM">
+		select distinct b.booking_number, b.customer_id, to_char(booking_date,'YYYY.MM.DD HH.MM.SS') as booking_date, b.booking_state  
+	   	from booking b, foodtruck f, menu m, booking_detail bd 
+	   	where f.foodtruck_number=m.foodtruck_number and f.foodtruck_number=#{value}
+	   	 and bd.menu_id=m.menu_id and b.booking_number=bd.booking_number
+	</select>
+	
+	<select id="getBookingVO" parameterType="pagingBean" resultMap="bookingRM">
+		select distinct b.booking_number, b.customer_id, b.booking_date, b.booking_state 
+	   	from(SELECT row_number() over(order by booking_number desc) as rnum, booking_number, customer_id, 
+	   	to_char(booking_date,'YYYY.MM.DD HH.MM.SS') as booking_date, booking_state from booking)b, foodtruck f, menu m, booking_detail bd 
+	   	where f.foodtruck_number=m.foodtruck_number and f.foodtruck_number=#{foodTruckNumber} and rnum between #{startRowNumber} and #{endRowNumber}
+	   	 and bd.menu_id=m.menu_id and b.booking_number=bd.booking_number
+	</select>
+	
+	<select id="getBookingDetailVO" parameterType="bookingVO" resultMap="bookingDetailRM">
+		select bd.booking_number,bd.menu_id, bd.menu_quantity, m.menu_name, m.menu_price 
+	   	from booking b, booking_detail bd, menu m
+	   	where b.booking_number=bd.booking_number and 
+	   	b.booking_number=#{bookingNumber} and m.menu_id=bd.menu_id
+	</select>
+	<select id="getTotalBookingCount" parameterType="String" resultType="Integer">
+		select count(*) from booking b, foodtruck f where f.foodtruck_number=#{value}
+	</select>
+	
+	<select id="getCustomerBookingVO" parameterType="String" resultMap="bookingRM">
+		select distinct b.booking_number, b.customer_id, to_char(booking_date,'YYYY.MM.DD HH.MM.SS') as booking_date, b.booking_state 
+	   	from booking b, booking_detail bd
+	   	where b.booking_number=bd.booking_number
+	   	and b.customer_id=#{value}
+	   	order by b.booking_number desc
+	</select>
+	<select id="getCustomerBookingDetailVO" parameterType="bookingVO" resultMap="bookingDetailRM">
+		select bd.booking_number, bd.menu_id, m.menu_name, m.menu_price, bd.menu_quantity 
+	   	from booking_detail bd, menu m, booking b 
+	   	where bd.menu_id=m.menu_id and b.customer_id=#{customerId} and b.booking_number=bd.booking_number order by bd.booking_number
+	</select>
+
+<!--  내가 슨 게시물 보기 -->
+<select id="getTotalFreeboardCount" resultType="int">
+	select count(*) from freeboard where id=#{value}
+</select>
+<select id="getTotalbusinessCount" resultType="int">
+	select count(*) from information where id=#{value}
+</select>
+<select id="getTotalqnaCount" resultType="int">
+	select count(*) from qna where id=#{value}
+</select>
+<select id="getSellerBookingListByTruckNumber" resultType="bookingVO" parameterType="String" resultMap="bookingRM">
+	select b.booking_number, b.customer_id, b.menu_id, b.booking_quantity, b.booking_state,
+	to_char(booking_date,'YYYY.MM.DD HH.MM.SS') as booking_date
+	from booking b, foodtruck f, menu m 
+	where f.foodtruck_number=m.foodtruck_number and f.foodtruck_number=#{value} 
+	and m.menu_id=b.menu_id order by b.booking_number desc
+</select>
+   <select id = "checkBookingState" parameterType="string" resultType="int">
+      select count(*) from booking where customer_id = #{value} and booking_state = '결제완료'
+   </select>
+<select id="getTotalPointCountById" resultType="int">
+select nvl(count(*),0)
+from booking b, customerpoint c where b.booking_number=c.booking_number and b.customer_id=#{value}
+</select>
+<select id="getPointListById" parameterType="pagingBean" resultMap="pointRM">
+select booking_number,foodtruck_name, point_type,point,point_date from(
+select row_number() over(order by c.point_date desc) as rnum,f.foodtruck_name,c.booking_number, c.point_type,c.point, to_char(c.point_date,'YYYY.MM.DD') as point_date 
+from booking b, customerpoint c,booking_detail bd, foodtruck f, menu m where b.booking_number=c.booking_number and b.customer_id=#{searchWord} and b.booking_number=bd.booking_number and bd.menu_id=m.menu_id and m.foodtruck_number=f.foodtruck_number
+) where rnum between #{startRowNumber} and #{endRowNumber}
+</select>
+</mapper>
+ 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE tiles-definitions PUBLIC 
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ <tiles-definitions>  
+ <definition name="main_home.tiles"  template="/WEB-INF/views/templates/layout_main.jsp">   
+     <put-attribute name="title" value="kosta" />        
+     <put-attribute name="header" value="/WEB-INF/views/templates/header.jsp" />   
+     <put-attribute name="main" value="/WEB-INF/views/home.jsp" />       
+     <put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />  
+  </definition>  
+  
+   <definition name="home.tiles"  template="/WEB-INF/views/templates/layout_page.jsp">   
+     <put-attribute name="title" value="kosta" />        
+     <put-attribute name="header" value="/WEB-INF/views/templates/header.jsp" />   
+     <put-attribute name="main" value="/WEB-INF/views/home.jsp" />       
+     <put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />  
+  </definition>  
+  
+   <definition name="map_home.tiles"  template="/WEB-INF/views/templates/layout_map.jsp">   
+     <put-attribute name="title" value="kosta" />        
+     <put-attribute name="header" value="/WEB-INF/views/templates/header.jsp" />   
+     <put-attribute name="main" value="/WEB-INF/views/home.jsp" />       
+     <put-attribute name="right_map" value="/WEB-INF/views/templates/right_map.jsp" />
+     <put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />  
+  </definition>  
+  
+     <definition name="detail_truck.tiles"  template="/WEB-INF/views/templates/layout_detail_truck.jsp">   
+     <put-attribute name="title" value="kosta" />        
+     <put-attribute name="header" value="/WEB-INF/views/templates/header.jsp" />   
+     <put-attribute name="main" value="/WEB-INF/views/home.jsp" />       
+     <put-attribute name="right_detail_truck" value="/WEB-INF/views/templates/right_detail_truck.jsp" />
+     <put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp" />  
+  </definition>
+  
+<!--   */*  : {1}/{2}
+  		예를 들어 컨트롤러에서 member/register 로 응답하면 
+  					  WEB-INF/views/member/register.jsp가 메인화면으로 
+  					  include 된다  -->
+  
+  <definition name="*/*.tiles" extends="home.tiles">
+  	<put-attribute name="title" value="{2}"></put-attribute>
+  	<put-attribute name="main" value="/WEB-INF/views/{1}/{2}.jsp"/>
+  </definition>
+ 
+  <definition name="foodtruck/foodtruck_location_select_list.tiles" extends="map_home.tiles">
+  	<put-attribute name="main" value="/WEB-INF/views/foodtruck/foodtruck_location_select_list.jsp"/>
+  </definition>
+  
+  <definition name="foodtruck/foodtruck_detail.tiles" extends="detail_truck.tiles">
+  	<put-attribute name="main" value="/WEB-INF/views/foodtruck/foodtruck_detail.jsp"/>
+  </definition>
+ </tiles-definitions>   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

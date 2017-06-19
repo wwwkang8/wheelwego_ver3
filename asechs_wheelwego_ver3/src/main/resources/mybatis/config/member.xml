@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sql Mapper -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<sql id="selectMember">
+		select id,password,member_name,address,phonenumber,member_type from member
+	</sql>
+	<resultMap type="memberVO" id="memberRM">
+		<result property="memberName" column="member_name" />
+		<result property="phoneNumber" column="phonenumber" />
+		<result property="memberType" column="member_type" />
+	</resultMap>
+	<select id="login" resultMap="memberRM" parameterType="memberVO">
+		select id,password,member_name,address,addressdetail,phonenumber,member_type,postcode from member where id=#{id}
+	</select>
+	<select id="forgetMemberId" resultType="String">
+		select id from member where member_name=#{memberName} and
+		phonenumber=#{phoneNumber}
+	</select>
+   <update id="forgetMemberPassword" parameterType="memberVO">
+   		update member set password=#{password} where id=#{id} and member_name=#{memberName} and phonenumber=#{phoneNumber}
+   </update>
+	<update id="updateMember" parameterType="memberVO">
+		update member set password=#{password}, address=#{address}, addressdetail = #{addressDetail}, phonenumber=#{phoneNumber}, postcode=#{postCode} where id=#{id}
+	</update>
+	<insert id="registerMember" parameterType="memberVO">
+		insert into member(id, password, member_name, postcode, address, addressdetail, phonenumber, member_type) values
+		(#{id},#{password},#{memberName},#{postCode},#{address},#{addressDetail},#{phoneNumber},#{memberType})
+	</insert>
+	<insert id="registerCustomer">
+		insert into customer (customer_id) values (#{value})
+	</insert>
+	<insert id="registerSeller" parameterType="sellerVO">
+		insert into
+		seller(seller_id, businessnumber) values (#{id},
+		#{businessNumber})
+	</insert>
+
+	<select id="idcheck" resultType="int">
+		select count(*) from member where id=#{value}
+	</select>
+	<select id="findMemberById" resultMap="memberRM">
+		<include refid="selectMember"></include>
+		where id=#{value}
+	</select>
+	<delete id="deleteMember">
+		delete member where id=#{value}
+	</delete>
+	<select id="getMemberPassword" resultType="string">
+		select password from member where id=#{value}
+	</select>
+	<select id="getMemberType" resultType="string">
+		select member_type from member where id=#{value}
+	</select>
+	<select id="findBusinessNumberById" resultType="String">
+	select businessnumber from seller where seller_id=#{value}
+</select>
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
