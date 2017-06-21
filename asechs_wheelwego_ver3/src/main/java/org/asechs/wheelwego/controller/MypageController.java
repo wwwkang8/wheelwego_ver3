@@ -39,11 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
   */
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
-	@Resource(name="memberServiceImpl2")
+	@Resource(name="memberServiceImpl")
    private MemberService memberService;
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
    /**
@@ -59,9 +59,16 @@ public class MypageController {
     * ModelAndView("../foodtruck/foodtruck_location_select_list.tiles",
     * "heartWishlist",heartWishList); }
     */
-
+	/**
+	 *  김래현
+	 *  2017.06.21 수정완료
+	 *  마이페이지/단골트럭/단골트럭리스트 불러오기
+	 *  ----------------------- 
+	 *    세션이 없으면 홈으로 보냄
+	 *    위도 경도를 세팅해주어 현재위치를 알수있음
+	 *    
+	 */
    @RequestMapping("afterLogin_mypage/wishlist.do")
-   // 세션이 없으면 홈으로 보냄
    public ModelAndView myWishList(HttpServletRequest request, String id, String pageNo,String latitude, String longitude) {
       HttpSession session = request.getSession(false);
       if (session == null) {
@@ -72,14 +79,19 @@ public class MypageController {
          gpsInfo.setLongitude(Double.parseDouble(longitude));
          ModelAndView modelAndView = new ModelAndView("mypage/mypage_wishlist.tiles");
          ListVO listVO = mypageService.getWishList(pageNo, id);
-         System.out.println(listVO);
          modelAndView.addObject("wishlist", listVO);
          modelAndView.addObject("gpsInfo", gpsInfo);
          // System.out.println(listVO.getTruckList());
          return modelAndView;
       }
    }
-
+   /**
+    * 김래현
+    * 2017.06.21 수정완료
+    * 마이페이지/단골트럭/단골트럭 삭제
+    * -------------------------
+    * 아이디에 저장되어있는 wishlist 중에 클릭한 푸드트럭의 넘버를 기반으로 삭제
+    */
    @RequestMapping(value = "afterLogin_mypage/deleteWishList.do", method = RequestMethod.POST)
    @ResponseBody
    public String deleteWishList(String id, String foodtruckNumber) {

@@ -67,15 +67,23 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/**
+	 * 김래현
+	   2017.06.21 수정완료
+ 	    마이페이지-단골트럭리스트
+	 */
 	@Override
 	public List<TruckVO> myWishList(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return mypageDAO.myWishList(id);
 	}
+	/**
+	 * 김래현
+	 * 2017.06.21 수정완료
+	 * 마이페이지-단골트럭삭제
+	 */
 	@Override
 	public void deleteWishList(WishlistVO wishlistVO) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.deleteWishList(wishlistVO);
 	}
 	@Override
 	public void registerFoodtruck(TruckVO tvo, String uploadPath) {

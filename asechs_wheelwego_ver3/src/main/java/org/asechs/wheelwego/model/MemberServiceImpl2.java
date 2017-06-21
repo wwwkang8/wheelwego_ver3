@@ -68,8 +68,7 @@ public class MemberServiceImpl2 implements MemberService {
 	}
 	@Override
 	public void deleteMember(String id) {
-		// TODO Auto-generated method stub
-		
+		memberDAO.deleteMember(id);
 	}
 	@Override
 	public String getMemberType(String id) {
