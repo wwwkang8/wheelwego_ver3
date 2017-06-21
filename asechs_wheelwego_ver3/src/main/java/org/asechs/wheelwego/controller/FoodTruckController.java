@@ -22,9 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FoodTruckController {
-	@Resource
+	@Resource(name="foodTruckServiceImpl2")
 	private FoodTruckService foodTruckService;
-	@Resource
+	@Resource(name="mypageServiceImpl2")
 	private MypageService mypageService; 
 
 	/* 현지 검색결과 테스트 */

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MemberController {
-	@Resource
+	@Resource(name="memberServiceImpl2")
 	private MemberService memberService;
 
 	// 박다혜 Login

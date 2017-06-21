@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BoardController {
 
-	@Resource
+	@Resource(name="boardServiceImpl2")
 	private BoardService boardService;
 
 	// 강정호 작성. 보드리스트(3개의 아이콘 나오는 것)
