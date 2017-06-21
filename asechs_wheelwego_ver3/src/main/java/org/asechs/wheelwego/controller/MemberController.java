@@ -21,8 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
  * --------------------------------- ~~~~~
  */
 @Controller
+
 public class MemberController {
-	@Resource(name = "memberServiceImpl")
+	@Resource(name="memberServiceImpl")
+
 	private MemberService memberService;
 
 	/**
@@ -151,12 +153,15 @@ public class MemberController {
 		return new ModelAndView("member/register_result.tiles", "memberVO", memberVO);
 	}
 
-	// 김래현 회원탈퇴
+	/**
+	 *  김래현
+	 * 	2016.06.21 수정완료
+	 *  회원삭제
+	 */
 	@RequestMapping("afterLogin_mypage/deleteAccount.do")
 	public String deleteMember(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("memberVO");
-		System.out.println(vo);
 		memberService.deleteMember(vo.getId());
 
 		if (session != null)

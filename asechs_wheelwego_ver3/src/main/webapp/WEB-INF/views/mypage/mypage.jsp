@@ -109,10 +109,10 @@ geoFindMe();
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/registerMyfoodtruck.do";
 	});
 		$("#updateTruckBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_page.do";
+			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_page.do?foodtruckNumber=${sessionScope.foodtruckNumber}";
 	});
 		$("#menuBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_menuList.do";
+			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_menuList.do?foodtruckNumber=${sessionScope.foodtruckNumber}";
 	});
 		$("#myTruckBtn").click(function(){
 			location.href = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${sessionScope.foodtruckNumber}"+"&latitude="+latitude+"&longitude="+longitude+"&address="+address;

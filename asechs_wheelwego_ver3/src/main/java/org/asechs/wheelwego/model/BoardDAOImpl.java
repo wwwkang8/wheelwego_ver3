@@ -114,8 +114,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public CommentVO getFreeboardComment(CommentVO cvo) {
 		return template.selectOne("board.getFreeboardComment",cvo);
 	}
-
-	//게시물 사진 수정시 선삭제
+	/**
+	 * 김호겸
+	 * 2017.6.9 (수정 완료) 
+	 *게시판-게시물 사진 수정시 선삭제
+	 */
 	@Override
 	public void freeboardDeleteFile(String no) {
 		template.delete("board.freeboardDeleteFile", no);

@@ -40,7 +40,7 @@ public interface MypageService {
 	List<FoodVO> showMenuList(String truckNumber); //트럭번호에 해당하는 메뉴 리스트보기
 
 	
-	void registerMenuList(List<FoodVO> foodList, String truckNumber, String uploadPath);  //트럭번호에 해당하는 메뉴리스트 등록하기
+	void registerMenuList(TruckVO truckVO, String uploadPath);  //트럭번호에 해당하는 메뉴리스트 등록하기
 
 	//메뉴아이디에 따른 메뉴수정으로 바꿔야함, 수정해주고 id로 다시 찾아서 보내야함
 	void updateMenu(TruckVO truckVO, String uploadPath);

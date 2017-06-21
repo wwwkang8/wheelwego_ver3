@@ -17,24 +17,19 @@ import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+
 /**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
+ * 본인 이름 수정 날짜 (수정 완료) 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
+ * ------------------------------------------------------ 코드설명
  * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+ * EX) 박다혜 2017.06.21 (수정완료) / (수정중) 마이페이지 - 마이트럭설정
+ * --------------------------------- ~~~~~
+ */
 @Repository
 public class MypageDAOImpl implements MypageDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
+
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
@@ -42,9 +37,10 @@ public class MypageDAOImpl implements MypageDAO {
 	기능설명 : 나의 주문 내역 리스트에 pagingBean 적용
 	*/
 	@Override
-	public List<BookingVO> customerBookingList(PagingBean pagingBean){
-		return sqlSessionTemplate.selectList("mypage.customerBookingList",pagingBean);
+	public List<BookingVO> customerBookingList(PagingBean pagingBean) {
+		return sqlSessionTemplate.selectList("mypage.customerBookingList", pagingBean);
 	}
+	
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
@@ -55,6 +51,7 @@ public class MypageDAOImpl implements MypageDAO {
 	   public List<BookingVO> getBookingList(int bookingNumber) {
 	      return sqlSessionTemplate.selectList("mypage.getBookingList", bookingNumber);
 	   }
+	
 	@Override
 	   public int getMyPoint(String customerId) {
 	      return sqlSessionTemplate.selectOne("mypage.getMyPoint", customerId);
@@ -69,16 +66,12 @@ public class MypageDAOImpl implements MypageDAO {
 	   public void addPoint(HashMap<String, Object> pointInfo) {
 	      sqlSessionTemplate.insert("mypage.addPoint", pointInfo);
 	   }
-	/** 	  
-	정현지
-	2017.06.21 (수정완료)
-	마이페이지 - 나의 위시리스트 목록
-	기능설명 : 사용자의 아이디로 위시리스트 목록을 가져온다
-	*/
+
 	@Override
-	public List<WishlistVO> heartWishList(String id){
+	public List<WishlistVO> heartWishList(String id) {
 		return sqlSessionTemplate.selectList("mypage.heartWishList", id);
 	}
+
 	@Override
 	public List<TruckVO> myWishList(String id) {
 		return sqlSessionTemplate.selectList("mypage.myWishList", id);
@@ -204,88 +197,150 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public List<TruckVO> getWishList(PagingBean pagingBean) {
-		System.out.println("dao: "+sqlSessionTemplate.selectList("mypage.getWishList", pagingBean));
+		System.out.println("dao: " + sqlSessionTemplate.selectList("mypage.getWishList", pagingBean));
 		return sqlSessionTemplate.selectList("mypage.getWishList", pagingBean);
 	}
+
 	@Override
 	public int getTotalReviewCount(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalReviewCount", customerId);
 	}
-	
+
 	@Override
 	public int getWishListFlag(WishlistVO wishlistVO) {
 		return sqlSessionTemplate.selectOne("mypage.getWishListFlag", wishlistVO);
 	}
-	@Override
-	public int getTotalFreeboardCount(String id) {
-		return sqlSessionTemplate.selectOne("mypage.getTotalFreeboardCount", id);
-	}
-	
+
 	@Override
 
 	public void updateBookingState(BookingVO bookingVO) {
-		sqlSessionTemplate.update("mypage.updateBookingState",bookingVO);
-		
+		sqlSessionTemplate.update("mypage.updateBookingState", bookingVO);
+
 	}
-	
+
 	@Override
 	public List<BookingVO> getBookingVO(String foodTruckNumber) {
-		System.out.println("getBookingVO 푸드트럭 넘버"+foodTruckNumber);
+		System.out.println("getBookingVO 푸드트럭 넘버" + foodTruckNumber);
 		return sqlSessionTemplate.selectList("mypage.getBookingVOCount", foodTruckNumber);
 	}
-	
+
 	@Override
 	public List<BookingVO> getBookingVO(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getBookingVO", pagingBean);
 	}
+
 	@Override
 	public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
-		return sqlSessionTemplate.selectList("mypage.getBookingDetailVO",bookingVO);
+		return sqlSessionTemplate.selectList("mypage.getBookingDetailVO", bookingVO);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
+	 */
+	@Override
+	public int getTotalFreeboardCount(String id) {
+		return sqlSessionTemplate.selectOne("mypage.getTotalFreeboardCount", id);
+	}
+	/**
+	 * 김호겸
+	 * 2017.6.12(수정 완료) 
+	 * 마이페이지- 내가 쓴 자유게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	public void freeboardDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.freeboardDelete", contentNo);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 자유게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentByFreeList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentByFreeList", pagingBean);
 	}
-	/*public List<BookingVO> getSellerBookingListByTruckNumber(String foodTruckNumber) {
-		return sqlSessionTemplate.selectList("mypage.getSellerBookingListByTruckNumber",foodTruckNumber);
-	}*/
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
+	 */
 	@Override
 	public int getTotalbusinessCount(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalbusinessCount", id);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.14 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 창업게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentBybusinessList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentBybusinessList", pagingBean);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.13(수정 완료) 
+	 * 마이페이지- 내가 쓴 창업게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public void businessDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.businessDelete", contentNo);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
+	 */
 	@Override
 	public int getTotalqnaCount(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalqnaCount", id);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.14 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentByqnaList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentByqnaList", pagingBean);
 	}
+	/**
+	 * 김호겸
+	 * 2017.6.13(수정 완료) 
+	 * 마이페이지- 내가 쓴 QnA게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public void qnaDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.qnaDelete", contentNo);
 
 	}
+
 	@Override
 	public String getBookingNumberByCustomerId(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getBookingNumberListByCustomerId", id);
 
 	}
-	   @Override
-	   public int checkBookingState(String customerId) {
-	      return sqlSessionTemplate.selectOne("mypage.checkBookingState", customerId);
-	   }
+
+	@Override
+	public int checkBookingState(String customerId) {
+		return sqlSessionTemplate.selectOne("mypage.checkBookingState", customerId);
+	}
+
 	@Override
 	public int getTotalBookingCount(String foodTruckNumber) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalBookingCount", foodTruckNumber);
@@ -294,13 +349,14 @@ public class MypageDAOImpl implements MypageDAO {
 	public int getTotalPointCountById(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalPointCountById", id);
 	}
+
 	@Override
 	public List<PointVO> getPointListById(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getPointListById", pagingBean);
 	}
-	
-	   @Override
-	   public int getCustomerBookingListCount(String customerId) {
-	      return sqlSessionTemplate.selectOne("mypage.getCustomerBookingListCount", customerId);
-	   }
+
+	@Override
+	public int getCustomerBookingListCount(String customerId) {
+		return sqlSessionTemplate.selectOne("mypage.getCustomerBookingListCount", customerId);
+	}
 }

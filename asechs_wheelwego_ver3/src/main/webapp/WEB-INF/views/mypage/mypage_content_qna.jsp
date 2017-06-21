@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <jsp:include page="./mypage_content.jsp" />
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!--  호겸 마이페이지에서 내가 쓴 게시글 보기 :수정완료 -->
 <style>
 .star_point_list {
 	font-size: 10pt;
@@ -100,7 +101,6 @@
        $(".updateBtn").click(function(){
     	   var contentNo=$(this).parent().parent().children(".no").text();
 			   if(confirm("등록된 게시물을 수정하시겠습니까?")){
-				  alert("수정페이지로 넘어간다");
 				  location.href="${pageContext.request.contextPath}/afterLogin_board/qna_update_form.do?no="+contentNo;
 			  }
        });// click

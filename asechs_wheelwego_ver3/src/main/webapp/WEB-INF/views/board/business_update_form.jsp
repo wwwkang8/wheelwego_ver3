@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-   <!-- 호겸 게시판 글 수정하기 -->
+   <!-- 호겸 게시판 글 수정하기 : 수정완료 -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <!-- Bootstrap --> 

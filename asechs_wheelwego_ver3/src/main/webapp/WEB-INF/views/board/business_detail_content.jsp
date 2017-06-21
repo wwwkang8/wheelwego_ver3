@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   <%-- 정호,호겸 창업게시판 상세보기 --%>
+   <!-- 정호,호겸 창업게시판 상세보기 :수정완료--!>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -32,7 +32,6 @@
 		})// 삭제버튼 끝
 		
 		$(":input[name=updateCommentBtn]").click(function(){
-			//alert($(this).parent().parent().find(".comment").text());
 			var commentNo=$(this).parent().parent().find(".commentNo").text();
 			var contentNo=${requestScope.detail_business.no};
 			window.name="parentForm";
