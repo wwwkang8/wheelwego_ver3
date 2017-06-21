@@ -11,7 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+/**
+ * 본인 이름
+ *  수정 날짜 (수정 완료)
+ * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
+ * ------------------------------------------------------
+ * 코드설명
+ * 
+ * EX)
+	박다혜
+	 2017.06.21 (수정완료) / (수정중)
+ 	마이페이지 - 마이트럭설정
+	---------------------------------
+	~~~~~
+  */
 @Controller
 public class MemberController {
 	@Resource(name="memberServiceImpl2")

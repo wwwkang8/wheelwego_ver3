@@ -11,7 +11,20 @@ import org.asechs.wheelwego.model.vo.MemberVO;
 import org.asechs.wheelwego.model.vo.PagingBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-
+/**
+ * 본인 이름
+ *  수정 날짜 (수정 완료)
+ * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
+ * ------------------------------------------------------
+ * 코드설명
+ * 
+ * EX)
+	박다혜
+	 2017.06.21 (수정완료) / (수정중)
+ 	마이페이지 - 마이트럭설정
+	---------------------------------
+	~~~~~
+  */
 @Repository
 public class BoardDAOImpl implements BoardDAO {
 	@Resource
