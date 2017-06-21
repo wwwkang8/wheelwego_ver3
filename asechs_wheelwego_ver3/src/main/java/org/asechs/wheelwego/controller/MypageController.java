@@ -413,6 +413,7 @@ public class MypageController {
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
+	          // myBookingList.get(i).getBookingNumber(); // 예약번호로 푸드트럭 find하기
 	       }
 	    }      
 	    model.addAttribute("myBookingList", myBookingList);
