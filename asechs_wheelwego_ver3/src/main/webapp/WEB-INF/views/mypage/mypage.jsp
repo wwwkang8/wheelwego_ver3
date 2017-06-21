@@ -1,18 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<!-- 박다혜 수정완료
+
+		seller와 customer 공통으로 회원 탈퇴와 회원 정보 수정 버튼을 제공한다.
+		
+		sessionScope의 memberType이 seller인 경우
+		 1. truckNumber가 존재한다면 트럭 설정, 메뉴 설정, my truck page, 위치설정, 온라인 주문현황을 보여준다.
+		 2. 존재하지 않는다면 트럭이 등록되어야 하므로 트럭등록버튼을 보여준다.
+		 
+		 memberType이 customer인 경우
+		 단골트럭, review목록 관리, 게시글 목록 관리, 주문내역 관리, 포인트목록을 보여준다.
+ -->
 
    <div class=" text-center"> <h1 class="page-header">MY Page</h1> </div>
    <div align="center">
   <button type="button" id="deleteAccountBtn" class="btn btn-warning">회원탈퇴</button>&nbsp;&nbsp;
   <button type="button" id="updateBtn" class="btn btn-warning">회원정보수정</button>&nbsp;&nbsp; 
- 
+  ${sessionScope.foodtruckNumber}
 <c:choose>
 	<c:when test="${sessionScope.memberVO.memberType=='seller'}">
 		<c:choose>
-			<c:when test="${sessionScope.foodtruckNumber==null}">
+			<c:when test="${sessionScope.foodtruckNumber==null || sessionScope.foodtruckNumber==''}"> 
 				<button type="button" id="registerTruckBtn" class="btn btn-warning">MY TRUCK 등록</button>&nbsp;&nbsp;
 			</c:when>
 			<c:otherwise>
@@ -25,12 +35,8 @@
 		</c:choose>
 	</c:when>
 	<c:otherwise>
-				<button type="button" id="wishlistBtn"class="btn btn-warning">단골트럭</button>&nbsp;&nbsp;
+			<button type="button" id="wishlistBtn"class="btn btn-warning">단골트럭</button>&nbsp;&nbsp;
 			<button type="button" id="reviewBtn"class="btn btn-warning">MY REVIEW</button>&nbsp;&nbsp;
-			<!-- 강정호가 만든 버튼 잠시 주석처리. 밑에 현지가 만든 버튼 사용할 것임 -->
-			<!-- <button type="button" id="contentBtn"class="btn btn-warning">MY CONTENT</button>&nbsp;&nbsp;
-			<button type="button" id="customerBookingListBtn" class="btn btn-warning">나의 주문 내역</button>  -->
-
 			<button type="button" id="contentBtn"class="btn btn-warning">MY CONTENT</button>&nbsp;&nbsp;
 			<button type="button" id="orderBtn" class="btn btn-warning">MY ORDER</button>&nbsp;&nbsp;
 			<button type="button" id="pointBtn" class="btn btn-warning">MY POINT</button>&nbsp;&nbsp;
@@ -61,8 +67,6 @@ if (!navigator.geolocation){
   function success(position) {
     latitude  = position.coords.latitude;
     longitude = position.coords.longitude;
-    //
-    //location.href = "${pageContext.request.contextPath}/searchFoodTruckByName.do?latitude="+latitude+"&longitude="+longitude+"&name="+searchFoodtruckName;
     
     
    var mapInfo = naver.maps.Service.reverseGeocode({
@@ -124,12 +128,8 @@ geoFindMe();
 	});
 
 		$("#sellerBookingListBtn").click(function(){
-			//location.href="${pageContext.request.contextPath}/afterLogin_mypage/sellerBookingList.do?sellerId=${sessionScope.memberVO.id}";
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/sellerBookingList.do?sellerId=${sessionScope.memberVO.id}";
 		});
-		//강정호가 만든 소비자 주문 확인 내역 보는 버튼 잠시 주석. 밑에 만든 현지것으로 대신함
-		/* $("#customerBookingListBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/customerBookingList.do?customerId=${sessionScope.memberVO.id}"; */
 
 		$("#orderBtn").click(function(){
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/customerBookingList.do?customerId=${sessionScope.memberVO.id}";

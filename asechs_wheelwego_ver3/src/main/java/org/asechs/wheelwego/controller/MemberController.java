@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.asechs.wheelwego.model.MemberService;
 import org.asechs.wheelwego.model.vo.MemberVO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,7 +77,18 @@ public class MemberController {
 		return "redirect:home.do";
 	}
 
-
+	   //강정호 회원 수정폼 이동 메서드
+	   @RequestMapping("afterLogin_mypage/update_form.do")
+	   public String updateForm(HttpServletRequest request, Model model){
+	      HttpSession session=request.getSession();
+	      MemberVO memberVO=(MemberVO) session.getAttribute("memberVO");
+	      if(memberVO.getMemberType().equals("seller")){
+	         String businessNumber=memberService.findBusinessNumberById(memberVO.getId());
+	         model.addAttribute("businessNumber", businessNumber);
+	      }
+	      return "mypage/update_form.tiles";
+	   }
+	   
 	// 강정호 회원 수정 메서드
 	@RequestMapping(value = "afterLogin_mypage/updateMember.do", method = RequestMethod.POST)
 	public String updateMember(MemberVO vo, HttpServletRequest request) {
