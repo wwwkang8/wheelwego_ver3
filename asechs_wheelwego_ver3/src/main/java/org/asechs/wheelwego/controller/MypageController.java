@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl")
+	@Resource(name="mypageServiceImpl2")
    private MypageService mypageService;
 
 	@Resource(name="foodTruckServiceImpl")
@@ -149,9 +149,8 @@ public class MypageController {
    @RequestMapping(method = RequestMethod.POST, value = "afterLogin_mypage/registerMenuList.do")
    public String RegisterMenuList(HttpServletRequest request, TruckVO truckVO) {
       String uploadPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
-      /*mypageService.registerMenuList(truckVO.getFoodList(), truckVO.getFoodtruckNumber(), uploadPath);*/
       mypageService.registerMenuList(truckVO, uploadPath);
-      return "redirect:/afterLogin_mypage/myfoodtruck_menuList.do";
+      return "mypage/myfoodtruck_menuList_result.tiles";
    }
    /**
     * 박다혜
@@ -180,8 +179,9 @@ public class MypageController {
     * @param foodtruckNumber
     * @return
     */
-   @RequestMapping(method = RequestMethod.POST, value ="afterLogin_mypage/deleteMyTruck.do")
+   @RequestMapping("afterLogin_mypage/deleteMyTruck.do")
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
+	   System.out.println("트럭삭제");
       mypageService.deleteMyTruck(foodtruckNumber);
       request.getSession(false).setAttribute("foodtruckNumber", "");
       return "redirect:/afterLogin_mypage/mypage.do";

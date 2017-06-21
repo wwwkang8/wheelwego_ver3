@@ -118,10 +118,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <select id="showMenuList" resultMap="foodRM">
       select menu_id,foodtruck_number,menu_name,menu_price,menu_filename from menu where foodtruck_number=#{value} order by menu_id asc
    </select>
+   <select id="getNextMenuSequence" resultType="string">  
+  		 select menu_seq.nextval from dual
+   </select>
    <insert id="registerMenu" parameterType="foodVO">
-      <selectKey keyProperty="menuId" order="BEFORE" resultType="String">
+<!--       <selectKey keyProperty="menuId" order="BEFORE" resultType="String">
          select menu_seq.nextval from dual
-      </selectKey>
+      </selectKey> -->
       insert into menu(menu_id,foodtruck_number,menu_name,menu_price,menu_filename) 
       values (#{menuId},#{foodTruckNumber},#{menuName},#{menuPrice},#{fileVO.filepath})
    </insert>
@@ -138,10 +141,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <select id="findMenuByMenuId" resultMap="foodRM">
       select * from menu where menu_id=#{value}
    </select>
-   <update id="updateMenuFilepath" parameterType="fileVO">
-      update menu set menu_filename=#{filepath}
-       where menu_id=#{no}
-   </update>
    <delete id="deleteMyTruck">
       delete from foodtruck where foodtruck_number=#{value}
    </delete>

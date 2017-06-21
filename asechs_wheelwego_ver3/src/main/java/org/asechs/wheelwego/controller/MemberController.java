@@ -73,7 +73,18 @@ public class MemberController {
 		return "redirect:home.do";
 	}
 
-	   //강정호 회원 수정폼 이동 메서드
+	   /**
+	    * 강정호
+	    * 2017.06.21(수정완료)
+	    * 멤버-회원 정보 수정 페이지
+	    * ------------------------------
+	    * 기능 설명 : 회원정보 수정 시, 비밀번호 확인 단계가 끝나면 컨트롤러로 넘어온다.
+	    * 그 후 세션 타입, 아이디를 이용해서 사업자 번호를 model 객체에 저장 후
+	    * 회원 정보 수정 폼으로 넘겨 준다.
+	    * @param request
+	    * @param model
+	    * @return
+	    */
 	   @RequestMapping("afterLogin_mypage/update_form.do")
 	   public String updateForm(HttpServletRequest request, Model model){
 	      HttpSession session=request.getSession();
@@ -85,7 +96,18 @@ public class MemberController {
 	      return "mypage/update_form.tiles";
 	   }
 	   
-	// 강정호 회원 수정 메서드
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 멤버-회원 정보 수정
+	 * -------------------------
+	 * 기능 설명 : 회원 정보 수정폼에서 submit을 하면 Controller로 수정된 MemberVO 객체가 넘어온다.
+	 * MemberVO 객체는 Service, DAO를 통해 데이터베이스에 업데이트 된다.
+	 * 업데이트 후 세션에는 변경된 회원 정보를 setAttribute 해준다.
+	 * @param vo
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "afterLogin_mypage/updateMember.do", method = RequestMethod.POST)
 	public String updateMember(MemberVO vo, HttpServletRequest request) {
 		memberService.updateMember(vo);
