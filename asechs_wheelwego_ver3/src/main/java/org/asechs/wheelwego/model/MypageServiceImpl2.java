@@ -1,5 +1,6 @@
 package org.asechs.wheelwego.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -42,33 +43,64 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/**
+	 * 김래현 황윤상
+	   2017.06.21 수정완료
+ 	    마이페이지-포인트적립,사용 계산메서드
+	 */
 	@Override
 	public void calPoint(String usePoint, String totalAmount, int bookingNumber) {
-		// TODO Auto-generated method stub
-		
-	}
+		System.out.println("service : "+usePoint);
+		int _usePoint = 0;
+		if (usePoint!=null &&usePoint!="")
+			{
+			_usePoint = Integer.parseInt(usePoint);
+			minusPoint(_usePoint, bookingNumber);
+			}
+			addPoint(Integer.parseInt(totalAmount), bookingNumber);
+	   }
+	/**
+	 * 김래현 황윤상
+	   2017.06.21 수정완료
+ 	    마이페이지-포인트사용
+	 */
 	@Override
 	public void minusPoint(int usePoint, int bookingNumber) {
-		// TODO Auto-generated method stub
-		
-	}
+		usePoint = -usePoint;
+		HashMap<String, Integer> pointInfo = new HashMap<String, Integer>();
+		pointInfo.put("point", usePoint);
+		pointInfo.put("bookingNumber", bookingNumber);
+		mypageDAO.minusPoint(pointInfo);
+	   }
+	/**
+	 * 김래현 황윤상
+	   2017.06.21 수정완료
+ 	    마이페이지-포인트적립
+	 */
 	@Override
 	public void addPoint(int totalAmount, int bookingNumber) {
-		// TODO Auto-generated method stub
-		
+		HashMap<String, Object> pointInfo = new HashMap<String, Object>();
+		pointInfo.put("point", Math.round(totalAmount * 0.05));
+		pointInfo.put("bookingNumber", bookingNumber);
+		mypageDAO.addPoint(pointInfo);
 	}
+	/**
+	 * 김래현 황윤상
+	   2017.06.21 수정완료
+ 	    마이페이지-보유포인트 조회
+	 */
 	@Override
 	public int getMyPoint(String customerId) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mypageDAO.getMyPoint(customerId);
 	}
+	
 	@Override
 	public List<WishlistVO> heartWishList(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	/**
-	 * 김래현
+	 * 김래현 황윤상
 	   2017.06.21 수정완료
  	    마이페이지-단골트럭리스트
 	 */
@@ -77,7 +109,7 @@ public class MypageServiceImpl2 implements MypageService {
 		return mypageDAO.myWishList(id);
 	}
 	/**
-	 * 김래현
+	 * 김래현 황윤상
 	 * 2017.06.21 수정완료
 	 * 마이페이지-단골트럭삭제
 	 */
