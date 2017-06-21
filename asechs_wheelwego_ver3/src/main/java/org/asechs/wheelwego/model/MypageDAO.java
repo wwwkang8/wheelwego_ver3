@@ -24,7 +24,7 @@ public interface MypageDAO {
 	
 	public void minusPoint(HashMap<String, Integer> pointInfo);
 
-	 public void addPoint(HashMap<String, Object> pointInfo);
+	public void addPoint(HashMap<String, Object> pointInfo);
 	
 	public int getMyPoint(String customerId);
 	

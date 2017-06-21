@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!--  호겸 마이페이지에서 내가 쓴 게시글 보기 :수정완료 -->
 <style>
 .star_point_list {
 	font-size: 10pt;

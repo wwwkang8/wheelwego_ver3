@@ -107,7 +107,11 @@ public class MemberDAOImpl implements MemberDAO {
 	public String getMemberPassword(String id) {
 		return sqlSessionTemplate.selectOne("member.getMemberPassword", id);
 	}
-
+	/** 	  
+	김래현
+	2017.06.21 (수정완료)
+ 	멤버 - 아이디 삭제
+  */
 	@Override
 	public void deleteMember(String id) {
 		sqlSessionTemplate.delete("member.deleteMember", id);
