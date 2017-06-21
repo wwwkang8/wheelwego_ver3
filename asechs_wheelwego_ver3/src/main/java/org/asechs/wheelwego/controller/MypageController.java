@@ -413,7 +413,6 @@ public class MypageController {
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
-	          // myBookingList.get(i).getBookingNumber(); // 예약번호로 푸드트럭 find하기
 	       }
 	    }      
 	    model.addAttribute("myBookingList", myBookingList);
@@ -436,14 +435,20 @@ public class MypageController {
 	   return bookingVO;
    }
    /**
-    * 포인트적립내역보기
+    * 박다혜
+    * 2016.06.21 (수정 완료)
+    * 마이페이지 - 마이 포인트 적립/사용 내역
+    * -----------------------------------------------
+    * 사용자 아이디에 해당하는 포인트 적립/사용내역을 불러와
+    * modelAndView 객체에 실어 보낸다.
+    *  이 때 사용자의 현재 포인트를 함께 보여주기 위해
+    *   사용자 아이디에 해당하는 포인트를 조회하여 함께 보낸다.
     * @param id
     * @param nowPage
     * @return
     */
    @RequestMapping("afterLogin_mypage/showMyPointList.do")
    public ModelAndView showMyPointList(String customerId, String nowPage){
-	   System.out.println(customerId);
 	   ListVO pointList=mypageService.getPointListById(customerId, nowPage);
 	   ModelAndView mv=new ModelAndView("mypage/mypage_point_list.tiles");
 	   mv.addObject("pointList", pointList);

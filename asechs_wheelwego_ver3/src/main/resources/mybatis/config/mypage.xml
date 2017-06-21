@@ -122,9 +122,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   		 select menu_seq.nextval from dual
    </select>
    <insert id="registerMenu" parameterType="foodVO">
-<!--       <selectKey keyProperty="menuId" order="BEFORE" resultType="String">
-         select menu_seq.nextval from dual
-      </selectKey> -->
       insert into menu(menu_id,foodtruck_number,menu_name,menu_price,menu_filename) 
       values (#{menuId},#{foodTruckNumber},#{menuName},#{menuPrice},#{fileVO.filepath})
    </insert>
@@ -136,11 +133,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    </delete>
    <update id="updateMenu" parameterType="foodVO">
       update menu set menu_name=#{menuName}, menu_price=#{menuPrice}
+      <if test="fileVO.filepath!=null">
+      	,menu_filepath=#{fileVO.filepath}
+      </if>
        where menu_id=#{menuId}
    </update>
-   <select id="findMenuByMenuId" resultMap="foodRM">
-      select * from menu where menu_id=#{value}
-   </select>
    <delete id="deleteMyTruck">
       delete from foodtruck where foodtruck_number=#{value}
    </delete>
@@ -155,7 +152,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <delete id="deleteWishList" parameterType="wishListVO">
    delete from wishlist where customer_id = #{customerId} and foodtruck_number = #{foodtruckNumber}
 </delete>
-<select id="showMyReview" resultMap="reviewRM" parameterType="pagingBean">
+<select id="showMyReviewList" resultMap="reviewRM" parameterType="pagingBean">
 select review_no, foodtruck_number,foodtruck_name, customer_id, review_content, review_timeposted, grade from(
 select row_number() over(order by r.review_timeposted desc) as rnum,r.review_no,t.foodtruck_number,r.customer_id,r.review_content, to_char(r.review_timeposted,'YYYY.MM.DD HH24:MI:SS') as review_timeposted, r.grade, t.foodtruck_name
 from review r, foodtruck t where r.customer_id=#{searchWord}  and r.foodtruck_number=t.foodtruck_number ) where rnum between #{startRowNumber} and #{endRowNumber}

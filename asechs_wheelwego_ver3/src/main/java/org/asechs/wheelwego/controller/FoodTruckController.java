@@ -40,44 +40,57 @@ public class FoodTruckController {
 	@Resource(name="mypageServiceImpl")
 	private MypageService mypageService; 
 
-	/** 	  
+/*	*//** 	  
 		정현지
 		2017.06.21 (수정완료)
 	 	푸드트럭 - 푸드트럭명으로 검색하기
 	 	기능설명 : 푸드트럭명 검색(searchFoodtruckName)리스트를 TruckVO 객체로 받아온다
 	 			return 값은 푸드트럭 검색 리스트 페이지로 보낸다
-	  */
+	  *//*
 	@RequestMapping("searchFoodTruckList.do")
 	public ModelAndView searchFoodTruckList(String searchFoodtruckName){
 		List<TruckVO> searchList = foodTruckService.searchFoodTruckList(searchFoodtruckName);
 		return new ModelAndView("foodtruck/foodtruck_location_select_list.tiles", "pagingList", searchList);
-	}
+	}*/
 	
 	
-	/* 검색 결과 푸드트럭 리스트 */
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 중)
+	 * 푸드트럭 - 푸드트럭 명으로 검색하기
+	 * ------------------------------------------------------------------
+	 * filteringOption이 null이라면 최신순 필터링을 적용한다.
+	 * filteringOption과 현재 페이지 번호, 검색 조건에 해당하는 푸드트럭 리스트를 반환받고
+	 * modelAndView 객체에 푸드트럭 리스트를 설정한다.
+	 *  또한 페이징시를 대비해 검색조건과 filteringOption도 함께 설정한다.
+	 * 
+	 * 
+	 * @param name
+	 * @param pageNo
+	 * @param latitude
+	 * @param longitude
+	 * @param request
+	 * @param option
+	 * @return
+	 */
 	@RequestMapping("searchFoodTruckByName.do")
-
-	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
-		if(option==null)
-			option="ByDate";
+	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String filteringOption) {
+		if(filteringOption==null)
+			filteringOption="ByDate";
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
-		ListVO listVO =foodTruckService.filtering(option, name, pageNo, latitude, longitude,null);
+		ListVO listVO =foodTruckService.filtering(filteringOption, name, pageNo, latitude, longitude,null);
 		modelAndView.addObject("pagingList", listVO);
 		modelAndView.addObject("name", name);
+		modelAndView.addObject("filteringOption", filteringOption);		
+		
 		HttpSession session=request.getSession(false);
-		String id=null;
-		List<WishlistVO> heartWishList=null;
 		if(session != null){
 			MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 			if(memberVO != null){
-				id = memberVO.getId();
-				heartWishList = mypageService.heartWishList(id);
-				modelAndView.addObject("heartWishlist",heartWishList);
-				System.out.println(heartWishList);
+				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId()));
 			}
 		}
-		modelAndView.addObject("option", option);		
-		modelAndView.addObject("flag", "false");	
+		modelAndView.addObject("GPSflag", "false");	
 		return modelAndView;
 	}
 	/**
