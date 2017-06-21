@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!-- 정현지 : 주문 내역 폼 수정 완료 -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.2.js"></script>
 <div class="row">
@@ -82,7 +83,7 @@ $(document).ready(function(){
 	        var point=$(this).val();
 	        var totalAmount = ${total} - point;
 	        if(point>parseInt(myPoint)){
-	           alert("보유하신 포인트를 확인해주세요");
+	           alert("보유하신 포인트를 확인해주세요.");
 	           $("#totalAmount").html("최종결제금액 : ${total}");
 	           $(this).val("");
 	        }
@@ -114,14 +115,9 @@ $(document).ready(function(){
 	                   $("#resultTotalAmount").val(totalAmount);
 	                   $('#bookingForm').submit();         
 	                }
-	                   
-/* 		  $("#resultPoint").val(point);
-	 	  $("#resultTotalAmount").val(totalAmount);
-		 $("#bookingForm").submit(); */
-            
-        var IMP = window.IMP; // 생략가능
+	                               
+      var IMP = window.IMP; // 생략가능
       IMP.init('imp65309481'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
-      
       IMP.request_pay({
           pg : 'inicis', // version 1.1.0부터 지원.
           pay_method : 'card',
@@ -144,8 +140,6 @@ $(document).ready(function(){
               
             $("#resultPoint").val(point);
             $("#resultTotalAmount").val(totalAmount);
-            //$('#paymentForm').submit();
-            //alert(msg);
         	 $("#bookingForm").submit();
           } else {
               var msg = '결제에 실패하였습니다.';
