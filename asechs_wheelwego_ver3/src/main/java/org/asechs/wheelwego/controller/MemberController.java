@@ -7,27 +7,22 @@ import javax.servlet.http.HttpSession;
 import org.asechs.wheelwego.model.MemberService;
 import org.asechs.wheelwego.model.vo.MemberVO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 /**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
+ * 본인 이름 수정 날짜 (수정 완료) 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
+ * ------------------------------------------------------ 코드설명
  * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+ * EX) 박다혜 2017.06.21 (수정완료) / (수정중) 마이페이지 - 마이트럭설정
+ * --------------------------------- ~~~~~
+ */
 @Controller
 public class MemberController {
-	@Resource(name="memberServiceImpl2")
+	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 
 	/**
@@ -76,7 +71,18 @@ public class MemberController {
 		return "redirect:home.do";
 	}
 
-
+	   //강정호 회원 수정폼 이동 메서드
+	   @RequestMapping("afterLogin_mypage/update_form.do")
+	   public String updateForm(HttpServletRequest request, Model model){
+	      HttpSession session=request.getSession();
+	      MemberVO memberVO=(MemberVO) session.getAttribute("memberVO");
+	      if(memberVO.getMemberType().equals("seller")){
+	         String businessNumber=memberService.findBusinessNumberById(memberVO.getId());
+	         model.addAttribute("businessNumber", businessNumber);
+	      }
+	      return "mypage/update_form.tiles";
+	   }
+	   
 	// 강정호 회원 수정 메서드
 	@RequestMapping(value = "afterLogin_mypage/updateMember.do", method = RequestMethod.POST)
 	public String updateMember(MemberVO vo, HttpServletRequest request) {
@@ -108,24 +114,37 @@ public class MemberController {
 	     return memberService.forgetMemberPassword(vo);
 	   }
 	   
-	   //황윤상 id체크
-	   @RequestMapping("idcheckAjax.do")
-	   @ResponseBody
-	   public String idcheckAjax(String id) {      
-	      int count=memberService.idcheck(id);
-	      return (count==0) ? "ok":"fail";       
-	   }
 
-
-	// 황윤상 registerMember
+	/**
+	 *	황윤상
+	 *	2017.06.21 (수정 완료)
+	 *	멤버 - id체크 
+	 *  회원가입시 id 중복여부를 체크한다.
+	 */
+	@RequestMapping("idcheckAjax.do")
+	@ResponseBody
+	public String idcheckAjax(String id) {
+		int count = memberService.idcheck(id);
+		return (count == 0) ? "ok" : "fail";
+	}
+	/**
+	 *	황윤상
+	 *	2017.06.21 (수정 완료)
+	 *	멤버 - 회원가입
+	 *	회원가입이 완료되면, 회원가입 결과를 보여주기 위해 redirect 한다.
+	 */	
 	@RequestMapping(value = "registerMember.do", method = RequestMethod.POST)
 	public String register(MemberVO memberVO, String businessNumber) {
-		System.out.println(memberVO);
 		memberService.registerMember(memberVO, businessNumber);
 		return "redirect:registerResultView.do?id=" + memberVO.getId();
 	}
 
-	// 황윤상 registerResult
+	/**
+	 *	황윤상
+	 *	2017.06.21 (수정 완료)
+	 *	멤버 - 회원가입결과
+	 *	회원가입의 결과를 페이지에 띄워준다.
+	 */
 	@RequestMapping("registerResultView.do")
 	public ModelAndView registerResultView(String id) {
 		MemberVO memberVO = memberService.findMemberById(id);
@@ -145,11 +164,16 @@ public class MemberController {
 		return "home.tiles";
 	}
 
-	// 황윤상 비번복호화
+	/**
+	 *	황윤상
+	 *	2017.06.21 (수정 완료)
+	 *	멤버 - 패스워드 복호화
+	 *	회원탈퇴, 회원정보 수정 시 패스워드를 확인하기 위한 과정이다. 확인 과정에서 페이지의 이동이 없도록 하기 위해 Ajax를 사용한다. 
+	 */
 	@RequestMapping("getMemberPasswordAjax.do")
 	@ResponseBody
 	public String getMemberPasswordAjax(String id, String password) {
-		String result = memberService.getMemberPassword(id, password);		
+		String result = memberService.getMemberPassword(id, password);
 		return result;
 	}
 }
