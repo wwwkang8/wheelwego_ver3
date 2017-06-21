@@ -39,11 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
   */
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
-	@Resource(name="memberServiceImpl2")
+	@Resource(name="memberServiceImpl")
    private MemberService memberService;
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
    /**
