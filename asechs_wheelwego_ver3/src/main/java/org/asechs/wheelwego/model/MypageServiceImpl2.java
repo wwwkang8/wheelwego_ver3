@@ -8,6 +8,7 @@ import org.asechs.wheelwego.model.vo.BookingDetailVO;
 import org.asechs.wheelwego.model.vo.BookingVO;
 import org.asechs.wheelwego.model.vo.FoodVO;
 import org.asechs.wheelwego.model.vo.ListVO;
+import org.asechs.wheelwego.model.vo.PagingBean;
 import org.asechs.wheelwego.model.vo.ReviewVO;
 import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
@@ -32,16 +33,38 @@ public class MypageServiceImpl2 implements MypageService {
    private MypageDAO mypageDAO;
    @Resource
    private FoodTruckDAO foodtruckDAO;
-	@Override
-	public ListVO customerBookingList(String pageNo, String customerId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public List<BookingVO> getBookingList(int bookingNumber) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 (pagingBean 적용)
+	기능설명 : 나의 주문 내역 리스트에 pagingBean 적용
+	*/
+   @Override
+   public ListVO customerBookingList(String pageNo, String customerId) {
+	      int totalCount = mypageDAO.getCustomerBookingListCount(customerId);
+	      System.out.println("totalCount" + totalCount);
+	      PagingBean pagingBean = null;
+	      if (pageNo == null)
+	         pagingBean = new PagingBean(totalCount);
+	      else
+	         pagingBean = new PagingBean(totalCount, Integer.parseInt(pageNo));	      
+	      pagingBean.setContentNumberPerPage(6);
+	      pagingBean.setCustomerId(customerId);      
+	      ListVO listVO = new ListVO();
+	      listVO.setPagingBean(pagingBean);  
+	      listVO.setBookingMenuList(mypageDAO.customerBookingList(pagingBean));
+	      return listVO;
+	   }
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 주문내역 리스트
+	기능설명 : 예약 번호를 통해 주문 내역을 가져온다
+	*/
+   @Override
+   public List<BookingVO> getBookingList(int bookingNumber) {
+      return mypageDAO.getBookingList(bookingNumber);
+   }
 	@Override
 	public void calPoint(String usePoint, String totalAmount, int bookingNumber) {
 		// TODO Auto-generated method stub
@@ -62,10 +85,15 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 위시리스트 목록
+	기능설명 : 사용자의 아이디로 위시리스트 목록을 가져온다
+	*/
 	@Override
-	public List<WishlistVO> heartWishList(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<WishlistVO> heartWishList(String id){
+	   return mypageDAO.heartWishList(id);
 	}
 	@Override
 	public List<TruckVO> myWishList(String id) {

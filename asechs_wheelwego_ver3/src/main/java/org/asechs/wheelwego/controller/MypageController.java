@@ -163,27 +163,46 @@ public class MypageController {
       request.getSession(false).setAttribute("foodtruckNumber", "");
       return "redirect:/afterLogin_mypage/mypage.do";
    }
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 내가 작성한 리뷰 리스트 보기
+	기능설명 : 사용자의 아이디로 내가 작성한 리뷰 목록을 받아온다 (pagingBean 적용)
+ */
    @RequestMapping("/afterLogin_mypage/showMyReviewList.do")
    public ModelAndView showMyReiviewList(String customerId, String reviewPageNo, HttpServletRequest request) {
       ListVO reviewList = mypageService.showMyReviewList(customerId, reviewPageNo);
       return new ModelAndView("mypage/mypage_review.tiles", "reviewList", reviewList);
    }
-
+   /** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 수정할 리뷰 항목 불러오기
+	기능설명 : 내가 쓴 글 리뷰를 수정하기 위해 리뷰 번호로 리뷰 항목을 찾는다
+*/
    @RequestMapping("afterLogin_mypage/mypage_review_update.do")
    public ModelAndView ReviewUpdateForm(String reviewNo) {
       ReviewVO reviewVO = mypageService.findReviewInfoByReviewNo(reviewNo);
-      System.out.println(reviewVO);
       return new ModelAndView("mypage/mypage_review_update.tiles", "reviewVO", reviewVO);
    }
-
+   /** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 내가 작성한 리뷰 삭제
+	기능설명 : 리뷰 번호를 통해 내가 쓴 글 리뷰를 삭제한다(ajax 통신)
+*/
    @RequestMapping("afterLogin_mypage/deleteMyReview.do")
    @ResponseBody
    public String deleteMyReview(String reviewNo) {
       mypageService.deleteMyReview(reviewNo);
       return "deleteOk";
    }
-
+   /** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 내가 작성한 리뷰 수정
+	기능설명 : 리뷰 번호를 통해 내가 쓴 글 리뷰를 수정한다
+*/
    @RequestMapping("afterLogin_mypage/updateMyReview.do")
    public String updateMyReview(ReviewVO reviewVO) {
       mypageService.updateMyReview(reviewVO);
@@ -225,12 +244,6 @@ public class MypageController {
    @RequestMapping("afterLogin_mypage/test.do")
    public String test() {
       return "mypage/test";
-   }
-
-   @RequestMapping("afterLogin_mypage/showMyFoodtruck.do")
-   public ModelAndView showMyFoodtruck(String id) {
-      String foodtruckNo = mypageService.findtruckNumberBySellerId(id);
-      return new ModelAndView("redirect:../foodtruck/foodTruckAndMenuDetail.do", "foodtruckNo", foodtruckNo);
    }
 
    @RequestMapping("afterLogin_mypage/checkFoodtruckNumber.do")
@@ -316,23 +329,24 @@ public class MypageController {
 	   return "mypage/mypage_seller_booking_list.tiles";
 	   
    }
-
-   /**
-    * 정현지 : 사용자 마이페이지 - 나의 주문내역 리스트
+   /** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 (pagingBean 적용)
+	기능설명 : 사용자 아이디로 주문 내역을 list로 받아온다
+			주문 내역이 있을 경우, 주문 내역 detail을 받아와 주문 목록(list)에 setting 해준다
+			주문 내역은 마이페이지 - 주문 내역 리스트에서 확인할 수 있다
     */
    @RequestMapping("afterLogin_mypage/customerBookingList.do")
    public String customerBookingList(Model model, String customerId, String pageNo){
 	    ListVO listVO = mypageService.customerBookingList(pageNo, customerId);
 	    List<BookingVO> myBookingList = listVO.getBookingMenuList();
-	    
 	    if (myBookingList.isEmpty() == false){
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
 	       }
 	    }      
-	    
-	    System.out.println(myBookingList);
 	    model.addAttribute("myBookingList", myBookingList);
 	    model.addAttribute("listVO", listVO);
 	    return "mypage/mypage_customer_order_list.tiles";
@@ -369,32 +383,4 @@ public class MypageController {
 	   return mv;
    }
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-
 }
