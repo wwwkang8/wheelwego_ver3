@@ -30,17 +30,27 @@ public class MypageDAOImpl implements MypageDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
 
-	// 현지
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 (pagingBean 적용)
+	기능설명 : 나의 주문 내역 리스트에 pagingBean 적용
+	*/
 	@Override
 	public List<BookingVO> customerBookingList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.customerBookingList", pagingBean);
 	}
-
-	// 현지
-	@Override
+	
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 주문내역 리스트
+	기능설명 : 예약 번호를 통해 주문 내역을 가져온다
+	*/
 	public List<BookingVO> getBookingList(int bookingNumber) {
-		return sqlSessionTemplate.selectList("mypage.getBookingList", bookingNumber);
-	}
+	      return sqlSessionTemplate.selectList("mypage.getBookingList", bookingNumber);
+	   }
+	
 	/**
 	 * 김래현,황윤상 2017.06.21 (수정완료)
 	 * 마이페이지 - 포인트조회
@@ -69,13 +79,10 @@ public class MypageDAOImpl implements MypageDAO {
 	public void addPoint(HashMap<String, Object> pointInfo) {
 		sqlSessionTemplate.insert("mypage.addPoint", pointInfo);
 	}
-
-
 	@Override
 	public List<WishlistVO> heartWishList(String id) {
 		return sqlSessionTemplate.selectList("mypage.heartWishList", id);
 	}
-
 	/**
 	 * 김래현,황윤상 
 	 * 2017.06.21 (수정완료) 
