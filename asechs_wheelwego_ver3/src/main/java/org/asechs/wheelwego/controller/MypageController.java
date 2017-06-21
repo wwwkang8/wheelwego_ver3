@@ -39,11 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
   */
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
-	@Resource(name="memberServiceImpl2")
+	@Resource(name="memberServiceImpl")
    private MemberService memberService;
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
    /**
@@ -90,9 +90,12 @@ public class MypageController {
    }
 
    /**
-    * 판매자가 마이페이지로 이동할때 판매자 아이디에 해당하는 푸드트럭이 테이블에 존재하는지 검사하여 존재한다면 푸드트럭 정보를 같이
-    * 보내준다.
+    * 박다혜
+    * 2017.06.21 (수정중)
+    * 마이페이지 - 마이페이지 홈페이지 가기
+    * ----------------------------------------------
     * 
+    * @param request
     * @return
     */
    @RequestMapping("afterLogin_mypage/mypage.do")

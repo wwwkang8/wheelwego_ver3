@@ -57,6 +57,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findBusinessNumberById" resultType="String">
 	select businessnumber from seller where seller_id=#{value}
 </select>
+<select id="findFoodTruckNumberById" resultType="string">
+	select foodtruck_number from foodtruck where seller_id=#{value}
+</select>
 </mapper>
  
  

@@ -30,24 +30,44 @@ public class MemberController {
 	@Resource(name="memberServiceImpl2")
 	private MemberService memberService;
 
-	// 박다혜 Login
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 로그인
+	 * ------------------------
+	 * login 정보(id, password)를 MemberVO 타입으로 받아와서
+	 * 해당하는 정보가 있을 경우 세션에 저장하여 home으로 보낸다.
+	 *  만약 사업자라면 자신의 아이디에 해당하는 foodtruck번호를 세션에 함께 저장한다.
+	 * 해당 정보가 없을 경우 login_fail로 보낸다.
+	 * 
+	 * @param request
+	 * @param vo
+	 * @return
+	 */
 	@RequestMapping(value = "login.do", method = RequestMethod.POST)
 
-	public String login(HttpServletRequest request, MemberVO vo) {
+	public String login(HttpSession session, MemberVO vo) {
 		MemberVO memberVO = memberService.login(vo);
 		if (memberVO == null)
 			return "member/login_fail";
 		else{
-			HttpSession session=request.getSession();
 			session.setAttribute("memberVO",memberVO);
 			if(memberVO.getMemberType().equals("seller")){
-				session.setAttribute("businessNumber", memberService.findBusinessNumberById(memberVO.getId()));
+				session.setAttribute("foodtruckNumber", memberService.findFoodTruckNumberById(memberVO.getId()));
 			}
 			return "redirect:home.do";
 		}
 	}
 
-	// 박다혜 logout
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 로그아웃
+	 * ------------------------
+	 * 세션이 존재한다면 세션을 무효화한다.
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("logout.do")
 	public String logout(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);

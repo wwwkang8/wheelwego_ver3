@@ -34,7 +34,7 @@ public class HomeController {
 	 * 우선적으로 실행되고 
 	 * 존재하지 않으면 @PathVariable 메서드가 실행된다 
 	 */
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
 	private FoodTruckService foodTruckService;
 
 	/** 	  

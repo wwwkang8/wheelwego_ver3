@@ -99,4 +99,9 @@ public class MemberServiceImpl implements MemberService {
 	public String findBusinessNumberById(String id) {
 		return memberDAO.findBusinessNumberById(id);
 	}
+
+	@Override
+	public String findFoodTruckNumberById(String id) {
+		return memberDAO.findFoodTruckNumberById(id);
+	}
 }

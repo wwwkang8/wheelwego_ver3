@@ -35,9 +35,9 @@ import org.springframework.web.servlet.ModelAndView;
   */
 @Controller
 public class FoodTruckController {
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
 	private FoodTruckService foodTruckService;
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
 	private MypageService mypageService; 
 
 	/** 	  

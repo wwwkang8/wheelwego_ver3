@@ -24,7 +24,13 @@ import org.springframework.stereotype.Repository;
 public class MemberDAOImpl implements MemberDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 로그인
+	 * -------------------------
+	 * 사용자가 입력한 정보(Id)에 해당하는 Member정보를 select한다.
+	 */
 	public MemberVO login(MemberVO vo) {
 		return sqlSessionTemplate.selectOne("member.login", vo);
 	}
@@ -90,9 +96,22 @@ public class MemberDAOImpl implements MemberDAO {
     public int forgetMemberPassword(MemberVO vo) {
        return sqlSessionTemplate.update("member.forgetMemberPassword", vo);
     }
-
+    /**
+     * 박다혜
+     * 2017.06.21 (수정완료)
+     * 멤버 - 사업자 아이디에 해당하는 사업자 번호 조회
+     */
 	@Override
 	public String findBusinessNumberById(String id) {
 		return sqlSessionTemplate.selectOne("member.findBusinessNumberById", id);
+	}
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정완료)
+	 * 멤버 - 사업자 자신의 아이디에 해당하는 푸드트럭 넘버 조회
+	 */
+	@Override
+	public String findFoodTruckNumberById(String id) {
+		return sqlSessionTemplate.selectOne("member.findFoodTruckNumberById", id);
 	}
 }
