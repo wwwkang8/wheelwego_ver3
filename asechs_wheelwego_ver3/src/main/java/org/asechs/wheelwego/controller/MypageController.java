@@ -12,7 +12,6 @@ import org.asechs.wheelwego.model.vo.BookingDetailVO;
 import org.asechs.wheelwego.model.vo.BookingVO;
 import org.asechs.wheelwego.model.vo.FoodVO;
 import org.asechs.wheelwego.model.vo.ListVO;
-import org.asechs.wheelwego.model.vo.MemberVO;
 import org.asechs.wheelwego.model.vo.ReviewVO;
 import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
@@ -22,24 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-/**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
- * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+
 @Controller
 public class MypageController {
 	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
+
 	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
@@ -107,19 +94,28 @@ public class MypageController {
    }
 
    /**
-    * 나의 푸드트럭 설정페이지이동 아이디에 일치하는 푸드트럭을 찾아서 정보를 함께 보낸다.
+    * 박다혜
+    * 2017.06.21 (수정 완료)
+    * 마이페이지 - 마이트럭설정페이지로 이동
+    * ------------------------------------------
+    * 자신의 트럭번호에 해당하는 트럭정보를 조회하여 modelAndView 객체에 실어 보낸다.
+    * @param foodtruckNumber
+    * @return
     */
    @RequestMapping("afterLogin_mypage/myfoodtruck_page.do")
-   public ModelAndView showMyFoodtruck(HttpServletRequest request) {
-      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");
-      String truckNumber = mypageService.findtruckNumberBySellerId(memberVO.getId());
-      TruckVO truckVO = mypageService.findtruckInfoByTruckNumber(truckNumber);
+   public ModelAndView showMyFoodtruck(String foodtruckNumber) {
+      TruckVO truckVO = mypageService.findtruckInfoByTruckNumber(foodtruckNumber);
       return new ModelAndView("mypage/myfoodtruck_page.tiles", "truckVO", truckVO);
    }
 
    /**
-    * 푸드트럭 정보를 업데이트
-    * 
+    * 박다혜
+    * 2017.06.21 (수정 완료)
+    * 마이페이지 - 푸드트럭 설정 업데이트
+    * ------------------------------------------
+    * 수정된 Truck 정보를 바탕으로 업데이트한다.
+    * @param truckVO
+    * @param request
     * @return
     */
    @RequestMapping(method = RequestMethod.POST, value = "afterLogin_mypage/updateMyfoodtruck.do")
@@ -128,32 +124,47 @@ public class MypageController {
       mypageService.updateMyfoodtruck(truckVO, uploadPath);
       return "mypage/myfoodtruck_page_result.tiles";
    }
-
+   /**
+    * 박다혜
+    * 2017.06.21(수정 완료)
+    * 마이페이지 - 메뉴리스트 가져오기
+    * ---------------------------------------
+    * 트럭 번호에 해당하는 메뉴의 리스트를 반환한다.
+    * @param foodtruckNumber
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/myfoodtruck_menuList.do")
-   public ModelAndView showMenuList(HttpServletRequest request) {
-      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");
-      String truckNumber = mypageService.findtruckNumberBySellerId(memberVO.getId());
-      List<FoodVO> menuList = mypageService.showMenuList(truckNumber);
-      ModelAndView mv = new ModelAndView();
-      mv.setViewName("mypage/myfoodtruck_menuList.tiles");
-      mv.addObject("menuList", menuList);
-      mv.addObject("truckNumber", truckNumber);
-      return mv;
+   public ModelAndView showMenuList(String foodtruckNumber) {
+      List<FoodVO> menuList = mypageService.showMenuList(foodtruckNumber);
+      return new ModelAndView("mypage/myfoodtruck_menuList.tiles","menuList", menuList);
    }
-
+   /**
+    * 박다혜
+    * 2017.06.21 (수정 완료)
+    * 마이페이지 - 메뉴 등록하기
+    * @param request
+    * @param truckVO
+    * @return
+    */
    @RequestMapping(method = RequestMethod.POST, value = "afterLogin_mypage/registerMenuList.do")
    public String RegisterMenuList(HttpServletRequest request, TruckVO truckVO) {
-      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");
-      String truckNumber = mypageService.findtruckNumberBySellerId(memberVO.getId());
       String uploadPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
-      mypageService.registerMenuList(truckVO.getFoodList(), truckNumber, uploadPath);
+      /*mypageService.registerMenuList(truckVO.getFoodList(), truckVO.getFoodtruckNumber(), uploadPath);*/
+      mypageService.registerMenuList(truckVO, uploadPath);
       return "redirect:/afterLogin_mypage/myfoodtruck_menuList.do";
    }
-
-   @RequestMapping("afterLogin_mypage/updateMenu.do")
-   public String updateMenu(TruckVO truckVO, String sellerId, HttpServletRequest request) {
-      String foodtruckNumber = mypageService.findtruckNumberBySellerId(sellerId);
-      truckVO.setFoodtruckNumber(foodtruckNumber);
+   /**
+    * 박다혜
+    * 2017.06.21 (수정 완료)
+    * 마이페이지 - 메뉴 업데이트하기
+    * 
+    * @param truckVO
+    * @param sellerId
+    * @param request
+    * @return
+    */
+   @RequestMapping(method = RequestMethod.POST, value ="afterLogin_mypage/updateMenu.do")
+   public String updateMenu(TruckVO truckVO, String foodtruckNumber, HttpServletRequest request) {
       String uploadPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
       mypageService.updateMenu(truckVO, uploadPath);
       return "mypage/updateMenu_result.tiles";
@@ -169,7 +180,7 @@ public class MypageController {
     * @param foodtruckNumber
     * @return
     */
-   @RequestMapping("afterLogin_mypage/deleteMyTruck.do")
+   @RequestMapping(method = RequestMethod.POST, value ="afterLogin_mypage/deleteMyTruck.do")
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
       mypageService.deleteMyTruck(foodtruckNumber);
       request.getSession(false).setAttribute("foodtruckNumber", "");
@@ -239,11 +250,11 @@ public class MypageController {
       return "mypage/test";
    }
 
-   @RequestMapping("afterLogin_mypage/showMyFoodtruck.do")
+/*   @RequestMapping("afterLogin_mypage/showMyFoodtruck.do")
    public ModelAndView showMyFoodtruck(String id) {
       String foodtruckNo = mypageService.findtruckNumberBySellerId(id);
       return new ModelAndView("redirect:../foodtruck/foodTruckAndMenuDetail.do", "foodtruckNo", foodtruckNo);
-   }
+   }*/
 
    @RequestMapping("afterLogin_mypage/checkFoodtruckNumber.do")
    @ResponseBody
@@ -254,45 +265,83 @@ public class MypageController {
       else
          return true;
    }
-   // 내가 슨 게시물 보기로 가기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.12 (수정 완료)
+	 * 마이페이지-내가 쓴 게시물 보기
+	 * ------------------------------------------------------
+	 *  마이페이지에서 My Contents 를 누르면 3가지 게시판 버튼이 뜬다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentList.do")
    public String mypage_content(){
 	   return "mypage/mypage_content.tiles";
    }
-   // 자유게시물 에 해당하는 게시글 보기2
+	/**
+	 * 김호겸 작성
+	 *  2017.6.13 (수정 완료)
+	 * 마이페이지-자유게시판 버튼 글릭시 내가 본 글 
+	 * ------------------------------------------------------
+	 * 자유게시판 버튼을 누르면 자신 아이디로 자신이 쓴 자유게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentByFreeList.do")
-   public ModelAndView showMyContentByFreeList(HttpServletRequest request,String id,String contentPageNo){
+   public ModelAndView showMyContentByFreeList(String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_freeboard.tiles");
 	   ListVO contentList=mypageService.showMyContentByFreeList(id,contentPageNo);
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 자유게시물 에 해당하는 게시글 삭제
+	/**
+	 * 김호겸 작성
+	 *  2017.6.12 (수정 완료)
+	 * 마이페이지-자유게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/freeboardDeleteInMaypage.do")
    @ResponseBody
    public String freeboardDeleteInMaypage(String contentNo) {
-	   System.out.println("딜리트"+contentNo);
       mypageService.freeboardDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   //창업게시판 에 해당한 게시글보기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-창업게시판 버튼 글릭시 내가 본 글 
+	 * ------------------------------------------------------
+	 * 창업게시판 버튼을 누르면 자신 아이디로 자신이 쓴 창업게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentBybusinessList.do")
-   public ModelAndView showMyContentBybusinessList(HttpServletRequest request,String id,String contentPageNo){
-	  
+   public ModelAndView showMyContentBybusinessList(String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_business.tiles");
 	   ListVO contentList=mypageService.showMyContentBybusinessList(id,contentPageNo);
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 창업 에 해당하는 게시글 삭제
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-창업게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/businessDeleteInMaypage.do")
    @ResponseBody
    public String businessDeleteInMaypage(String contentNo) {
-	   System.out.println("딜리트"+contentNo);
       mypageService.businessDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   // 규엔에이 게시글 보기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-QnA게시판 버튼 글릭시 내가 본 글 뜬다. 
+	 * ------------------------------------------------------
+	 * QnA게시판 버튼을 누르면 자신 아이디로 자신이 쓴 QnA게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentByqnaList.do")
    public ModelAndView showMyContentByqnaList(HttpServletRequest request,String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_qna.tiles");
@@ -300,7 +349,14 @@ public class MypageController {
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 큐ㅜ엔에이 에 해당하는 게시글 삭제
+   /**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-QnA게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/qnaDeleteInMaypage.do")
    @ResponseBody
    public String qnaDeleteInMaypage(String contentNo) {

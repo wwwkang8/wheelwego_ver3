@@ -76,19 +76,27 @@ public class BoardServiceImpl implements BoardService {
 			}
 		}
 	}
-
-	// 자유게시판 업데이트
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 자유게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void updateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
-		List<MultipartFile> fileList = vo.getFile();// 사진을 받아오고
+		// 사진을 받아오고
+		List<MultipartFile> fileList = vo.getFile();
 		// 글 수정을 먼저 한다
 		String contentNo = boardDAO.updateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
-			System.out.println("사용자가 보낸 파일 : "+vo.getFile().get(i).getOriginalFilename());
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
-			
 			if (!modityFile.equals(""))
 				list.add(modityFile.trim());
 			else
@@ -98,7 +106,6 @@ public class BoardServiceImpl implements BoardService {
 			boardDAO.updateBoard(vo);
 			return;
 		}else{
-
 			boardDAO.freeboardDeleteFile(contentNo);
 			for (int i = 0; i < fileList.size(); i++) {
 				if (fileList.isEmpty() == false) {
@@ -114,7 +121,6 @@ public class BoardServiceImpl implements BoardService {
 							fileVO.setFilepath(fileName);
 							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							System.out.println(boardVO);
 							// 새로운 사진 서버에 업데이트
 							boardDAO.freeboardWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
@@ -122,9 +128,7 @@ public class BoardServiceImpl implements BoardService {
 						}
 					}
 				}
-				
 			}
-
 		}
 	}
 
@@ -255,7 +259,17 @@ public class BoardServiceImpl implements BoardService {
 	public void businessDelete(String no) {
 		boardDAO.businessDelete(no);
 	}
-
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 창업게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void businessupdateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
@@ -264,9 +278,7 @@ public class BoardServiceImpl implements BoardService {
 		String contentNo = boardDAO.businessupdateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
-			System.out.println("사용자가 보낸 파일 : "+vo.getFile().get(i).getOriginalFilename());
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
-			
 			if (!modityFile.equals(""))
 				list.add(modityFile.trim());
 			else
@@ -276,7 +288,6 @@ public class BoardServiceImpl implements BoardService {
 			boardDAO.businessupdateBoard(vo);
 			return;
 		}else{
-
 			boardDAO.businessDeleteFile(contentNo);
 			for (int i = 0; i < fileList.size(); i++) {
 				if (fileList.isEmpty() == false) {
@@ -292,7 +303,6 @@ public class BoardServiceImpl implements BoardService {
 							fileVO.setFilepath(fileName);
 							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							System.out.println(boardVO);
 							// 새로운 사진 서버에 업데이트
 							boardDAO.businessWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
@@ -300,9 +310,7 @@ public class BoardServiceImpl implements BoardService {
 						}
 					}
 				}
-				
 			}
-
 		}
 	}
 	@Override
@@ -419,7 +427,17 @@ public class BoardServiceImpl implements BoardService {
 		boardDAO.qnaDelete(no);
 
 	}
-
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * QnA게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void qnaupdateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
@@ -428,7 +446,6 @@ public class BoardServiceImpl implements BoardService {
 		String contentNo = boardDAO.qnaupdateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
-			//System.out.println("사용자가 보낸 파일 : "+vo.getFile().get(i).getOriginalFilename());
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
 			// 사용자가 사진을 하나 이상 수정한다고 하면 
 			// 리스트에 사용자가 보낸파일 명을 저장시킨다
@@ -459,7 +476,6 @@ public class BoardServiceImpl implements BoardService {
 							fileVO.setFilepath(fileName);
 							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							System.out.println(boardVO);
 							// 새로운 사진 서버에 업데이트
 							boardDAO.qnaWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
@@ -467,9 +483,7 @@ public class BoardServiceImpl implements BoardService {
 						}
 					}
 				}
-				
 			}
-
 		}
 	}
 	@Override

@@ -70,6 +70,7 @@ public class MypageDAOImpl implements MypageDAO {
 		sqlSessionTemplate.insert("mypage.addPoint", pointInfo);
 	}
 
+
 	@Override
 	public List<WishlistVO> heartWishList(String id) {
 		return sqlSessionTemplate.selectList("mypage.heartWishList", id);
@@ -227,11 +228,6 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 
 	@Override
-	public int getTotalFreeboardCount(String id) {
-		return sqlSessionTemplate.selectOne("mypage.getTotalFreeboardCount", id);
-	}
-
-	@Override
 
 	public void updateBookingState(BookingVO bookingVO) {
 		sqlSessionTemplate.update("mypage.updateBookingState", bookingVO);
@@ -253,47 +249,97 @@ public class MypageDAOImpl implements MypageDAO {
 	public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 		return sqlSessionTemplate.selectList("mypage.getBookingDetailVO", bookingVO);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
+	 */
+	@Override
+	public int getTotalFreeboardCount(String id) {
+		return sqlSessionTemplate.selectOne("mypage.getTotalFreeboardCount", id);
+	}
+	/**
+	 * 김호겸
+	 * 2017.6.12(수정 완료) 
+	 * 마이페이지- 내가 쓴 자유게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	public void freeboardDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.freeboardDelete", contentNo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 자유게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentByFreeList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentByFreeList", pagingBean);
 	}
-
-	/*
-	 * public List<BookingVO> getSellerBookingListByTruckNumber(String
-	 * foodTruckNumber) { return
-	 * sqlSessionTemplate.selectList("mypage.getSellerBookingListByTruckNumber",
-	 * foodTruckNumber); }
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
 	 */
 	@Override
 	public int getTotalbusinessCount(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalbusinessCount", id);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.14 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 창업게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentBybusinessList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentBybusinessList", pagingBean);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.13(수정 완료) 
+	 * 마이페이지- 내가 쓴 창업게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public void businessDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.businessDelete", contentNo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료)
+	 * 마이페이지- 페이징 빈을 위해 총 게시물 수 
+	 */
 	@Override
 	public int getTotalqnaCount(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalqnaCount", id);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.14 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * rnum 으로 페이징 빈을 하였다.
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public List<BoardVO> showMyContentByqnaList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("board.showMyContentByqnaList", pagingBean);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.6.13(수정 완료) 
+	 * 마이페이지- 내가 쓴 QnA게시글 삭제
+	 * ------------------------------------
+	 * board.xml 로 넘기는 이유는 resultMap를 위해서 이다.
+	 */
 	@Override
 	public void qnaDeleteInMaypage(String contentNo) {
 		sqlSessionTemplate.delete("board.qnaDelete", contentNo);

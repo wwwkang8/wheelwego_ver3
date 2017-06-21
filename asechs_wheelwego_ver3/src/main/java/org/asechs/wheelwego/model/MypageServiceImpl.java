@@ -153,7 +153,6 @@ public class MypageServiceImpl implements MypageService {
          mypageDAO.updateFilePath(truckVO.getFileVO()); //파일경로 등록
             fm.uploadFile(truckFile, uploadPath+renamedFile);
          } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
          }
       }else{
@@ -169,7 +168,7 @@ public class MypageServiceImpl implements MypageService {
       return mypageDAO.showMenuList(truckNumber);
    }
 
-   //메뉴 등록
+/*   //메뉴 등록
    @Override
    public void registerMenuList(List<FoodVO> foodList, String truckNumber, String uploadPath) {
       FileManager fm=new FileManager();
@@ -186,8 +185,28 @@ public class MypageServiceImpl implements MypageService {
             e.printStackTrace();
          }
       }
-   }
+   }*/
 
+   @Override
+   public void registerMenuList(TruckVO truckVO, String uploadPath) {
+	   List<FoodVO> foodList=truckVO.getFoodList();
+	   String foodtruckNumber=truckVO.getFoodtruckNumber();
+      FileManager fm=new FileManager();
+      for(int i=0;i<foodList.size();i++){
+         try{
+            foodList.get(i).setFoodTruckNumber(foodtruckNumber); //트럭넘버를 세팅
+            foodList.get(i).setFileVO(new FileVO(foodtruckNumber, "defaultMenu.jpg"));
+            mypageDAO.registerMenu(foodList.get(i)); //메뉴를 등록한다.
+            MultipartFile foodFile=foodList.get(i).getMenuFile(); //메뉴사진받아와서
+            String renamedFile=fm.rename(foodFile,foodtruckNumber+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
+            mypageDAO.updateMenuFilepath(new FileVO(foodList.get(i).getMenuId(), renamedFile)); //파일 경로 수정
+            fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 파일 업로드
+         }catch (Exception e) {
+            e.printStackTrace();
+         }
+      }
+   }
+   
    //메뉴수정
    @Override
    public void updateMenu(TruckVO truckVO, String uploadPath) {
@@ -281,6 +300,15 @@ public class MypageServiceImpl implements MypageService {
       WishlistVO wishlistVO=new WishlistVO(foodtruckNumber,customerId); 
       return mypageDAO.getWishListFlag(wishlistVO);
    }
+   /**
+    * 김호겸
+    * 2017.6.13 (수정 완료) 
+    *마이페이지-내가 쓴 게시글 자유게시글 보기
+    * ------------------------------------------------------ 코드설명
+    * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+    * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+    * 페이징 빈을 set 해준다
+    */
 @Override
 public ListVO showMyContentByFreeList(String id,String contentPageNo) {
 	 if(contentPageNo==null)
@@ -329,14 +357,25 @@ public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 	return mypageDAO.getBookingDetailVO(bookingVO);
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void freeboardDeleteInMaypage(String contentNo) {
 	mypageDAO.freeboardDeleteInMaypage(contentNo);
 	
 }
-/*public List<BookingVO> getSellerBookingListByTruckNumber(String foodTruckNumber) {
-	return mypageDAO.getSellerBookingListByTruckNumber(foodTruckNumber);
-}*/
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 창업게시글 보기
+ * ------------------------------------------------------ 코드설명
+ * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+ * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+ * 페이징 빈을 set 해준다
+ */
 @Override
 public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
 	 if(contentPageNo==null)
@@ -348,11 +387,25 @@ public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void businessDeleteInMaypage(String contentNo) {
 	mypageDAO.businessDeleteInMaypage(contentNo);
 	
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 보기
+ * ------------------------------------------------------ 코드설명
+ * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+ * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+ * 페이징 빈을 set 해준다
+ */
 @Override
 public ListVO showMyContentByqnaList(String id, String contentPageNo) {
 	 if(contentPageNo==null)
@@ -364,10 +417,16 @@ public ListVO showMyContentByqnaList(String id, String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void qnaDeleteInMaypage(String contentNo) {
 	mypageDAO.qnaDeleteInMaypage(contentNo);
 }
+
 @Override
 public int checkBookingState(String customerId) {
    return mypageDAO.checkBookingState(customerId);
