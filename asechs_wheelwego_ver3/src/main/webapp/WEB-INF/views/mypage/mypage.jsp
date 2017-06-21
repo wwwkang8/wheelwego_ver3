@@ -12,7 +12,7 @@
 <c:choose>
 	<c:when test="${sessionScope.memberVO.memberType=='seller'}">
 		<c:choose>
-			<c:when test="${truckNumber==null&&truckVO.foodtruckNumber==null && truckNumber==null}">
+			<c:when test="${sessionScope.foodtruckNumber==null}">
 				<button type="button" id="registerTruckBtn" class="btn btn-warning">MY TRUCK 등록</button>&nbsp;&nbsp;
 			</c:when>
 			<c:otherwise>
@@ -111,7 +111,7 @@ geoFindMe();
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_menuList.do";
 	});
 		$("#myTruckBtn").click(function(){
-			location.href = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckNumber}"+"&latitude="+latitude+"&longitude="+longitude+"&address="+address;
+			location.href = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${sessionScope.foodtruckNumber}"+"&latitude="+latitude+"&longitude="+longitude+"&address="+address;
 	});
 		$("#wishlistBtn").click(function(){
 			location.href = "${pageContext.request.contextPath}/afterLogin_mypage/wishlist.do?id=${sessionScope.memberVO.id}&latitude="+latitude+"&longitude="+longitude;
