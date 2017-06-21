@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!-- 정현지 : 수정완료 -->
 <style>
 /*별점*/
 input[name="grade"]{
@@ -47,11 +48,7 @@ input[name="grade"]:checked + .star_point~label{
          <table>
             <tr>
                <td>
-               <div class="form-group row">
-               <%-- <input type="hidden" name="reviewNo" value="${reviewVO.reviewNo}">
-               TruckNo <input type="text" class="form-control" name="foodtruckNumber" value="${reviewVO.foodtruckNumber}" readonly="readonly"></input>
-               | Writer <input type="text" class="form-control" name="customerId" value="${reviewVO.customerId}" readonly="readonly"></input>   
-               | Date <input type="text" class="form-contro " name="reviewTimeposted" value="${reviewVO.reviewTimeposted}" readonly="readonly"></input><br> --%>   
+               <div class="form-group row">  
                 <input type="hidden" name="reviewNo" value="${reviewVO.reviewNo}">
                 <div class="col-xs-2">
                    <label for="ex1">TruckNo</label>
@@ -97,9 +94,7 @@ input[name="grade"]:checked + .star_point~label{
 $(document).ready(function(){
    var gradeRadio=$(":input[name=grade]");
    for(var i=0; i<gradeRadio.length;i++){
-         //alert(gradeRadio[i].value);
          gradeRadio[i].checked=true;
       }
-      //alert(gradeRadio);
 })
 </script>

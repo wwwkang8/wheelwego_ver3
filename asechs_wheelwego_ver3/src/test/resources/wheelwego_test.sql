@@ -7,6 +7,19 @@ select * from BOOKING_DETAIL
 select * from CUSTOMER
 select * from 
 select * from SELLER
+select customer_id from booking where booking_number='61'
+-- 주문 번호로 BOOKING_DETAIL DB에서 menu_id select
+-- menu_id로 MENU DB에서 foodtruck_number select
+-- foodtuck_number로 FOODTRUCK DB에서 foodtruck_name 찾아내기
+select menu_id from booking_detail where booking_number='61' -- 20
+select foodtruck_number from menu where menu_id='20' -- 80나0009
+select foodtruck_name from foodtruck where foodtruck_number='80나0009' -- 달리는 타코
+
+select foodtruck_number from(select menu_id from booking_detail)
+
+select t.*, f.foodtruck_filepath, m.menu_filename
+		from(select * from foodtruck)t, foodtruckfile f, menu m
+		where t.foodtruck_number=f.foodtruck_number and t.foodtruck_number=m.foodtruck_number and t.foodtruck_number='80나0001'
 ----------dbTEST---------------------
 select bd.booking_number,bd.menu_id, bd.menu_quantity, m.menu_name, m.menu_price 
 	   	from booking b, booking_detail bd, menu m
@@ -23,9 +36,6 @@ from (select * from menu)fn, foodtruck f
 where fn.foodtruck_number = f.foodtruck_number and fn.menu_id='76'
 
 select foodtruck_name from foodtruck where foodtruck_number='80나0035'
-select t.*, f.foodtruck_filepath, m.menu_filename
-		from(select * from foodtruck)t, foodtruckfile f, menu m
-		where t.foodtruck_number=f.foodtruck_number and t.foodtruck_number=m.foodtruck_number and t.foodtruck_number='80나0001'
 
 ----------dbTEST---------------------
 		select id from member where member_name='정현지' and

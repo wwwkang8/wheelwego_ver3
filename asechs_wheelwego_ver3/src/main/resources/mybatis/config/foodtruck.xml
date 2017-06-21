@@ -28,20 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<result property="reviewContent" column="review_content"/>
 	<result property="reviewTimeposted" column="review_timeposted"/>
 </resultMap>
-<select id="findFoodtruckNameByMenuId" resultMap="truckRM">
-select f.foodtruck_name
-from (select * from menu)fn, foodtruck f
-where fn.foodtruck_number = f.foodtruck_number and fn.menu_id=#{value}
-</select>
+
 <select id="foodtruckList" resultMap="truckRM">
 		select t.*, f.foodtruck_filepath
 		from(select * from foodtruck)t, foodtruckfile f
 		where t.foodtruck_number=f.foodtruck_number
-</select>
-<select id="searchFoodTruckList" resultMap="truckRM">
-select t.*, f.foodtruck_filepath
-from(select * from foodtruck)t, foodtruckfile f
-where t.foodtruck_number=f.foodtruck_number and t.foodtruck_name like '%' || #{value} || '%' and latitude is not null and longitude is not null
 </select>
 <select id="getTruckListTotalContentCountByName" resultType="Integer" parameterType="string">
 	select count(*) from foodtruck where foodtruck_name like '%' || #{value}|| '%' and latitude is not null and longitude is not null
@@ -53,7 +44,7 @@ where t.foodtruck_number=f.foodtruck_number and t.foodtruck_name like '%' || #{v
 	select count(*) from foodtruck where (latitude between #{latitude}-0.009 and #{latitude}+0.009) and (longitude between #{longitude}-0.012 and #{longitude}+0.012)
 </select>
 
-<select id="getFoodTruckListByName" parameterType="pagingBean" resultMap="truckRM" resultType="truckVO">
+<!-- <select id="getFoodTruckListByName" parameterType="pagingBean" resultMap="truckRM" resultType="truckVO">
 	SELECT f.foodtruck_filepath, t.* FROM
 	(SELECT fo.*, row_number() over(order by foodtruck_number desc) as rnum 
 	from foodtruck fo where foodtruck_name like '%' || #{searchWord} || '%' and latitude is not null and longitude is not null)t, foodtruckfile f  
@@ -67,7 +58,7 @@ where t.foodtruck_number=f.foodtruck_number and t.foodtruck_name like '%' || #{v
 	from foodtruck fo where (latitude between #{gpsInfo.latitude}-0.009 and #{gpsInfo.latitude}+0.009) and (longitude between #{gpsInfo.longitude}-0.012 and #{gpsInfo.longitude}+0.012))t, foodtruckfile f  
 	where t.foodtruck_number=f.foodtruck_number and rnum between #{startRowNumber} and #{endRowNumber}
 	order by t.foodtruck_number desc
-</select>
+</select> -->
 
 <select id="foodtruckDetail" resultMap="truckRM">
 select t.*, f.foodtruck_filepath
@@ -123,7 +114,7 @@ values(#{reviewNo},#{foodtruckNumber},#{customerId},#{reviewContent},sysdate,#{g
 	t.foodtruck_name, t.foodtruck_number, t.register_timeposted,t.latitude,t.longitude,
 	f.foodtruck_filepath
 	from foodtruck t, foodtruckfile f where
-	f.foodtruck_number(+)=t.foodtruck_number 
+	f.foodtruck_number=t.foodtruck_number 
 	<if test='searchWord != null'>
 	and t.foodtruck_name like '%' || #{searchWord}  || '%' and t.latitude is not null and t.longitude is not null
 	</if>
@@ -175,7 +166,7 @@ values(#{reviewNo},#{foodtruckNumber},#{customerId},#{reviewContent},sysdate,#{g
 </select>
 <select id="findAvgGradeByTruckNumber" resultType="double" >
 	select nvl(trunc(avg(r.grade),1),0) as grade
-	from(select * from foodtruck)f, review r
+	from foodtruck f, review r
 	where f.foodtruck_number=r.foodtruck_number(+) and
 	f.foodtruck_number=#{value} group by f.foodtruck_number
 </select>

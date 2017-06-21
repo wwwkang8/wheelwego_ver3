@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 public class FoodTruckServiceImpl implements FoodTruckService {
 	@Resource
 	private FoodTruckDAO foodTruckDAO;
-	@Override
-	public String findFoodtruckNameByMenuId(String menuId){
-		return foodTruckDAO.findFoodtruckNameByMenuId(menuId);
-	}
+
 	
 	@Override
 	public List<TruckVO> foodtruckList() {
@@ -32,17 +29,13 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		}
 		return truckList;
 	}
-	/* 검색 결과 푸드트럭 리스트 */
-	@Override
-	public List<TruckVO> searchFoodTruckList(String name){
-		return foodTruckDAO.searchFoodTruckList(name);
-	}
+
 	
-	@Override
+/*	@Override
 	public List<TruckVO> searchFoodTruckByGPS(TruckVO gpsInfo) {
 		return foodTruckDAO.searchFoodTruckByGPS(gpsInfo);
 	}
-
+*/
 	/* foodtruck 상세보기 */
 	@Override
 	public TruckVO foodTruckAndMenuDetail(String foodtruckNo){
@@ -79,7 +72,7 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 	public int getBookMarkCount(WishlistVO wishlistVO) {
 		return foodTruckDAO.getBookMarkCount(wishlistVO);
 	}
-	@Override
+/*	@Override
 	public ListVO getFoodTruckListByName(String pageNo, String name) {
 		int totalCount=foodTruckDAO.getTruckListTotalContentCountByName(name);
 		PagingBean pagingBean=null;
@@ -106,9 +99,9 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		pagingBean.setGpsInfo(gpsInfo);
 				
 		return new ListVO(pagingBean, foodTruckDAO.getFoodTruckListByGPS(pagingBean));
-	}
+	}*/
 	   @Override
-	   public ListVO filtering(String option, String searchWord, String pageNo, String latitude, String longitude, TruckVO gpsInfo) {
+	   public ListVO filtering(String option, String searchWord, String pageNo, TruckVO gpsInfo) {
 	      List<TruckVO> truckList=null;
 	      
 	      if(pageNo==null)

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<!-- 정현지 : 수정완료 -->
 <style>
 .star_point_list{
   font-size:10pt;
@@ -200,7 +200,6 @@
                 success:function(data){
                    if(data=="deleteOk"){
                       alert("삭제하였습니다.");
-                      //row.remove();
                       location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyReviewList.do?customerId=${sessionScope.memberVO.id}";
                    }
                 }                
