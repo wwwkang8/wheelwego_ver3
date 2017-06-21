@@ -43,11 +43,11 @@ select .selected {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 
 $(document).ready(function(){
-   var filteringOption="${requestScope.filteringOption}";
-   var sel=document.getElementById("filteringOption");
+	var option="${requestScope.option}";
+   var sel=document.getElementById("option");
    for(var i=0; i<sel.options.length; i++){
       if(sel.options[i].value==option){
          sel.options[i].selected = true;
@@ -66,11 +66,11 @@ $(document).ready(function(){
      var foodtruckNumber = $(this).attr('name');
      var insertBtn=$(this);
      var id = "${sessionScope.memberVO.id}";
-
+	var memberType="${sessionScope.memberVO.memberType}";
     if(id==""){
        alert("로그인이 필요합니다.");
     }
-    else if(${sessionScope.memberVO.memberType=='seller'}){
+    else if(memberType=="seller"){
     	alert("일반회원 전용 서비스입니다.");
     }
     else{
@@ -92,14 +92,14 @@ $(document).ready(function(){
    });
     }
 });
-   $(":input[name=filteringOption]").change(function(){
-      var optionVal=$(this).val();
-      var flag="${requestScope.flag}";
-      if(flag=="false"){
-           location.href="${pageContext.request.contextPath}/searchFoodTruckByName.do?latitude=${param.latitude}&longitude=${param.longitude}&name=${param.name}&filteringOption="+optionVal;
+   $("#option").change(function(){
+       var optionVal=$(this).val();
+      var GPSflag="${requestScope.GPSflag}";
+      if(GPSflag=="false"){
+           location.href="${pageContext.request.contextPath}/searchFoodTruckByName.do?latitude=${param.latitude}&longitude=${param.longitude}&name=${param.name}&option="+optionVal;
       }else{
-           location.href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude=${param.latitude}&longitude=${param.longitude}&filteringOption="+optionVal;
-      }
+           location.href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude=${param.latitude}&longitude=${param.longitude}&option="+optionVal;
+      } 
    });
 });
 </script>
@@ -125,7 +125,7 @@ $(document).ready(function(){
   <div class="row">
   <div class="col-xs-4"></div>
   <div class="col-xs-4">
-  <select name="filteringOption" id="filteringOption" class="form-control">
+  <select name="option" id="option" class="form-control">
      <option value="byDate" class="selected">최신순</option>
       <option value="byAvgGrade" class="selected">평점순</option>
      <option value="byWishlist" class="selected">즐겨찾기순</option>
@@ -178,11 +178,11 @@ $(document).ready(function(){
     -->      
    <c:if test="${pb.previousPageGroup}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&filteringOption=${requestScope.option}">◀&nbsp; </a>
+            <c:when test="${requestScope.GPSflag==false}">
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">◀&nbsp; </a>
             </c:when>
             <c:otherwise>
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&filteringOption=${requestScope.option}">◀&nbsp; </a>
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&option=${requestScope.option}">◀&nbsp; </a>
             </c:otherwise>         
          </c:choose>   
    </c:if>
@@ -197,11 +197,11 @@ $(document).ready(function(){
    <c:choose>
    <c:when test="${pb.nowPage!=i}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&filteringOption=${requestScope.option}">${i}</a>
+            <c:when test="${requestScope.GPSflag==false}">
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">${i}</a>
             </c:when>
             <c:otherwise>
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&filteringOption=${requestScope.option}">${i}</a>
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&option=${requestScope.option}">${i}</a>
             </c:otherwise>         
          </c:choose> 
    </c:when>
@@ -214,11 +214,11 @@ $(document).ready(function(){
 
    <c:if test="${pb.nextPageGroup}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&filteringOption=${requestScope.option}">▶</a>
+            <c:when test="${requestScope.GPSflag==false}">
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">▶</a>
             </c:when>
             <c:otherwise>
-               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&filteringOption=${requestScope.option}">▶</a>
+               <a href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&option=${requestScope.option}">▶</a>
             </c:otherwise>         
          </c:choose>   
    </c:if>   

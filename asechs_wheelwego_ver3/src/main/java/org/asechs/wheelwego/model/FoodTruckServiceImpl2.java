@@ -12,30 +12,12 @@ import org.asechs.wheelwego.model.vo.ReviewVO;
 import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
 import org.springframework.stereotype.Service;
-/**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
- * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+
 @Service
 public class FoodTruckServiceImpl2 implements FoodTruckService {
 	@Resource
 	private FoodTruckDAO foodTruckDAO;
 
-	@Override
-	public String findFoodtruckNameByMenuId(String menuId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
@@ -52,23 +34,6 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 			truckList.get(i).setWishlistCount(foodTruckDAO.findWishlistCountByTruckNumber(foodtruckNumber));
 		}
 		return truckList;
-	}
-
-	/** 	  
-	정현지
-	2017.06.21 (수정완료)
- 	푸드트럭 - 푸드트럭명으로 검색한 푸드트럭 리스트
- 	기능설명 : 검색한 푸드트럭명에 해당하는 푸드트럭 리스트를 list로 받아온다
-  */
-	@Override
-	public List<TruckVO> searchFoodTruckList(String name){
-		return foodTruckDAO.searchFoodTruckList(name);
-	}
-
-	@Override
-	public List<TruckVO> searchFoodTruckByGPS(TruckVO gpsInfo) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/** 	  
@@ -100,11 +65,14 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 리뷰 등록하기
+	 */
 	@Override
 	public void registerReview(ReviewVO reviewVO) {
-		// TODO Auto-generated method stub
-		
+		foodTruckDAO.registerReview(reviewVO);		
 	}
 	/** 	  
 	정현지
@@ -126,23 +94,59 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		return pagingList;
 	}
 
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정완료)
+	 * 푸드트럭 - 필터링
+	 * -------------------------
+	 * pageNo가 없다면 기본 1로 설정해준다.
+	 * searchWord가 존재한다면 이름으로 검색하는 것이고
+	 * gpsInfo가 존재한다면 자동검색 / 수동검색을 하는 것이다.
+	 * 
+	 *  따라서 이름으로 검색한다면 이름검색조건에 해당하는 푸드트럭 리스트의 수를
+	 *  totalCount로 설정하여 페이징빈 객체를 생성한다.
+	 *  gps정보로 검색한다면 위치 반경 1km내의 푸드트럭 리스트 수를 totalCount로 
+	 *  설정하여 페이징빈 객체를 생성한다.
+	 *  
+	 *  이후 option값에 따라 필터링을 실행하고
+	 *  각 푸드트럭마다 평점과 즐겨찾기 수를 setting해서 반환한다.
+	 */
 	@Override
-	public ListVO getFoodTruckListByName(String pageNo, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListVO getFoodTruckListByGPS(String pageNo, TruckVO gpsInfo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListVO filtering(String option, String name, String pageNo, String latitude, String longitude,
-			TruckVO gpsInfo) {
-		// TODO Auto-generated method stub
-		return null;
+	public ListVO filtering(String option, String searchWord, String pageNo, TruckVO gpsInfo) {
+	      int totalCount=0;
+	      PagingBean pagingbean =null;
+	      if(pageNo==null)
+	         pageNo="1";
+	      //이름으로 검색할 경우 페이징 객체 설정
+	      if(searchWord!=null){
+	    	  totalCount=foodTruckDAO.getTruckListTotalContentCountByName(searchWord);
+	    	  pagingbean = new PagingBean(Integer.parseInt(pageNo),totalCount,searchWord);
+	      }
+	      //위치로 검색할 경우 페이징 객체 설정
+	      if(gpsInfo!=null){
+	    	  totalCount=foodTruckDAO.getTruckListTotalContentCountByGPS(gpsInfo);
+	    	  pagingbean = new PagingBean(Integer.parseInt(pageNo),totalCount);
+	    	  pagingbean.setGpsInfo(gpsInfo);
+	      }
+	      
+	      //option에 따른 필터링
+	      List<TruckVO> truckList=null;
+	      if(option.equals("byAvgGrade")){
+	         truckList=foodTruckDAO.filteringByAvgGrade(pagingbean);
+	      }else if(option.equals("byWishlist")){
+	         truckList=foodTruckDAO.filteringByWishlist(pagingbean);
+	      }else{
+	         truckList=foodTruckDAO.filteringByDate(pagingbean);
+	      }
+	      
+	      for(int i=0; i<truckList.size();i++){
+	         truckList.get(i).setAvgGrade(foodTruckDAO.findAvgGradeByTruckNumber(truckList.get(i).getFoodtruckNumber()));
+	         truckList.get(i).setWishlistCount(foodTruckDAO.findWishlistCountByTruckNumber(truckList.get(i).getFoodtruckNumber()));
+	      }
+	      ListVO pagingList=new ListVO();
+	      pagingList.setTruckList(truckList);
+	      pagingList.setPagingBean(pagingbean);
+	      return pagingList;
 	}
 
 	@Override
