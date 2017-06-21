@@ -2,6 +2,7 @@ package org.asechs.wheelwego.model;
 
 import javax.annotation.Resource;
 
+import org.asechs.wheelwego.model.vo.MemberVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,65 @@ import org.springframework.stereotype.Service;
 	~~~~~
   */
 @Service
-public class MemberServiceImpl2 /*implements MemberService */{
+public class MemberServiceImpl2 implements MemberService {
 	@Resource
 	private MemberDAO memberDAO;
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	@Override
+	public MemberVO login(MemberVO vo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String forgetMemberId(MemberVO vo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int forgetMemberPassword(MemberVO vo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void updateMember(MemberVO vo) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int idcheck(String id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public MemberVO findMemberById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getMemberPassword(String id, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void registerMember(MemberVO memberVO, String businessNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteMember(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getMemberType(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String findBusinessNumberById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
