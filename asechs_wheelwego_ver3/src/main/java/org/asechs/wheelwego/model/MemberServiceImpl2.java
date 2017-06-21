@@ -22,21 +22,51 @@ public class MemberServiceImpl2 implements MemberService {
 	@Autowired // Resource와 대비하여 Spring Framework에 종속적이지만 정밀한 DI가 가능함
 	BCryptPasswordEncoder passwordEncoder; // Bcrypt : 비밀번호 패스워드에 특화됨
 
-	public MemberVO login(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 로그인
+	 * --------------------------
+	 * DB로부터 자신의 member정보에 해당하는 reMemberVO객체가 존재한다면
+	 * 자신이 입력한 패스워드와 DB에 저장된 암호화되어진 패스워드를 비교한다.
+	 * 만약 일치한다면 db로부터 받아온 reMemberVO를 resultMember에 저장한다.
+	 */
+	@Override
+	public MemberVO login(MemberVO memberVO) {
+			MemberVO reMemberVO = memberDAO.login(memberVO);		
+			MemberVO resultMember = null;
+	
+			if (reMemberVO != null) {
+				String rawPassword = memberVO.getPassword(); // 사용자가 입력한 비밀번호
+				String encodedPassword = reMemberVO.getPassword(); // 암호화된 비밀번호(DB저장)
+				
+				//사용자가 입력한 비밀번호와 암호화된 비밀번호를 매치
+				if (passwordEncoder.matches(rawPassword, encodedPassword)) 
+					resultMember = reMemberVO;
+			}
+			return resultMember;
+		}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 아이디 찾기
+ 	기능설명 : 이름, 휴대폰 번호가 담긴 MemberVO 객체를 return 한다
+  */
 	@Override
 	public String forgetMemberId(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.forgetMemberId(vo);
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 새 비밀번호 설정
+ 	기능설명 : 새로 설정된 비밀번호를 암호화해서 받아와 DB에 update 해준다
+  */
 	@Override
 	public int forgetMemberPassword(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return 0;
+		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+		return memberDAO.forgetMemberPassword(vo);
 	}
 
 	@Override
@@ -105,11 +135,23 @@ public class MemberServiceImpl2 implements MemberService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 사업자 아이디에 해당하는 사업자 번호 검색
+	 */
 	@Override
 	public String findBusinessNumberById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.findBusinessNumberById(id);
+	}
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 사업자 아이디에 해당하는 푸드트럭 번호 검색
+	 */
+	@Override
+	public String findFoodTruckNumberById(String id) {
+		return memberDAO.findFoodTruckNumberById(id);
 	}
 
 }

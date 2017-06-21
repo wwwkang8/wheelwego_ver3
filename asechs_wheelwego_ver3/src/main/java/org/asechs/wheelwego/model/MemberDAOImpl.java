@@ -24,11 +24,22 @@ import org.springframework.stereotype.Repository;
 public class MemberDAOImpl implements MemberDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 완료)
+	 * 멤버 - 로그인
+	 * -------------------------
+	 * 사용자가 입력한 정보(Id)에 해당하는 Member정보를 select한다.
+	 */
 	public MemberVO login(MemberVO vo) {
 		return sqlSessionTemplate.selectOne("member.login", vo);
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 아이디 찾기
+ 	기능설명 : 이름, 휴대폰 번호를 MemberVO 객체로 받아온다
+  */
 	@Override
 	public String forgetMemberId(MemberVO vo) {
 		return sqlSessionTemplate.selectOne("member.forgetMemberId", vo);
@@ -100,14 +111,32 @@ public class MemberDAOImpl implements MemberDAO {
 	public String getMemberType(String id) {
 		return sqlSessionTemplate.selectOne("member.getMemberType", id);
 	}
-	
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 새 비밀번호 설정
+ 	기능설명 : 아이디, 이름, 휴대폰 번호를 MemberVO 객체로 받아와 비밀번호를 update 해준다
+  */
     @Override
     public int forgetMemberPassword(MemberVO vo) {
        return sqlSessionTemplate.update("member.forgetMemberPassword", vo);
     }
-
+    /**
+     * 박다혜
+     * 2017.06.21 (수정완료)
+     * 멤버 - 사업자 아이디에 해당하는 사업자 번호 조회
+     */
 	@Override
 	public String findBusinessNumberById(String id) {
 		return sqlSessionTemplate.selectOne("member.findBusinessNumberById", id);
+	}
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정완료)
+	 * 멤버 - 사업자 자신의 아이디에 해당하는 푸드트럭 넘버 조회
+	 */
+	@Override
+	public String findFoodTruckNumberById(String id) {
+		return sqlSessionTemplate.selectOne("member.findFoodTruckNumberById", id);
 	}
 }

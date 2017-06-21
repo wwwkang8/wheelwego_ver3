@@ -149,7 +149,7 @@
        	   	   <div class="form-group">
           <label class="col-sm-3 control-label" for="inputPassword">사업자 번호</label>
         	<div class="col-sm-6">
-            <input type="text"   class="form-control"  id="businessNumber" name = "businessNumber" placeholder="사업자번호" value = "${sessionScope.businessNumber}" readonly="readonly"><br>
+            <input type="text"   class="form-control"  id="businessNumber" name = "businessNumber" placeholder="사업자번호" value = "${requestScope.businessNumber}" readonly="readonly"><br>
             </div>
             </div>
    	</c:otherwise>

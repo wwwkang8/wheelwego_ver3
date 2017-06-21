@@ -27,4 +27,6 @@ public interface MemberDAO {
 	String getMemberType(String id);
 
 	String findBusinessNumberById(String id);
+
+	String findFoodTruckNumberById(String id);
 }

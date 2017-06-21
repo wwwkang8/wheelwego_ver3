@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.asechs.wheelwego.model.FoodTruckService;
-import org.asechs.wheelwego.model.MemberService;
 import org.asechs.wheelwego.model.MypageService;
 import org.asechs.wheelwego.model.vo.BookingDetailVO;
 import org.asechs.wheelwego.model.vo.BookingVO;
@@ -41,24 +40,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class MypageController {
 	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
-	@Resource(name="memberServiceImpl")
-   private MemberService memberService;
 	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
-   /**
-    * 현지: myWishList 푸드트럭 리스트에서 heart 표시
-    * 
-    * @param id
-    */
-   /*
-    * @RequestMapping("heartWishList.do") public ModelAndView
-    * heartWishList(HttpServletRequest request, String id){ id =
-    * request.getSession().getId(); List<WishlistVO> heartWishList =
-    * mypageService.heartWishList(id); return new
-    * ModelAndView("../foodtruck/foodtruck_location_select_list.tiles",
-    * "heartWishlist",heartWishList); }
-    */
 
    @RequestMapping("afterLogin_mypage/wishlist.do")
    // 세션이 없으면 홈으로 보냄
@@ -89,36 +73,24 @@ public class MypageController {
       return "success";
    }
 
-   /**
-    * 판매자가 마이페이지로 이동할때 판매자 아이디에 해당하는 푸드트럭이 테이블에 존재하는지 검사하여 존재한다면 푸드트럭 정보를 같이
-    * 보내준다.
-    * 
-    * @return
-    */
-   @RequestMapping("afterLogin_mypage/mypage.do")
-   public ModelAndView showMyTruckpage(HttpServletRequest request) {
-      HttpSession session = request.getSession(false);
-      ModelAndView mv = new ModelAndView("");
-      MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
-      String truckNumber = mypageService.findtruckNumberBySellerId(memberVO.getId());
-      mv.addObject("truckNumber", truckNumber);
-      mv.setViewName("mypage/mypage.tiles");
-      return mv;
-   }
 
-   /**
-    * 판매자가 트럭을 등록하는 경우 파일 경로와 함께 트럭정보를 저장한다.
-    * 
-    * @param truckVO
-    * @param request
-    * @return
-    */
+  /**
+   * 박다혜
+   * 2017.06.21 (수정 완료)
+   * 마이페이지-마이트럭 등록
+   * -------------------------------
+   * 사용자가 입력한 트럭 정보를 저장한다.
+   * 이때 파일이 있으므로 uploadPath를 설정한다.
+   * 트럭 등록 후, session에 foodtruckNumber를 설정해준다.
+   * @param truckVO
+   * @param request
+   * @return
+   */
    @RequestMapping(method = RequestMethod.POST, value = "afterLogin_mypage/registerFoodtruck.do")
    public String registerFoodtruck(TruckVO truckVO, HttpServletRequest request) {
-      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");
-      truckVO.setSellerId(memberVO.getId());
       String uploadPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
       mypageService.registerFoodtruck(truckVO, uploadPath);
+      request.getSession(false).setAttribute("foodtruckNumber", truckVO.getFoodtruckNumber());
       return "mypage/registerMyfoodtruck_result.tiles";
    }
 
@@ -174,10 +146,21 @@ public class MypageController {
       mypageService.updateMenu(truckVO, uploadPath);
       return "mypage/updateMenu_result.tiles";
    }
-
+   /**
+    * 박다혜
+    * 2017.06.21 (수정 완료)
+    * 마이페이지 - 트럭삭제
+    * ---------------------------
+    * 트럭 넘버에 해당하는 트럭정보를 삭제하고
+    * 세션에 저장된 foodtruckNumber속성을 초기화해준다.
+    * @param request
+    * @param foodtruckNumber
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/deleteMyTruck.do")
-   public String deleteMyTruck(String foodtruckNumber) {
+   public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
       mypageService.deleteMyTruck(foodtruckNumber);
+      request.getSession(false).setAttribute("foodtruckNumber", "");
       return "redirect:/afterLogin_mypage/mypage.do";
    }
 
