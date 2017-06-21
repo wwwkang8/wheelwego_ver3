@@ -39,11 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
   */
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
-	@Resource(name="memberServiceImpl2")
+	@Resource(name="memberServiceImpl")
    private MemberService memberService;
-	@Resource(name="foodTruckServiceImpl2")
+	@Resource(name="foodTruckServiceImpl")
    private FoodTruckService foodtruckService;
 
    /**
@@ -259,45 +259,83 @@ public class MypageController {
       else
          return true;
    }
-   // 내가 슨 게시물 보기로 가기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.12 (수정 완료)
+	 * 마이페이지-내가 쓴 게시물 보기
+	 * ------------------------------------------------------
+	 *  마이페이지에서 My Contents 를 누르면 3가지 게시판 버튼이 뜬다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentList.do")
    public String mypage_content(){
 	   return "mypage/mypage_content.tiles";
    }
-   // 자유게시물 에 해당하는 게시글 보기2
+	/**
+	 * 김호겸 작성
+	 *  2017.6.13 (수정 완료)
+	 * 마이페이지-자유게시판 버튼 글릭시 내가 본 글 
+	 * ------------------------------------------------------
+	 * 자유게시판 버튼을 누르면 자신 아이디로 자신이 쓴 자유게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentByFreeList.do")
-   public ModelAndView showMyContentByFreeList(HttpServletRequest request,String id,String contentPageNo){
+   public ModelAndView showMyContentByFreeList(String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_freeboard.tiles");
 	   ListVO contentList=mypageService.showMyContentByFreeList(id,contentPageNo);
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 자유게시물 에 해당하는 게시글 삭제
+	/**
+	 * 김호겸 작성
+	 *  2017.6.12 (수정 완료)
+	 * 마이페이지-자유게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/freeboardDeleteInMaypage.do")
    @ResponseBody
    public String freeboardDeleteInMaypage(String contentNo) {
-	   System.out.println("딜리트"+contentNo);
       mypageService.freeboardDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   //창업게시판 에 해당한 게시글보기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-창업게시판 버튼 글릭시 내가 본 글 
+	 * ------------------------------------------------------
+	 * 창업게시판 버튼을 누르면 자신 아이디로 자신이 쓴 창업게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentBybusinessList.do")
-   public ModelAndView showMyContentBybusinessList(HttpServletRequest request,String id,String contentPageNo){
-	  
+   public ModelAndView showMyContentBybusinessList(String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_business.tiles");
 	   ListVO contentList=mypageService.showMyContentBybusinessList(id,contentPageNo);
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 창업 에 해당하는 게시글 삭제
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-창업게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/businessDeleteInMaypage.do")
    @ResponseBody
    public String businessDeleteInMaypage(String contentNo) {
-	   System.out.println("딜리트"+contentNo);
       mypageService.businessDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   // 규엔에이 게시글 보기
+	/**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-QnA게시판 버튼 글릭시 내가 본 글 뜬다. 
+	 * ------------------------------------------------------
+	 * QnA게시판 버튼을 누르면 자신 아이디로 자신이 쓴 QnA게시판에 있는
+	 * 글을 불러온다. 이때 페이징 빈을 통해 불러온다.
+	  */
    @RequestMapping("afterLogin_mypage/showMyContentByqnaList.do")
    public ModelAndView showMyContentByqnaList(HttpServletRequest request,String id,String contentPageNo){
 	   ModelAndView mv=new ModelAndView("mypage/mypage_content_qna.tiles");
@@ -305,7 +343,14 @@ public class MypageController {
 	   mv.addObject("contentList", contentList);
 	   return mv;
    }
-   // 큐ㅜ엔에이 에 해당하는 게시글 삭제
+   /**
+	 * 김호겸 작성
+	 *  2017.6.14 (수정 완료)
+	 * 마이페이지-QnA게시판에 있는 게시글 삭제
+	 * ------------------------------------------------------
+	 * ajax 사용하므로 ResponseBoby를 적용시킨다.
+	 * DB 에서 삭제후 컨트롤러에서 삭제가 완료되면 deleteOK를 넘긴다.
+	  */
    @RequestMapping("afterLogin_mypage/qnaDeleteInMaypage.do")
    @ResponseBody
    public String qnaDeleteInMaypage(String contentNo) {

@@ -16,26 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-/**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
- * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+
 @Controller
 public class BoardController {
 
-	@Resource(name="boardServiceImpl2")
+	@Resource(name="boardServiceImpl")
 	private BoardService boardService;
-
+ 
 	// 강정호 작성. 보드리스트(3개의 아이콘 나오는 것)
 	@RequestMapping("boardSelectList.do")
 	public String showBoardList() {
@@ -43,27 +30,26 @@ public class BoardController {
 	}
 	
 
-	
 	////////////강정호. 자유게시판 freeboard/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 강정호 작성. 자유게시판 리스트 보여주는 메서드
 	@RequestMapping("freeboard_list.do")
 	public ModelAndView freeBoardList(String pageNo) {
 		System.out.println("리스트 테스트");
-		/*
-		 * System.out.println("보드컨트롤러 자유게시판 메핑 통과"); ListVO
-		 * freeBoardList=boardService.getFreeBoardList(pageNo);
-		 * System.out.println("BoardController에서 자유게시판 목록 받음: "+freeBoardList);
-		 * return new ModelAndView("board/freeboard_list.tiles","freeBoardList",
-		 * freeBoardList);
-		 */
 		return new ModelAndView("board/freeboard_list.tiles", "freeBoardList", boardService.getFreeBoardList(pageNo));
 	}
-	
-	// 호겸 작성. 자유게시판 상세보기 and 조회수
+	/**
+	 * 김호겸 작성
+	 *  2017.6 (수정 완료)
+	 * 자유게시판 상세보기- 게시판 상세보기 및 조회수
+	 * ------------------------------------------------------
+	 * 게시글의 no로 상세보기를 구현한다.
+	 * 상세보기를 할때 조회수를 올리는 메서드와 사진 파일 이름을 가져오는 메서드를 실행해
+	 * model 에 저장시킨다.
+		---------------------------------
+	  */
 		@RequestMapping("/board/freeboard_detail_content.do")
 		public String freeboard_detail_content(String no, Model model) {
-			System.out.println("자유게시판 상세보기 : 컨트롤러 시작");
 			int hits = Integer.parseInt(no);
 			// 조회수 올리기
 			boardService.updateHits(hits);
@@ -88,29 +74,42 @@ public class BoardController {
 			//return "redirect:freeboard_list.do";
 			return "redirect:board/freeboard_detail_content.do?no=" + bvo.getNo();
 		}
-		
-		// 호겸 작성. 자유게시판 게시물 삭제
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 자유게시판 글 삭제- 게시판 글 삭제
+		 * ------------------------------------------------------
+		 * 자유게시판 no를 받아 해당 게시글을 삭제
+		 * intercepter로 인해 redirect 시 ../ 으로 한번 나간뒤 실행한다.
+		  */
 		@RequestMapping("afterLogin_board/freeboardDelete.do")
 		public String freeboardDelete(String no) {
-			System.out.println("삭제전");
 			boardService.freeboardDelete(no);
-			System.out.println("삭제후");
 			return "redirect:../freeboard_list.do";
 		}
-		
-		// 호겸 작성. 자유게시판 게시물 수정 폼으로 가기
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 자유게시판 수정폼 - 자유게시판 수정시 수정폼 넘어가기
+		 * ------------------------------------------------------
+		 * 게시글의 no 로 수정폼으로 넘어가고
+		 * 그때 아이디에 해당하는 이름을 갖고오는 메서드를 정의한다.
+		  */
 		@RequestMapping("afterLogin_board/freeboard_update_form.do")
-		public String freeboard_update_form(String no, Model model,HttpServletRequest request) {
-			//아이디를 받아와서 작성자를 뽑아야된다
-			System.out.println("freeboard_update_form 통과");
+		public String freeboard_update_form(String no, Model model) {
 			BoardVO bvo = boardService.getFreeBoardDetail(no);
 			MemberVO name = boardService.getNameById(bvo);
 			model.addAttribute("name", name);
 			model.addAttribute("detail_freeboard", bvo);
 			return "board/freeboard_update_form.tiles";
 		}
-		
-		// 호겸 작성. 자유게시판 게시물 수정 해버리기
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 자유게시판 수정하기- 게시글 수정하기
+		 * ------------------------------------------------------
+		 * 수정 후 상세보기로 넘어가야 함으로 vo의 no을 받아 넘긴다.
+		  */
 		@RequestMapping("afterLogin_board/updateBoard.do")
 		public String updateBoard(BoardVO vo) {
 			boardService.updateBoard(vo);
@@ -123,8 +122,7 @@ public class BoardController {
 			boardService.writeFreeboardComment(cvo);
 			return "redirect:../board/freeboard_detail_content.do?no="+cvo.getContentNo();
 		}
-		
-		
+	
 		//강정호 작성. 자유게시판 댓글 삭제
 		@RequestMapping(value="afterLogin_board/deleteFreeboardComment.do", method=RequestMethod.POST)
 		@ResponseBody
@@ -167,8 +165,16 @@ public class BoardController {
 		return new ModelAndView("board/business_list.tiles", "businessInfoBoardList",
 				boardService.getBusinessInfoBoardList(pageNo));
 	}
-	
-	// 강정호. 창업게시판 상세보기
+	/**
+	 * 김호겸, 강정호 작성
+	 *  2017.6 (수정 완료)
+	 * 창업게시판 상세보기- 게시판 상세보기 및 조회수
+	 * ------------------------------------------------------
+	 * 게시글의 no로 상세보기를 구현한다.
+	 * 상세보기를 할때 조회수를 올리는 메서드와 사진 파일 이름을 가져오는 메서드를 실행해
+	 * model 에 저장시킨다.
+		---------------------------------
+	  */
 		@RequestMapping("board/business_detail_content.do")
 		public String business_detail_content(String no, Model model) {
 			int hits = Integer.parseInt(no);
@@ -192,30 +198,45 @@ public class BoardController {
 			boardService.businessWrite(bvo, request);
 			return "redirect:../board/business_detail_content.do?no="+bvo.getNo();
 		}
-		
-		// 호겸 작성. 창업 게시물 삭제
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 창업게시판 글 삭제- 게시판 글 삭제
+		 * ------------------------------------------------------
+		 * 창업게시판 no를 받아 해당 게시글을 삭제
+		 * intercepter로 인해 redirect 시 ../ 으로 한번 나간뒤 실행한다.
+		  */
 		@RequestMapping("afterLogin_board/businessDelete.do")
 		public String businessDelete(String no) {
 			boardService.businessDelete(no);
 			return "redirect:../business_list.do";
 		}
-
-		// 호겸 작성. 창업 게시물 수정 폼으로 가기
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 창업게시판 수정폼 - 게시판 수정시 수정폼 넘어가기
+		 * ------------------------------------------------------
+		 * 게시글의 no 로 수정폼으로 넘어가고
+		 * 그때 아이디에 해당하는 이름을 갖고오는 메서드를 정의한다.
+		  */
 		@RequestMapping("afterLogin_board/business_update_form.do")
 		public String business_update_form(String no, Model model) {
-			System.out.println(no);
 			BoardVO bvo = boardService.getBusinessBoardDetail(no);
 			MemberVO name = boardService.business_getNameById(bvo);
 			model.addAttribute("name", name);
 			model.addAttribute("detail_freeboard", bvo);
 			return "board/business_update_form.tiles";
 		}
-		
-		// 호겸 작성. 창업게시물 수정 해버리기
+		/**
+		 * 김호겸 작성
+		 *  2017.6 (수정 완료)
+		 * 창업게시판 수정하기- 게시글 수정하기
+		 * ------------------------------------------------------
+		 * 수정 후 상세보기로 넘어가야 함으로 vo의 no을 받아 넘긴다.
+		  */
 		@RequestMapping(value="afterLogin_board/business_updateBoard.do",method=RequestMethod.POST)
 		public String businessupdateBoard(BoardVO vo) {
 			boardService.businessupdateBoard(vo);
-			System.out.println(vo.getNo());
 			return "redirect:../board/business_detail_content.do?no="+vo.getNo();
 		}
 		
@@ -263,7 +284,16 @@ public class BoardController {
 	public ModelAndView QnABoardList(String pageNo) {
 		return new ModelAndView("board/qna_list.tiles", "qnaBoardList", boardService.getQnABoardList(pageNo));
 	}
-	// 강정호. 질문답변게시판 상세보기
+	/**
+	 * 김호겸,강정호 작성
+	 *  2017.6 (수정 완료)
+	 * QnA게시판 상세보기- 게시판 상세보기 및 조회수
+	 * ------------------------------------------------------
+	 * 게시글의 no로 상세보기를 구현한다.
+	 * 상세보기를 할때 조회수를 올리는 메서드와 사진 파일 이름을 가져오는 메서드를 실행해
+	 * model 에 저장시킨다.
+		---------------------------------
+	  */
 	@RequestMapping("board/qna_detail_content.do")
 	public String qna_detail_content(String no, Model model) {
 		int hits = Integer.parseInt(no);
@@ -286,14 +316,27 @@ public class BoardController {
 		boardService.qnaWrite(bvo, request);
 		return "redirect:../board/qna_detail_content.do?no="+bvo.getNo();
 	}
-	// 호겸 작성. qna 게시물 삭제
+	/**
+	 * 김호겸 작성
+	 *  2017.6 (수정 완료)
+	 * QnA게시판 글 삭제- 게시판 글 삭제
+	 * ------------------------------------------------------
+	 * QnA게시판 no를 받아 해당 게시글을 삭제
+	 * intercepter로 인해 redirect 시 ../ 으로 한번 나간뒤 실행한다.
+	  */
 			@RequestMapping("afterLogin_board/qnaDelete.do")
 			public String qnaDelete(String no) {
 				boardService.qnaDelete(no);
 				return "redirect:../qna_list.do";
 			}
-
-			// 호겸 작성. qna 게시물 수정 폼으로 가기
+			/**
+			 * 김호겸 작성
+			 *  2017.6 (수정 완료)
+			 * QnA게시판 수정폼 - 게시판 수정시 수정폼 넘어가기
+			 * ------------------------------------------------------
+			 * 게시글의 no 로 수정폼으로 넘어가고
+			 * 그때 아이디에 해당하는 이름을 갖고오는 메서드를 정의한다.
+			  */
 			@RequestMapping("afterLogin_board/qna_update_form.do")
 			public String qna_update_form(String no, Model model) {
 				BoardVO bvo = boardService.getqnaBoardDetail(no);
@@ -304,8 +347,13 @@ public class BoardController {
 				model.addAttribute("detail_qna", bvo);
 				return "board/qna_update_form.tiles";
 			}
-			
-			// 호겸 작성. qna게시물 수정 해버리기
+			/**
+			 * 김호겸 작성
+			 *  2017.6 (수정 완료)
+			 * QnA게시판 수정하기- 게시글 수정하기
+			 * ------------------------------------------------------
+			 * 수정 후 상세보기로 넘어가야 함으로 vo의 no을 받아 넘긴다.
+			  */
 			@RequestMapping("afterLogin_board/qna_updateBoard.do")
 			public String qnaupdateBoard(BoardVO vo) {
 				boardService.qnaupdateBoard(vo);

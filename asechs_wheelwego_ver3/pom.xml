@@ -3,7 +3,7 @@
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>org.asechs</groupId>
-   <artifactId>wheelwego_ver2</artifactId>
+   <artifactId>wheelwego_ver3</artifactId>
    <name>asechs_wheelwego_ver2</name>
    <packaging>war</packaging>
    <version>1.0.0-BUILD-SNAPSHOT</version>
