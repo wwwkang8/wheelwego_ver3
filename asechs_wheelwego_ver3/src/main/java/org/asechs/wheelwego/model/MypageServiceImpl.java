@@ -300,6 +300,15 @@ public class MypageServiceImpl implements MypageService {
       WishlistVO wishlistVO=new WishlistVO(foodtruckNumber,customerId); 
       return mypageDAO.getWishListFlag(wishlistVO);
    }
+   /**
+    * 김호겸
+    * 2017.6.13 (수정 완료) 
+    *마이페이지-내가 쓴 게시글 자유게시글 보기
+    * ------------------------------------------------------ 코드설명
+    * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+    * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+    * 페이징 빈을 set 해준다
+    */
 @Override
 public ListVO showMyContentByFreeList(String id,String contentPageNo) {
 	 if(contentPageNo==null)
@@ -348,14 +357,25 @@ public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 	return mypageDAO.getBookingDetailVO(bookingVO);
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void freeboardDeleteInMaypage(String contentNo) {
 	mypageDAO.freeboardDeleteInMaypage(contentNo);
 	
 }
-/*public List<BookingVO> getSellerBookingListByTruckNumber(String foodTruckNumber) {
-	return mypageDAO.getSellerBookingListByTruckNumber(foodTruckNumber);
-}*/
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 창업게시글 보기
+ * ------------------------------------------------------ 코드설명
+ * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+ * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+ * 페이징 빈을 set 해준다
+ */
 @Override
 public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
 	 if(contentPageNo==null)
@@ -367,11 +387,25 @@ public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void businessDeleteInMaypage(String contentNo) {
 	mypageDAO.businessDeleteInMaypage(contentNo);
 	
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 보기
+ * ------------------------------------------------------ 코드설명
+ * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+ * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+ * 페이징 빈을 set 해준다
+ */
 @Override
 public ListVO showMyContentByqnaList(String id, String contentPageNo) {
 	 if(contentPageNo==null)
@@ -383,10 +417,16 @@ public ListVO showMyContentByqnaList(String id, String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+/**
+ * 김호겸
+ * 2017.6.13 (수정 완료) 
+ *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+ */
 @Override
 public void qnaDeleteInMaypage(String contentNo) {
 	mypageDAO.qnaDeleteInMaypage(contentNo);
 }
+
 @Override
 public int checkBookingState(String customerId) {
    return mypageDAO.checkBookingState(customerId);
