@@ -60,10 +60,8 @@ public class FoodTruckController {
 	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
 		if(option==null)
 			option="ByDate";
-
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
 		ListVO listVO =foodTruckService.filtering(option, name, pageNo, latitude, longitude,null);
-		//ListVO listVO = foodTruckService.getFoodTruckListByName(pageNo, name);	
 		modelAndView.addObject("pagingList", listVO);
 		modelAndView.addObject("name", name);
 		HttpSession session=request.getSession(false);
@@ -78,8 +76,6 @@ public class FoodTruckController {
 				System.out.println(heartWishList);
 			}
 		}
-		//System.out.println(name);
-		//System.out.println(listVO);
 		modelAndView.addObject("option", option);		
 		modelAndView.addObject("flag", "false");	
 		return modelAndView;
@@ -176,7 +172,6 @@ public class FoodTruckController {
 	@ResponseBody
 	public String registerBookMark(String id, String foodtruckNumber){
 		String result = null;
-
 		WishlistVO wishlistVO = new WishlistVO(foodtruckNumber, id);
 		int count = foodTruckService.getBookMarkCount(wishlistVO);
 
@@ -275,7 +270,5 @@ public class FoodTruckController {
 			String bookingNumber=foodTruckService.getPreviousBookingNumberByCustomerId(id);
 			return bookingNumber;
 		}
-	   
-	   
-	   
+		
 }

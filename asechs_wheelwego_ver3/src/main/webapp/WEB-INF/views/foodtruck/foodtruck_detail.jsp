@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<!-- 정현지 : 수정완료 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -28,7 +28,6 @@ body, html {
 input[name="grade"]{
   display:none;
 }
-
 .star_point{
   font-size:20pt;
   color:gold;
@@ -42,16 +41,13 @@ input[name="grade"]{
 input[name="grade"]:checked + .star_point~label{
     color:lightgray;
 }
-
 </style>
 <script>
-
 $(document).ready(function(){
    $("input#insertBtn2").click(function(){
      var foodtruckNumber = $(this).attr('name');
      var id = "${sessionScope.memberVO.id}";
-     //var img1=document.getElementById("${pageContext.request.contextPath }/resources/img/foodtruck/heartoff.png");
-       var src = ($(this).attr('src')) ==='hearton.png'
+     var src = ($(this).attr('src')) ==='hearton.png'
      
     if(id==""){
        alert("로그인이 필요합니다.");
@@ -66,7 +62,6 @@ $(document).ready(function(){
       data: {id: id, foodtruckNumber: foodtruckNumber}, 
       success:function(data){
          if(data=="on"){
-
 			$("#insertBtn2").attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png');
 			alert("단골트럭으로 등록!");
 			location.reload();
@@ -116,9 +111,6 @@ $(document).ready(function(){
 	        </c:otherwise>
         </c:choose>
     </div>
-  
-    <%-- <input type="image" id="insertBtn" name = "${truckDetailInfo.foodtruckNumber}" src = "${pageContext.request.contextPath }/resources/upload/greyheart2.png"> --%>
-   <%--  <img src="${pageContext.request.contextPath}/resources/upload/${requestScope.truckDetailInfo.fileVO.filepath}" style="width:100%" ><br><br><br> --%>
 <p style="text-align:center;"><i>${truckDetailInfo.introduction}</i></p><br>
 <div class="w3-panel w3-leftbar w3-light-grey" align="center" >
 	<p></p>
@@ -128,7 +120,6 @@ $(document).ready(function(){
 </div>
  </div>
   </div>
-
 
 <!-- Menu Container -->
 <div class="w3-container" id="menu">
@@ -157,11 +148,8 @@ $(document).ready(function(){
 <div class="w3-container" id="where" style="padding-bottom:32px;">
   <div class="w3-content" style="max-width:700px">
     <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">WHERE TO FIND US</span></h5>
-    <%-- <p style="text-align:center" id = "${truckDetailInfo.foodtruckName}"></p> --%>
     <center><p>${param.address}</p></center>
-    <!-- <iframe src="http://map.naver.com/?elng=b481b050171860a69f8e9feaa83f5ce7&menu=route&etext=%EB%8F%84%EC%B0%A9%EC%A7%80%EC%9D%B4%EB%A6%84&elat=bde725fc7a337cbc16aedc4da72b54ae&pathType=1&slng=b5980529d9dd3d387c515f33c92a0f06&stext=%EC%B6%9C%EB%B0%9C%EC%A7%80%EC%9D%B4%EB%A6%84&slat=e50da12d3af9afe511ca714e39883728" style="width:100%;height:400px;"></iframe> -->
     <div id="map" style="width:100%;height:400px;"></div>
-
     <c:if test="${sessionScope.memberVO!=null&&sessionScope.memberVO.memberType!='seller'}">
     <h5 class="w3-center w3-padding-32"><span class="w3-tag w3-wide">REVIEW</span></h5>
    <form action="${pageContext.request.contextPath}/afterLogin_foodtruck/registerReview.do" target="_blank" method="post">
@@ -373,22 +361,6 @@ $(document).ready(function(){
 
 <!-- Add Google Maps -->
 <script>
-/* function myMap()
-{
-  myCenter=new google.maps.LatLng(41.878114, -87.629798);
-  var mapOptions= {
-    center:myCenter,
-    zoom:12, scrollwheel: false, draggable: false,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
-
-  var marker = new google.maps.Marker({
-    position: myCenter,
-  });
-  marker.setMap(map);
-} */
-
 // Tabbed Menu
 function openMenu(evt, menuName) {
   var i, x, tablinks;
@@ -405,6 +377,7 @@ function openMenu(evt, menuName) {
 }
 document.getElementById("myLink").click();
 </script>
+
 <script>
    $(document).ready(function(){
       $("#registerBtn").click(function(){
