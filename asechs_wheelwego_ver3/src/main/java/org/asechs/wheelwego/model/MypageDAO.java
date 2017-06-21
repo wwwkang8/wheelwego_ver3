@@ -58,8 +58,6 @@ public interface MypageDAO {
 	
 	FoodVO findMenuByMenuId(String menuId);
 	
-	void updateMenuFilepath(FileVO fileVO);
-
 	void deleteMyTruck(String foodtruckNumber);
 	
 	List<ReviewVO> showMyReviewList(PagingBean pagingBean); //리뷰 리스트보기
@@ -123,6 +121,8 @@ public interface MypageDAO {
 	List<PointVO> getPointListById(PagingBean pagingBean);
 	
 	public int getCustomerBookingListCount(String customerId);
+	
+	String getNextMenuSequence();
 
 
 }

@@ -162,11 +162,16 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public List<TruckVO> filteringByAvgGrade(PagingBean pagingbean) {
 		return sqlSessionTemplate.selectList("foodtruck.filteringByAvgGrade", pagingbean);
 	}
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public double findAvgGradeByTruckNumber(String truckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findAvgGradeByTruckNumber", truckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public int findWishlistCountByTruckNumber(String foodtruckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findWishlistCountByTruckNumber", foodtruckNumber);
