@@ -66,7 +66,7 @@ $(document).ready(function(){
     if(id==""){
        alert("로그인이 필요합니다.");
     }
-    else if(${sessionScope.memberVO.memberType=='seller'}){
+    else if("${sessionScope.memberVO.memberType=='seller'}"){
     	alert("일반회원 전용 서비스입니다.");
     }
     else{
