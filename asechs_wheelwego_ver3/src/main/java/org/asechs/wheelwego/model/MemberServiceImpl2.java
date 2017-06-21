@@ -31,15 +31,26 @@ public class MemberServiceImpl2 implements MemberService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 아이디 찾기
+ 	기능설명 : 이름, 휴대폰 번호가 담긴 MemberVO 객체를 return 한다
+  */
 	@Override
 	public String forgetMemberId(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.forgetMemberId(vo);
 	}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 새 비밀번호 설정
+ 	기능설명 : 새로 설정된 비밀번호를 암호화해서 받아와 DB에 update 해준다
+  */
 	@Override
 	public int forgetMemberPassword(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return 0;
+		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+		return memberDAO.forgetMemberPassword(vo);
 	}
 	@Override
 	public void updateMember(MemberVO vo) {

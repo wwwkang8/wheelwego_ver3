@@ -37,10 +37,13 @@ public class HomeController {
 	@Resource(name="foodTruckServiceImpl2")
 	private FoodTruckService foodTruckService;
 
-	/**
-	 * 정현지 : main 랜덤 리스트
-	 * Collections.shuffle()을 사용하여 음식목록(foodList)를 랜덤으로 뿌려준다
-	 */
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - main 랜덤 리스트
+ 	기능설명 : 푸드트럭 리스트를 받아온 뒤,
+ 			Collections.shuffle()을 사용하여 음식목록(foodList)를 랜덤으로 뿌려준다
+  */
 	@RequestMapping("home.do")
 	public ModelAndView foodtruckList() {
 		List<TruckVO> truckList = foodTruckService.foodtruckList();

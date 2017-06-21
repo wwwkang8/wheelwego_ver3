@@ -65,13 +65,23 @@ public class MemberController {
 		return "mypage/updateMember_result.tiles";
 	}
 
-	// 정현지 id찾기
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - ID찾기
+ 	기능설명 : 회원 이름, 휴대폰 번호를 입력받아 일치하는 아이디가 존재하면 select하여 보여준다
+  */
 	@RequestMapping("forgetMemberId.do")
 	@ResponseBody
 	   public String forgetMemberId(MemberVO vo) {
 	      return memberService.forgetMemberId(vo);
 	   }
-	//정현지 새 비밀번호 설정
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	멤버 - 새 비밀번호 설정
+ 	기능설명 : 아이디, 이름, 휴대폰 번호를 입력받아 DB에 일치하는 정보가 있으면 새로운 비밀번호를 설정할 수 있다
+  */
 	   @RequestMapping("forgetMemberPassword.do")
 	   @ResponseBody
 	   public int forgetMemberPassword(MemberVO vo) {
