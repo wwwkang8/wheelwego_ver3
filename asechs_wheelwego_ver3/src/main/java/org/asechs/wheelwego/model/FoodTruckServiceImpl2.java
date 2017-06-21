@@ -5,7 +5,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.asechs.wheelwego.model.vo.BookingVO;
+import org.asechs.wheelwego.model.vo.FoodVO;
 import org.asechs.wheelwego.model.vo.ListVO;
+import org.asechs.wheelwego.model.vo.PagingBean;
 import org.asechs.wheelwego.model.vo.ReviewVO;
 import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
@@ -34,17 +36,33 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 랜덤 리스트(main)
+ 	기능설명 : 푸드트럭 정보를 main 화면에서 랜덤으로 보여준다
+ 			푸드트럭 번호에 해당하는 푸드트럭의 위시리스트 수, 평점 평균도 함께 보여준다
+  */
 	@Override
 	public List<TruckVO> foodtruckList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TruckVO> truckList=foodTruckDAO.foodtruckList();
+		for(int i=0; i<truckList.size();i++){
+			String foodtruckNumber=truckList.get(i).getFoodtruckNumber();
+			truckList.get(i).setAvgGrade(foodTruckDAO.findAvgGradeByTruckNumber(foodtruckNumber));
+			truckList.get(i).setWishlistCount(foodTruckDAO.findWishlistCountByTruckNumber(foodtruckNumber));
+		}
+		return truckList;
 	}
 
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭명으로 검색한 푸드트럭 리스트
+ 	기능설명 : 검색한 푸드트럭명에 해당하는 푸드트럭 리스트를 list로 받아온다
+  */
 	@Override
-	public List<TruckVO> searchFoodTruckList(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TruckVO> searchFoodTruckList(String name){
+		return foodTruckDAO.searchFoodTruckList(name);
 	}
 
 	@Override
@@ -53,10 +71,22 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		return null;
 	}
 
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기
+ 	기능설명 : 푸드트럭 클릭시, 푸드트럭 번호를 받아와
+ 			1) 일치하는 푸드트럭의 상세정보를 가져온다
+ 			2) 푸드트럭의 위시리스트 수, 리뷰 평점 정보를 가져온다
+  */
 	@Override
-	public TruckVO foodTruckAndMenuDetail(String foodtruckNo) {
-		// TODO Auto-generated method stub
-		return null;
+	public TruckVO foodTruckAndMenuDetail(String foodtruckNo){
+		TruckVO tvo = foodTruckDAO.foodtruckDetail(foodtruckNo);
+		tvo.setAvgGrade(foodTruckDAO.findAvgGradeByTruckNumber(tvo.getFoodtruckNumber()));
+		tvo.setWishlistCount(foodTruckDAO.findWishlistCountByTruckNumber(tvo.getFoodtruckNumber()));
+		List<FoodVO> fvo = foodTruckDAO.foodListDetail(foodtruckNo);
+		tvo.setFoodList(fvo);
+		return tvo;
 	}
 
 	@Override
@@ -76,11 +106,24 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기 - 리뷰 리스트
+ 	기능설명 : 푸드트럭 클릭시, 푸드트럭 번호를 받아와
+ 			1) 일치하는 푸드트럭의 리뷰 목록을 보여준다
+ 			2) 리뷰 리스트에 pagingBean 적용
+  */
 	@Override
-	public ListVO getReviewListByTruckNumber(String reviewPageNo, String foodTruckNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public ListVO getReviewListByTruckNumber(String reviewPageNo, String foodtruckNumber) {
+		int totalCount =foodTruckDAO.getReivewTotalCount(foodtruckNumber);
+		if(reviewPageNo==null)
+			reviewPageNo="1";
+		PagingBean pagingBean=new PagingBean( Integer.parseInt(reviewPageNo),totalCount,foodtruckNumber);
+		ListVO pagingList=new ListVO();
+		pagingList.setReviewList(foodTruckDAO.getReviewListByTruckNumber(pagingBean));
+		pagingList.setPagingBean(pagingBean);
+		return pagingList;
 	}
 
 	@Override

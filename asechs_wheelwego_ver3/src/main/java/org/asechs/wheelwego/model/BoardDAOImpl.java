@@ -32,13 +32,28 @@ public class BoardDAOImpl implements BoardDAO {
 	
 //////////강정호. 자유게시판 Service/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 자유게시판 게시물 목록 보기
+	 * -------------------------------------------
+	 * 코드 설명 : 자유게시판 게시물 목록과 페이지 번호를 보여주기 위한 메서드이다.
+	 * 페이징 빈 객체를 ServiceImpl에서 받아와 페이지 번호당 게시물 개수를 10개로 정하여
+	 * 목록을 보여준다.
+	 */
 	@Override
 	public List<BoardVO> getFreeBoardList(PagingBean pagingBean) {
 		return template.selectList("board.getFreeBoardList", pagingBean);
 	}
 
 
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 게시물 총 개수 구하는 메서드
+	 * --------------------------------------------------------------
+	 * 코드 설명 : 게시판 게시물 총 개수를 구하는 메서드입니다.
+	 */
 	@Override
 	public int getFreeBoardTotalContentCount() {
 		return template.selectOne("board.getFreeBoardTotalContentCount");
@@ -53,7 +68,16 @@ public class BoardDAOImpl implements BoardDAO {
 	public void freeboardDelete(String no) {
 		template.delete("board.freeboardDelete", no);
 	}
-	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 자유 게시판 글 등록
+	 * ---------------------------------------
+	 * 코드 설명 : 사용자의 글 정보(작성자, 글 제목, 내용)을 등록하는 메서드입니다.
+	 * 데이터 베이스에 insert 시에 게시물 번호를 <selectKey>를 이용하여 
+	 * ServiceImpl에 있는 freeboardWrite()로 리턴해준다.
+	 * 리턴 해준 게시물 번호(시퀀스)를 이용하여 파일 업로드를 할 수 있다.
+	 */
 	@Override
 	public String freeboardWrite(BoardVO bvo) {
 		template.insert("board.freeboardWrite",bvo);
@@ -62,6 +86,14 @@ public class BoardDAOImpl implements BoardDAO {
 		return bvo.getNo();
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 자유 게시판 글 등록(첨부 사진 업로드 기능)
+	 * ---------------------------------------
+	 * 코드 설명 : boardVO에 있는 첨부 사진의 이름을 해당 게시물 번호를 이용하여
+	 * 데이터 베이스에 insert 해준다. 
+	 */
 	@Override
 	public void freeboardWriteFileUpload(BoardVO boardVO) {
 		template.insert("board.freeboardWriteFileUpload", boardVO);
@@ -93,7 +125,14 @@ public class BoardDAOImpl implements BoardDAO {
 		template.update("board.freeboardUpdateFileUpload", boardVO);
 		
 	}
-	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 댓글 등록
+	 * --------------------------------
+	 * 코드 설명 : Controller, ServiceImpl로부터 넘겨받은 댓글 정보를 등록해주는 메서드입니다.
+	 * 댓글의 경우 고유의 시퀀스 번호를 발급합니다.
+	 */
 	@Override
 	public void writeFreeboardComment(CommentVO cvo) {
 		template.insert("board.writeFreeboardComment",cvo);
@@ -104,6 +143,13 @@ public class BoardDAOImpl implements BoardDAO {
 		return template.selectList("board.getFreeboardCommentList", no);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시물 - 댓글 삭제
+	 * -------------------------------------
+	 * 코드 설명 : 게시물의 댓글을 삭제하는 메서드입니다.
+	 */
 	@Override
 	public void deleteFreeboardComment(CommentVO cvo) {
 		template.delete("board.deleteFreeboardComment",cvo);
@@ -114,18 +160,26 @@ public class BoardDAOImpl implements BoardDAO {
 	public CommentVO getFreeboardComment(CommentVO cvo) {
 		return template.selectOne("board.getFreeboardComment",cvo);
 	}
-
-	//게시물 사진 수정시 선삭제
+	/**
+	 * 김호겸
+	 * 2017.6.9 (수정 완료) 
+	 *게시판-게시물 사진 수정시 선삭제
+	 */
 	@Override
 	public void freeboardDeleteFile(String no) {
 		template.delete("board.freeboardDeleteFile", no);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시물- 댓글 수정
+	 * ---------------------------------------
+	 * 코드 설명 : 사용자가 수정한 댓글정보를 Service로부터 받아 업데이트 해주는 메서드입니다.
+	 */
 	@Override
 	public void updateFreeboardComment(CommentVO cvo) {
 		template.update("board.updateFreeboardComment",cvo);
-
-		
 	}
 	
 	

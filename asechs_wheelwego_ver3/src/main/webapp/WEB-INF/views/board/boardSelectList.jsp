@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <!-- 강정호, 김호겸 : 수정완료 -->
     <script>
        $(document).ready(function(){
     	   // 마우스 오버시 게시판 확인

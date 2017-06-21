@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<!-- 정현지 : 수정완료 -->
 <style>
 .btn:focus{
  outline:none !important;
@@ -42,17 +42,15 @@
    TOTAL  <span id="total" style="font-weight: bold;"></span><span style="padding-left: 150px;"><input type="button" id="orderBtn" class="btn btn-xs" value="order" style="position: fixed; right:30px"></span>
    </form>
 </div>
+
 <script>
 $(document).ready(function(){
     $("#orderBtn").click(function(){
        $("#orderform").submit();
-        /* if(confirm("주문하시겠습니까?")){
-           alert("주문페이지로 이동합니다.");
-           $("#orderform").submit();
-        }  */
      });  
 }); // ready
 </script>
+
 <script>
    $(document).ready(function() {
       var cnt=0;
@@ -69,9 +67,7 @@ $(document).ready(function(){
           else if("${sessionScope.memberVO.memberType}"=='seller'){
              alert("일반회원 전용 서비스입니다.");
           }
-         
           else{
-
          for(var i=0; i<arr.length; i++)   {
             if(arr[i]==menu){
                flag=true;
@@ -101,13 +97,11 @@ $(document).ready(function(){
                        "<td><input type='text' class='sumId' name='sum' size='4' readonly value="+price+"></td>"+
                        "<td>"+
                        "<span class='glyphicon glyphicon-remove' role='button'></span></td></tr>");
-
-          
             cnt++;
           totalPrice();
           }
-
        }); //dropdown
+       
       $("#testTable").on("change",":input[type=number]",function(){
          var unitPrice=$(this).parent().find(".menuPrice").val();
          var price=$(this).parent().next().find(":input[name=sum]");
@@ -119,15 +113,13 @@ $(document).ready(function(){
       
       $("#testTable").on("click",".glyphicon",function(){
          var menu = $(this).attr('value');
-         
          if(confirm("메뉴를 삭제하시겠습니까?")){
             $(this).parent().parent().remove();
-            //arr.pop(menu);
             totalPrice();
          }
       });
-   
    }); //ready
+   
 function totalPrice(){
    var sum_val=0;
     for(var i=0; i<document.getElementsByName("sum").length; i++){

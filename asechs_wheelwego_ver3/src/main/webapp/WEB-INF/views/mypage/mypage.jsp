@@ -18,7 +18,6 @@
    <div align="center">
   <button type="button" id="deleteAccountBtn" class="btn btn-warning">회원탈퇴</button>&nbsp;&nbsp;
   <button type="button" id="updateBtn" class="btn btn-warning">회원정보수정</button>&nbsp;&nbsp; 
-  ${sessionScope.foodtruckNumber}
 <c:choose>
 	<c:when test="${sessionScope.memberVO.memberType=='seller'}">
 		<c:choose>
@@ -109,10 +108,10 @@ geoFindMe();
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/registerMyfoodtruck.do";
 	});
 		$("#updateTruckBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_page.do";
+			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_page.do?foodtruckNumber=${sessionScope.foodtruckNumber}";
 	});
 		$("#menuBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_menuList.do";
+			location.href="${pageContext.request.contextPath}/afterLogin_mypage/myfoodtruck_menuList.do?foodtruckNumber=${sessionScope.foodtruckNumber}";
 	});
 		$("#myTruckBtn").click(function(){
 			location.href = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${sessionScope.foodtruckNumber}"+"&latitude="+latitude+"&longitude="+longitude+"&address="+address;
@@ -128,6 +127,7 @@ geoFindMe();
 	});
 
 		$("#sellerBookingListBtn").click(function(){
+			alert("aa");
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/sellerBookingList.do?sellerId=${sessionScope.memberVO.id}";
 		});
 

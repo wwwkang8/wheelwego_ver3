@@ -36,13 +36,23 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public String findFoodtruckNameByMenuId(String menuId){
 		return sqlSessionTemplate.selectOne("foodtruck.findFoodtruckNameByMenuId", menuId);
 	}
-	
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - main 화면에 보여줄 푸드트럭 리스트
+ 	기능설명 : foodtruck 리스트를 랜덤 함수를 사용하여 main 화면에 보여준다
+  */
 	@Override
 	public List<TruckVO> foodtruckList() {
 		return sqlSessionTemplate.selectList("foodtruck.foodtruckList");
 	}
 
-	/* 검색 결과 푸드트럭 리스트 */
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭명으로 검색한 푸드트럭 리스트
+ 	기능설명 : 푸드트럭명으로 검색한 foodtruck 리스트를 받아온다
+  */
 	@Override
 	public List<TruckVO> searchFoodTruckList(String name) {
 		return sqlSessionTemplate.selectList("foodtruck.searchFoodTruckList", name);
@@ -58,7 +68,13 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		return sqlSessionTemplate.selectList("foodtruck.searchFoodTruckByGPS", gpsInfo);
 	}
 
-	/* foodtruck 정보 상세보기 */
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기
+ 	기능설명 : 푸드트럭 번호와 일치하는 푸드트럭 정보를 모두 받아온다
+ 		   (푸드트럭 정보, 메뉴 정보, 리뷰 정보, 위시리스트 등..)
+  */
 	@Override
 	public TruckVO foodtruckDetail(String foodtruckNo) {
 		return sqlSessionTemplate.selectOne("foodtruck.foodtruckDetail", foodtruckNo);
@@ -69,12 +85,23 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public List<FoodVO> foodListDetail(String foodtruckNo) {
 		return sqlSessionTemplate.selectList("foodtruck.foodListDetail", foodtruckNo);
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기 - 리뷰 작성
+ 	기능설명 : selectKey를 사용하여 reviewNo를 먼저 select 한 뒤, 리뷰를 insert 해준다
+	(reviewNo, foodtruckNumber, cumstomerId, reviewContent, sysdate, grade) 
+  */
 	@Override
 	public void registerReview(ReviewVO reviewVO) {
 		sqlSessionTemplate.insert("foodtruck.registerReview", reviewVO);
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기 - 리뷰 목록
+ 	기능설명 : foodtruckNumber에 해당하는 리뷰 항목을 리스트로 받아온다(pagingBean 적용)
+  */
 	@Override
 	public List<ReviewVO> getReviewListByTruckNumber(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("foodtruck.getReviewListByTruckNumber", pagingBean);
@@ -94,7 +121,12 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		
 		return sqlSessionTemplate.selectOne("foodtruck.getBookMarkCount",wishlistVO);
 	}
-
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭명으로 검색한 푸드트럭 리스트
+ 	기능설명 : 푸드트럭명으로 검색한 푸드트럭 리스트를 pagingBean 적용하여 받아온다
+  */
 	@Override
 	public List<TruckVO> getFoodTruckListByName(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("foodtruck.getFoodTruckListByName",pagingBean);
@@ -130,11 +162,16 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public List<TruckVO> filteringByAvgGrade(PagingBean pagingbean) {
 		return sqlSessionTemplate.selectList("foodtruck.filteringByAvgGrade", pagingbean);
 	}
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public double findAvgGradeByTruckNumber(String truckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findAvgGradeByTruckNumber", truckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public int findWishlistCountByTruckNumber(String foodtruckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findWishlistCountByTruckNumber", foodtruckNumber);
