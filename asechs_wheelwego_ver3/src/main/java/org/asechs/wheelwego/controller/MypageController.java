@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl2")
+	@Resource(name="mypageServiceImpl")
    private MypageService mypageService;
 
 	@Resource(name="foodTruckServiceImpl")
@@ -376,9 +376,24 @@ public class MypageController {
       mypageService.qnaDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   /**
-    * 강정호. Seller가 받은 주문 내역 확인하는 메서드
-    */
+  /**
+   * 강정호
+   * 2017.06.21(수정완료)
+   * 마이페이지 - 사업자 주문 내역
+   * -----------------------------------------------
+   * 코드 설명 : 사업자 주문 내역은 3가지의 메서드로 이루어져 있다.
+   * findtruckNumberBySellerId(sellerId) : 세션의 sellerId를 이용하여 푸드 트럭 넘버를 가져오는 메서드
+   * getBookingVO(foodTruckNumber, pageNo) : 푸드 트럭 넘버에 해당하는 주문 내역을 BookingVO형식으로
+   * 불러온다. 이때 예약 번호, 주문한 회원아이디, 주문상태, 주문 일시 등의 정보를 받아온다.
+   * getBookingDetailVO(): 앞서 받아온 BookingVO에 있는 예약 번호에 해당하는 상세 메뉴 내역을 불러와서
+   * BookingVO에 있는 BookingDetailVO에 set 해주는 메서드이다.
+   * 
+   * 위의 3가지 메서드를 이용해서 사업자의 BookingVO와 BookingDetailVO에 대한 정보를 불러와서
+   * View에서 사업자가 받은 주문 내역을 보여준다.
+   * @param model
+   * @param request
+   * @return
+   */
    @RequestMapping("afterLogin_mypage/sellerBookingList.do")
    public String sellerBookingList(Model model, HttpServletRequest request){
 	   String sellerId=request.getParameter("sellerId");

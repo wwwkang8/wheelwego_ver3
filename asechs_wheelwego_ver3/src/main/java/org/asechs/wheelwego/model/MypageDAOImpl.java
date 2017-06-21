@@ -256,25 +256,49 @@ public class MypageDAOImpl implements MypageDAO {
 	public int getWishListFlag(WishlistVO wishlistVO) {
 		return sqlSessionTemplate.selectOne("mypage.getWishListFlag", wishlistVO);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 주문 상태 업데이트
+	 * ------------------------------------------
+	 * 코드 설명 : 사업자 주문 내역에서 조리중 버튼, 조리 완료 버튼을 눌러 주문 상태를 업데이트
+	 * 할 때 사용하는 메서드. BookingVO에 있는 예약 번호를 이용하여 업데이트 할 주문 내역을 찾는다.
+	 */
 	@Override
-
 	public void updateBookingState(BookingVO bookingVO) {
 		sqlSessionTemplate.update("mypage.updateBookingState", bookingVO);
 
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 개수 가져오는 메서드
+	 * ------------------------------------------------------------
+	 * 코드설명 : 푸드 트럭 넘버를 이용하여 사업자가 받은 주문 개수를 받아온다.
+	 */
 	@Override
 	public List<BookingVO> getBookingVO(String foodTruckNumber) {
-		System.out.println("getBookingVO 푸드트럭 넘버" + foodTruckNumber);
 		return sqlSessionTemplate.selectList("mypage.getBookingVOCount", foodTruckNumber);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 내역
+	 * ---------------------------------------------------
+	 * 코드 설명 : 푸드 트럭 번호를 이용하여 사업자가 받은 주문내역을 불러오는 메서드
+	 */
 	@Override
 	public List<BookingVO> getBookingVO(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getBookingVO", pagingBean);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 상세 메뉴 내역
+	 * ---------------------------------------------------
+	 * 코드 설명 : 사업자가 받은 주문의 상세 메뉴 내역(수량, 단가, 메뉴이름)을 불러오는 메서드
+	 */
 	@Override
 	public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 		return sqlSessionTemplate.selectList("mypage.getBookingDetailVO", bookingVO);
@@ -375,7 +399,13 @@ public class MypageDAOImpl implements MypageDAO {
 		sqlSessionTemplate.delete("board.qnaDelete", contentNo);
 
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 일반회원 주문 내역 확인
+	 * ----------------------------------------------------
+	 * 코드 설명 : 일반회원의 예약 번호를 회원 아이디를 이용해 조회한다.
+	 */
 	@Override
 	public String getBookingNumberByCustomerId(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getBookingNumberListByCustomerId", id);
@@ -386,7 +416,13 @@ public class MypageDAOImpl implements MypageDAO {
 	public int checkBookingState(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.checkBookingState", customerId);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 주문 갯수 확인
+	 * -------------------------------------------
+	 * 코드 설명 : 주문 갯수를 확인하여 사업자, 일반회원의 주문내역에 페이징 빈을 적용할 때 사용한다
+	 */
 	@Override
 	public int getTotalBookingCount(String foodTruckNumber) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalBookingCount", foodTruckNumber);

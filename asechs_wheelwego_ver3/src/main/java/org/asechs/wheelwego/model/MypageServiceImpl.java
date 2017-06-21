@@ -320,17 +320,29 @@ public ListVO showMyContentByFreeList(String id,String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+/**
+ * 강정호
+ * 2017.06.21(수정완료)
+ * 마이페이지 - 주문 상태 업데이트
+ * -----------------------------------------------
+ * 코드 설명 : 사업자의 주문 내역에서 "조리중", "조리완료" 버튼을 눌러서
+ * 주문 상태를 업데이트 해주는 메서드이다. BookingVO에 있는 예약 번호를 이용해서
+ * 예약 번호에 해당하는 주문 상태를 조리중 또는 조리 완료로 SQL로 업데이트 해준다.
+ */
 @Override
 public void updateBookingState(BookingVO bookingVO) {
 	mypageDAO.updateBookingState(bookingVO);
 	
 }
-/*@Override
-public List<BookingVO> getBookingVO(String foodTruckNumber) {
-	//List<BookingVO> list=mypageDAO.getBookingVO
-	return mypageDAO.getBookingVO(foodTruckNumber);
-}*/
-
+/**
+ * 강정호
+ * 2017.06.21(수정완료)
+ * 마이페이지 - 사업자 주문 내역
+ * ------------------------------------------
+ * 코드 설명 : 푸드 트럭 넘버를 이용해서 사업자가 받은 주문 내역을 받아오는 메서드입니다.
+ * foodTruckNumber와 pageNo를 DAO에 매개 변수로 넘겨줍니다. 주문내역은 BookingVO 타입의
+ * 데이터를 List 형식으로 받아옵니다.
+ */
 @Override
 public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 	List<BookingVO> list=mypageDAO.getBookingVO(foodTruckNumber);
@@ -352,7 +364,16 @@ public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 	return listVO;
 }
 
-
+/**
+ * 강정호
+ * 2017.06.21(수정완료)
+ * 마이페이지 - 사업자 주문 메뉴 내역
+ * ----------------------------------------------------
+ * 코드 설명 : 위의 메서드 getBookingVO로 받아온 주문 내역에는 주문 메뉴의 상세 내역이 없다.
+ * 그래서 getBookingDetailVO 메서드를 이용하여 해당 예약 번호에 속한 상세 메뉴 내역(수량, 가격, 메뉴이름)을 가져온다.
+ * BookingVO를 매개변수로 하여 그 안에 있는 예약 번호를 이용해서 주문 내역을 찾는다.
+ * 
+ */
 @Override
 public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 	return mypageDAO.getBookingDetailVO(bookingVO);

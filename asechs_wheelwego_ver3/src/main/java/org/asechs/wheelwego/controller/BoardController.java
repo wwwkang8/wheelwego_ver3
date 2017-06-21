@@ -23,7 +23,14 @@ public class BoardController {
 	@Resource(name="boardServiceImpl")
 	private BoardService boardService;
  
-	// 강정호 작성. 보드리스트(3개의 아이콘 나오는 것)
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 게시판 아이콘
+	 * --------------------------------------
+	 * 코드 설명 : 게시판 아이콘을 클릭하면 해당 게시판으로 이동하는 기능
+	 * @return
+	 */
 	@RequestMapping("boardSelectList.do")
 	public String showBoardList() {
 		return "board/boardSelectList.tiles";
