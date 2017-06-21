@@ -104,26 +104,40 @@ public class MypageDAOImpl implements MypageDAO {
 	public void deleteWishList(WishlistVO wishlistVO) {
 		sqlSessionTemplate.delete("mypage.deleteWishList", wishlistVO);
 	}
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
 
+	 */
 	public void registerFoodtruck(TruckVO tvo) {
 		sqlSessionTemplate.insert("mypage.registerFoodtruck", tvo);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21
+	 */
 	@Override
 	public TruckVO findtruckInfoByTruckNumber(String truckNumber) {
 		return sqlSessionTemplate.selectOne("mypage.findtruckInfoByTruckNumber", truckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21
+	 */
 	@Override
 	public void saveFilePath(FileVO fileVO) {
 		sqlSessionTemplate.insert("mypage.saveFilePath", fileVO);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void updateMyfoodtruck(TruckVO truckVO) {
 		sqlSessionTemplate.update("mypage.updateMyfoodtruck", truckVO);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void updateFilePath(FileVO fileVO) {
 		sqlSessionTemplate.update("mypage.updateFilePath", fileVO);
@@ -133,7 +147,9 @@ public class MypageDAOImpl implements MypageDAO {
 	public String findtruckNumberBySellerId(String sellerId) {
 		return sqlSessionTemplate.selectOne("mypage.findtruckNumberBySellerId", sellerId);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public List<FoodVO> showMenuList(String truckNumber) {
 		return sqlSessionTemplate.selectList("mypage.showMenuList", truckNumber);
@@ -143,7 +159,9 @@ public class MypageDAOImpl implements MypageDAO {
 	public void deleteAllMenu(String truckNumber) {
 		sqlSessionTemplate.delete("mypage.deleteAllMenu", truckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void registerMenu(FoodVO foodVO) {
 		sqlSessionTemplate.insert("mypage.registerMenu", foodVO);
@@ -153,7 +171,9 @@ public class MypageDAOImpl implements MypageDAO {
 	public void deleteMenu(String menuId) {
 		sqlSessionTemplate.delete("mypage.deleteMenu", menuId);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void updateMenu(FoodVO foodVO) {
 		sqlSessionTemplate.update("mypage.updateMenu", foodVO);
@@ -164,32 +184,35 @@ public class MypageDAOImpl implements MypageDAO {
 		return sqlSessionTemplate.selectOne("mypage.findMenuByMenuId", menuId);
 	}
 
-	@Override
-	public void updateMenuFilepath(FileVO fileVO) {
-		sqlSessionTemplate.update("mypage.updateMenuFilepath", fileVO);
-
-	}
 
 	@Override
 	public void deleteMyTruck(String foodtruckNumber) {
 		sqlSessionTemplate.delete("mypage.deleteMyTruck", foodtruckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public List<ReviewVO> showMyReviewList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.showMyReview", pagingBean);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void updateMyReview(ReviewVO reviewVO) {
 		sqlSessionTemplate.update("mypage.updateMyReview", reviewVO);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public void deleteMyReview(String reviewNo) {
 		sqlSessionTemplate.delete("mypage.deleteMyReview", reviewNo);
 	}
-
+	/**
+	 * 박다혜
+	 */
 	@Override
 	public ReviewVO findReviewInfoByReviewNo(String reviewNo) {
 		return sqlSessionTemplate.selectOne("mypage.findReviewInfoByReviewNo", reviewNo);
@@ -381,5 +404,12 @@ public class MypageDAOImpl implements MypageDAO {
 	@Override
 	public int getCustomerBookingListCount(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.getCustomerBookingListCount", customerId);
+	}
+	/**
+	 * 박다혜
+	 */
+	@Override
+	public String getNextMenuSequence() {
+		return sqlSessionTemplate.selectOne("mypage.getNextMenuSequence");
 	}
 }

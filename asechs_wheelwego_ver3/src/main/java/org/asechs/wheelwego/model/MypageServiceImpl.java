@@ -149,8 +149,8 @@ public class MypageServiceImpl implements MypageService {
          try {
          String renamedFile=fm.rename(truckFile,truckVO.getFoodtruckNumber());
          truckVO.setFileVO(new FileVO(truckVO.getFoodtruckNumber(), renamedFile));
-         mypageDAO.updateMyfoodtruck(truckVO);  //트럭정보 등록
-         mypageDAO.updateFilePath(truckVO.getFileVO()); //파일경로 등록
+        // mypageDAO.updateMyfoodtruck(truckVO);  //트럭정보 등록
+         //mypageDAO.updateFilePath(truckVO.getFileVO()); //파일경로 등록
             fm.uploadFile(truckFile, uploadPath+renamedFile);
          } catch (IOException e) {
             e.printStackTrace();
@@ -199,7 +199,7 @@ public class MypageServiceImpl implements MypageService {
             mypageDAO.registerMenu(foodList.get(i)); //메뉴를 등록한다.
             MultipartFile foodFile=foodList.get(i).getMenuFile(); //메뉴사진받아와서
             String renamedFile=fm.rename(foodFile,foodtruckNumber+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
-            mypageDAO.updateMenuFilepath(new FileVO(foodList.get(i).getMenuId(), renamedFile)); //파일 경로 수정
+            //mypageDAO.updateMenuFilepath(new FileVO(foodList.get(i).getMenuId(), renamedFile)); //파일 경로 수정
             fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 파일 업로드
          }catch (Exception e) {
             e.printStackTrace();
@@ -222,7 +222,7 @@ public class MypageServiceImpl implements MypageService {
             String renamedFile=fm.rename(foodFile,truckVO.getFoodtruckNumber()+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
             foodList.get(i).setFileVO(new FileVO(foodList.get(i).getMenuId(),renamedFile));
             mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
-            mypageDAO.updateMenuFilepath(foodList.get(i).getFileVO()); //파일 경로 수정
+           // mypageDAO.updateMenuFilepath(foodList.get(i).getFileVO()); //파일 경로 수정
             fm.uploadFile(foodFile, uploadPath+renamedFile);
          }
          }catch (Exception e) {
