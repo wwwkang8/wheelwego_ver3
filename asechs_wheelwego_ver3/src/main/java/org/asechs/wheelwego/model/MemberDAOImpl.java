@@ -44,7 +44,13 @@ public class MemberDAOImpl implements MemberDAO {
 	public String forgetMemberId(MemberVO vo) {
 		return sqlSessionTemplate.selectOne("member.forgetMemberId", vo);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 멤버- 회원 정보 수정
+	 * 기능 설명 : 회원 정보 수정 폼에서 받아온 MemberVO를 데이터 베이스에 업데이트 해준다.
+	 */
 	@Override
 	public void updateMember(MemberVO vo) {
 		sqlSessionTemplate.update("member.updateMember", vo);
