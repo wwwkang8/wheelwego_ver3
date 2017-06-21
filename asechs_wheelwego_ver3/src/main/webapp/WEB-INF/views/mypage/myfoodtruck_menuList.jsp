@@ -7,7 +7,7 @@
         	<c:when test="${menuList!='[]'}">
         	<br>
        <form class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/updateMenu.do" enctype="multipart/form-data">
-			<input type="hidden" name="sellerId" value="${sessionScope.memberVO.id}" required="required">
+			<input type="hidden" name="foodtruckNumber" value="${sessionScope.foodtruckNumber}">
         	<c:forEach items="${menuList}" var="foodVO" begin="0" end="2" varStatus="status">
         <table style="border: none; padding: 15px" class="table table-hover">
          	<tr>
@@ -31,6 +31,7 @@
         	</c:when>
         	<c:otherwise>
          <form  class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/registerMenuList.do" enctype="multipart/form-data">
+       	 <input type="hidden" name="foodtruckNumber" value="${sessionScope.foodtruckNumber}">
         	<table style="border: none; padding: 15px" class="table table-hover">
         		<tr>
         	 	<td>대표 메뉴</td>
