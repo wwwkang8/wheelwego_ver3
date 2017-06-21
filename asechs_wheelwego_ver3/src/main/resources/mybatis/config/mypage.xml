@@ -209,9 +209,10 @@ select count(*) from wishlist where customer_id=#{customerId} and foodtruck_numb
 	<select id="getBookingVO" parameterType="pagingBean" resultMap="bookingRM">
 		select distinct b.booking_number, b.customer_id, b.booking_date, b.booking_state 
 	   	from(SELECT row_number() over(order by booking_number desc) as rnum, booking_number, customer_id, 
-	   	to_char(booking_date,'YYYY.MM.DD HH.MM.SS') as booking_date, booking_state from booking)b, foodtruck f, menu m, booking_detail bd 
+	   	to_char(booking_date,'YYYY.MM.DD HH.MI.SS') as booking_date, booking_state from booking)b, foodtruck f, menu m, booking_detail bd 
 	   	where f.foodtruck_number=m.foodtruck_number and f.foodtruck_number=#{foodTruckNumber} and rnum between #{startRowNumber} and #{endRowNumber}
-	   	 and bd.menu_id=m.menu_id and b.booking_number=bd.booking_number
+	   	 <!-- and bd.menu_id=m.menu_id and b.booking_number=bd.booking_number  -->
+	   	 and bd.menu_id=m.menu_id and b.booking_number=bd.booking_number order by b.booking_number desc
 	</select>
 	
 	<select id="getBookingDetailVO" parameterType="bookingVO" resultMap="bookingDetailRM">
