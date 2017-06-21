@@ -40,7 +40,13 @@ public class FoodTruckController {
 	@Resource(name="mypageServiceImpl")
 	private MypageService mypageService; 
 
-	/* 현지 검색결과 테스트 */
+	/** 	  
+		정현지
+		2017.06.21 (수정완료)
+	 	푸드트럭 - 푸드트럭명으로 검색하기
+	 	기능설명 : 푸드트럭명 검색(searchFoodtruckName)리스트를 TruckVO 객체로 받아온다
+	 			return 값은 푸드트럭 검색 리스트 페이지로 보낸다
+	  */
 	@RequestMapping("searchFoodTruckList.do")
 	public ModelAndView searchFoodTruckList(String searchFoodtruckName){
 		List<TruckVO> searchList = foodTruckService.searchFoodTruckList(searchFoodtruckName);
@@ -54,10 +60,8 @@ public class FoodTruckController {
 	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
 		if(option==null)
 			option="ByDate";
-
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
 		ListVO listVO =foodTruckService.filtering(option, name, pageNo, latitude, longitude,null);
-		//ListVO listVO = foodTruckService.getFoodTruckListByName(pageNo, name);	
 		modelAndView.addObject("pagingList", listVO);
 		modelAndView.addObject("name", name);
 		HttpSession session=request.getSession(false);
@@ -72,8 +76,6 @@ public class FoodTruckController {
 				System.out.println(heartWishList);
 			}
 		}
-		//System.out.println(name);
-		//System.out.println(listVO);
 		modelAndView.addObject("option", option);		
 		modelAndView.addObject("flag", "false");	
 		return modelAndView;
@@ -113,13 +115,15 @@ public class FoodTruckController {
 		modelAndView.addObject("flag", "true");	
 		return modelAndView;
 	}
-	/**
-	 * 정현지 푸드트럭 상세보기
-	 * @param foodtruck_number
-	 * @return TruckVO
-	 */
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	푸드트럭 - 푸드트럭 상세보기 
+ 	기능설명 : 1. 푸드트럭 번호(foodtruckNo)로 푸드트럭 상세정보를 TruckVO 객체로 받아온다
+ 			2. 푸드트럭 번호로 작성된 리뷰 리스트를 받아온다(리뷰 리스트 pagingBean 적용)
+ 			-> return 값은 푸드트럭 detail 페이지로 보낸다
+  */
 	   @RequestMapping("foodtruck/foodTruckAndMenuDetail.do")
-	   
 	   public ModelAndView foodTruckAndMenuDetail(String foodtruckNo,String reviewPageNo, String latitude, String longitude, HttpServletRequest request){
 	      TruckVO truckDetail = foodTruckService.foodTruckAndMenuDetail(foodtruckNo);
 	      String bookingPossible = "no";
@@ -150,6 +154,13 @@ public class FoodTruckController {
 	      mv.addObject("bookingPossible", bookingPossible);
 	      return mv;
 	   }
+	   /** 	  
+		정현지
+		2017.06.21 (수정완료)
+	 	푸드트럭 - 리뷰 작성
+	 	기능설명 : 평점(grade), 리뷰 내용, 작성일자, 작성자(customerId), 리뷰를 작성한 푸드트럭 번호를 
+	 			ajax 통신한 뒤, 통신이 성공하면 다시 푸드트럭 디테일 페이지로 이동한다(reloading)
+	  */
 	@RequestMapping(value = "afterLogin_foodtruck/registerReview.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String registerReview(ReviewVO reviewVO){
@@ -161,7 +172,6 @@ public class FoodTruckController {
 	@ResponseBody
 	public String registerBookMark(String id, String foodtruckNumber){
 		String result = null;
-
 		WishlistVO wishlistVO = new WishlistVO(foodtruckNumber, id);
 		int count = foodTruckService.getBookMarkCount(wishlistVO);
 
@@ -188,12 +198,16 @@ public class FoodTruckController {
 		System.out.println(result);
 		return result;
 	}
-	/**
-	 * 현지: 주문하기 btn 클릭 후 주문폼으로 넘어가기
-	 */
+
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+ 	예약 - 주문 후 주문 내역 확인
+ 	기능설명 : 주문한 메뉴를 BookingVO 객체로 받아오고(bvo), session으로부터 id를 받아와 포인트 내역을 받아온다(myPoint)
+ 			-> 주문 메뉴 / 포인트 내역을 주문 내역 페이지에서 확인할 수 있다
+  */
 	@RequestMapping(value = "afterLogin_foodtruck/foodtruck_booking_confirm.do", method = RequestMethod.POST)
 	public ModelAndView foodtruck_booking_confirm(BookingVO bvo,HttpServletRequest request){
-		System.out.println("controller: "+bvo);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("foodtruck/foodtruck_booking_confirm.tiles");
 		MemberVO memberVO=(MemberVO)request.getSession(false).getAttribute("memberVO");
@@ -256,7 +270,5 @@ public class FoodTruckController {
 			String bookingNumber=foodTruckService.getPreviousBookingNumberByCustomerId(id);
 			return bookingNumber;
 		}
-	   
-	   
-	   
+		
 }

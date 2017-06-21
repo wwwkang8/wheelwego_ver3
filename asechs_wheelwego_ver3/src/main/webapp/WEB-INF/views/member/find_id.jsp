@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!-- 정현지 : 수정완료 -->    
 <style>
 .form-control-static{
 font-size: 15px;
 }
 </style>
+
 <div class="page-header text-center">
-	<h1><small>아이디 찾기</small></h1>
-	</div>
+<h1><small>아이디 찾기</small></h1>
+</div>
 
 <form id="find_id_form">
   <div class="form-group col-xs-3">
@@ -19,9 +21,6 @@ font-size: 15px;
     <input type="text" class="form-control" name="phoneNumber">
   </div>
   <br>
-  <!-- 이슈 관리
-  button type="submit"으로 해서 계속 페이지가 reloading 되었음. 
-  button type="submit"이 아니라 input type="button" 으로 명시해줘야 했음 -->
  <input type="button" class="btn btn-primary" id="findidBtn" value="Find ID"><br>
 <a href="${pageContext.request.contextPath}/member/find_password.do">forgot Password?</a>
 </form>

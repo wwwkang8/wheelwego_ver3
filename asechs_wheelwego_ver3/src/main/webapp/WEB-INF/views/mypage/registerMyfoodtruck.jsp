@@ -19,7 +19,7 @@
     			<label for="foodtruckName">ID</label>
     		</aside>
     		<div>
-    				<input type="text" name="" class="form-control" value="${sessionScope.memberVO.id }" readonly="readonly">
+    				<input type="text" name="sellerId" class="form-control" value="${sessionScope.memberVO.id}" readonly="readonly">
     		</div>
     	</div>
     	   <br>
