@@ -88,14 +88,15 @@ $(document).ready(function(){
          if(data=="on"){
          $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png'); 
             alert("단골트럭으로 등록!");
-           location.reload();  
+           //location.reload();  
          }else{
             $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/greyheart2.png');
             alert("단골트럭 등록해제");         
-            location.reload();  
+            //location.reload();  
          }
       }
    });
+     location.reload();
     }
 });
    $("#option").change(function(){
@@ -161,7 +162,8 @@ $(document).ready(function(){
 	      <input type="hidden" id = "_option" name = "_option" value = "">
 	      <input type="hidden" id = "name" name = "name" value = ""> 
       	  <input type="hidden" id = "latitude" name="latitude" value="${truckInfo.latitude}">
-          <input type="hidden" id = "longitude" name="longitude" value="${truckInfo.longitude}">	      
+          <input type="hidden" id = "longitude" name="longitude" value="${truckInfo.longitude}">
+       </form>	      
 	      <a href="#" onclick="foodtruckDetail()">  
 	        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
 	        </a>
@@ -185,7 +187,6 @@ $(document).ready(function(){
 	        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>
 	        <strong style="font-size:15px; "><span class="glyphicon glyphicon-star" style="color:orange"> </span>&nbsp;&nbsp;${truckInfo.avgGrade}&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-heart" style="color:red"></span>&nbsp;&nbsp;${truckInfo.wishlistCount }</strong>
 	        <br><p id = "${truckInfo.foodtruckName}" style="font-size:13px; color: grey;" class="address"></p>      
-      </form>
       </div>
     </div>
   </c:forEach>
