@@ -96,7 +96,6 @@ public class MypageServiceImpl implements MypageService {
    @Override
    public List<TruckVO> myWishList(String id) {
       return mypageDAO.myWishList(id);
-         
    }
    @Override
    public void deleteWishList(WishlistVO wishlistVO) {

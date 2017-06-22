@@ -154,7 +154,17 @@ public class FoodTruckController {
 		foodTruckService.registerReview(reviewVO); // 푸드 트럭 등록
 		return "foodtruck/foodtruck_detail.tiles";
 	}
-
+	/**
+	 *  김래현
+	 *	2017.06.22 (수정완료)
+	 *	기능설명 : 즐겨찾기 등록
+	 *---------------------------
+	 * 코드설명:
+	 * view 페이지에서 ajax로 통신할때
+	 * 컨트롤러에서 리턴값을 on , off 로하여 
+	 * 즐겨찾기 등록,삭제 시 하트색을 바꿀수 있게한다
+	 *    
+	 */
 	@RequestMapping(value = "afterLogin_foodtruck/registerBookMark.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String registerBookMark(String id, String foodtruckNumber){
@@ -260,14 +270,22 @@ public class FoodTruckController {
 		else
 			return "fail";
 	}
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 예약 - 선행주문이 있는지 체크
+	 * ------------------------------------------
+	 * 아이디에 해당하는 선행주문이 있는지 체크하여
+	 * count가 0이라면 선행주문이 없는 것이므로 ok를,
+	 *  0이아니라면 선행주문이 있는 것이므로 no를 반환한다.
+	 * @param request
+	 * @return
+	 */
 	   @RequestMapping("afterLogin_foodtruck/checkBooking.do")
 	   @ResponseBody
 	   public String checkBooking(HttpServletRequest request) {
-	      System.out.println("실행됨");
-	      HttpSession session = request.getSession();
-	      MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");      
+	      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");      
 	      int count = mypageService.checkBookingState(memberVO.getId());
-	      System.out.println(count);
 	      return (count==0) ? "ok":"no";
 	   }
 	   /**

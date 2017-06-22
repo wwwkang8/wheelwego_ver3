@@ -317,25 +317,68 @@ public class MypageServiceImpl2 implements MypageService {
 	public ReviewVO findReviewInfoByReviewNo(String reviewNo) {
 		 return mypageDAO.findReviewInfoByReviewNo(reviewNo);
 	}
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 사업자의 GPS정보 조회
+	 */
 	@Override
 	public TruckVO getGPSInfo(String sellerId) {
-		// TODO Auto-generated method stub
-		return null;
+		  return mypageDAO.getGPSInfo(sellerId);
 	}
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 사용자의 GPS위치 설정
+	 * --------------------------------------------
+	 * GPS 정보의 위도 혹은 경도가 없다면 사용자는 트럭의 위치를 해제한 것이므로 
+	 * leaveFoodtruck을 실행하고
+	 * 있다면 사용자는 위치를 설정한 것이므로 stayFoodtruck을 실행한다.
+	 */
 	@Override
 	public void setGPSInfo(TruckVO gpsInfo) {
-		// TODO Auto-generated method stub
-		
+	      if (gpsInfo.getLatitude() == 0.0)
+	         mypageDAO.leaveFoodtruck(gpsInfo);         
+	      else
+	         mypageDAO.stayFoodtruck(gpsInfo);
 	}
-	@Override
-	public ListVO getWishList(String pageNo, String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 단골트럭
+	 * ---------------
+	 * 자신이 등록한 단골트럭 리스트를 가져오는 메서드
+	 * 
+	 */
+	 @Override
+	   public ListVO getWishList(String pageNo, String id) {
+	      int totalCount=mypageDAO.getWishListTotalContentCount(id);
+	   
+	      PagingBean pagingBean=null;
+	      
+	      if(pageNo==null)
+	         pagingBean=new PagingBean(totalCount);
+	      else
+	         pagingBean=new PagingBean(totalCount,Integer.parseInt(pageNo));      
+	      
+	      pagingBean.setContentNumberPerPage(6);
+	      pagingBean.setCustomerId(id);
+	      
+	      System.out.println( "service : "+new ListVO(pagingBean, mypageDAO.getWishList(pagingBean)));
+	      return new ListVO(pagingBean, mypageDAO.getWishList(pagingBean));
+	   }
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 해당 푸드트럭이 사용자의 위시리스트 사항인지 검사한다.
+	 * ---------------------------------------------------------------------------
+	 * WISHLIST 테이블에 사용자의 아이디와 푸드트럭번호에 해당하는 
+	 * 데이터가 존재한다면 1을, 존재하지 않는다면 0을 반환한다.
+	 */
 	@Override
 	public int getWishListFlag(String customerId, String foodtruckNumber) {
-		// TODO Auto-generated method stub
-		return 0;
+	      WishlistVO wishlistVO=new WishlistVO(foodtruckNumber,customerId); 
+	      return mypageDAO.getWishListFlag(wishlistVO);
 	}
 	/**
 	    * 김호겸
@@ -488,11 +531,14 @@ public class MypageServiceImpl2 implements MypageService {
 	public void qnaDeleteInMaypage(String contentNo) {
 		mypageDAO.qnaDeleteInMaypage(contentNo);
 	}
-	
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 예약 - 사용자 아이디에 해당하는 선행주문이 있는지 체크
+	 */
 	@Override
-	public int checkBookingState(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int checkBookingState(String customerId) {
+		return mypageDAO.checkBookingState(customerId);
 	}
 	/**
 	 * 박다혜

@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
-<!-- 김래현: 수정완료 -->
+
 <style>
  .container-fluid {
       padding: 40px 50px 30px 40px;
@@ -51,12 +51,7 @@ img{
   <c:forEach items="${wishlist.truckList}" var="wishList">
       <div class="w3-third col-sm-4" >    
          <div class="w3-one" align="center">
-<%--             <a href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${wishList.foodtruckNumber}">
-               <img height="250px" width="260px" src="${pageContext.request.contextPath}/resources/upload/${wishList.fileVO.filepath}" style="position:relative;  z-index: 1; ">
-                </a> --%>
-            <%-- <a href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${wishList.foodtruckNumber}&latitude=${param.latitude}&longitude=${param.longitude}"> --%>
                <img class = "imgName" height="250px" width="260px" src="${pageContext.request.contextPath}/resources/upload/${wishList.fileVO.filepath}" style="position:relative;  z-index: 1;">
-                <!-- </a> -->
                   <input  type="image" id="insertBtn" name = "${wishList.foodtruckNumber}" src = "${pageContext.request.contextPath }/resources/upload/hearton.png" 
                       style="right:40px;opacity: 0.8; z-index: 2;" >
                <div class="overlay" >
@@ -126,7 +121,6 @@ $(document).ready(function(){
         var foodtruckNo=$(this).next().next().find(".foodtruckNo").val();
         var address=$(this).next().next().find(".address").html();
         location.href= "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+foodtruckNo+"&latitude=${param.latitude}&longitude=${param.longitude}&address="+address;
-      //alert(address.html());foodturckNumber")
    });
    
    
