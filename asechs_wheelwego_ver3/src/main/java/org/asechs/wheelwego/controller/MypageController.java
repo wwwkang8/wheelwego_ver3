@@ -436,7 +436,11 @@ public class MypageController {
 	   }
 
    /**
-    * 강정호. 조리 상태 업데이트 해주는 메서드
+    * 강정호
+    * 2017.06.22(수정완료)
+    * 마이페이지 - 주문 상태 업데이트
+    * ----------------------------------------
+    * 코드 설명 : 주문 상태를 결제 완료에서 "조리중", "조리완료"로 변경해주는 메서드
     */
    @RequestMapping(value="afterLogin_mypage/updateState.do",method=RequestMethod.POST)
    @ResponseBody

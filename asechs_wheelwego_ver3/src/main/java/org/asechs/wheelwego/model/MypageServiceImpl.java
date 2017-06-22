@@ -159,6 +159,7 @@ public class MypageServiceImpl implements MypageService {
          mypageDAO.updateMyfoodtruck(truckVO); 
       }
    }
+
    @Override
    public String findtruckNumberBySellerId(String sellerId) {
       return mypageDAO.findtruckNumberBySellerId(sellerId);
@@ -327,6 +328,7 @@ public void updateBookingState(BookingVO bookingVO) {
 	
 }
 
+
 @Override
 public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 	List<BookingVO> list=mypageDAO.getBookingVO(foodTruckNumber);
@@ -340,7 +342,6 @@ public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
 		pagingBean = new PagingBean(totalCount, Integer.parseInt(pageNo));
 		pagingBean.setContentNumberPerPage(9);
 	}
-	
 	pagingBean.setFoodTruckNumber(foodTruckNumber);
 	ListVO listVO=new ListVO();
 	listVO.setBookingNumberList(mypageDAO.getBookingVO(pagingBean));
@@ -361,7 +362,6 @@ public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 @Override
 public void freeboardDeleteInMaypage(String contentNo) {
 	mypageDAO.freeboardDeleteInMaypage(contentNo);
-	
 }
 /**
  * 김호겸
