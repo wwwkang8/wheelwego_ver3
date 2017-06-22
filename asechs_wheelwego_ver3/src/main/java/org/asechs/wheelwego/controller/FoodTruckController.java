@@ -51,7 +51,6 @@ public class FoodTruckController {
 		String option = _option;
 		if(option==null)
 			option="ByDate";
-		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
 		ListVO listVO =foodTruckService.filtering(option, name, pageNo,null);
 		modelAndView.addObject("pagingList", listVO);
@@ -63,7 +62,8 @@ public class FoodTruckController {
 		if(session != null){
 			MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 			if(memberVO != null){
-				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); //사용자 id의 단골트럭 목록을 보낸다.
+				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); 
+				//사용자 id의 단골트럭 목록을 보낸다.
 			}
 		}
 		return modelAndView;
