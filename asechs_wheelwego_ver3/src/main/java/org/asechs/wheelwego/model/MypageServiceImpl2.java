@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.asechs.wheelwego.model.vo.BoardVO;
 import org.asechs.wheelwego.model.vo.BookingDetailVO;
 import org.asechs.wheelwego.model.vo.BookingVO;
 import org.asechs.wheelwego.model.vo.FileManager;
@@ -336,51 +337,158 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	/**
+	    * 김호겸
+	    * 2017.6.13 (수정 완료) 
+	    *마이페이지-내가 쓴 게시글 자유게시글 보기
+	    * ------------------------------------------------------ 코드설명
+	    * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	    * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	    * 페이징 빈을 set 해준다
+	    */
 	@Override
-	public ListVO showMyContentByFreeList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+	public ListVO showMyContentByFreeList(String id,String contentPageNo) {
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalFreeboardCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentByFreeList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 주문 상태 업데이트
+	 * -----------------------------------------------
+	 * 코드 설명 : 사업자의 주문 내역에서 "조리중", "조리완료" 버튼을 눌러서
+	 * 주문 상태를 업데이트 해주는 메서드이다. BookingVO에 있는 예약 번호를 이용해서
+	 * 예약 번호에 해당하는 주문 상태를 조리중 또는 조리 완료로 SQL로 업데이트 해준다.
+	 */
 	@Override
 	public void updateBookingState(BookingVO bookingVO) {
-		// TODO Auto-generated method stub
+		mypageDAO.updateBookingState(bookingVO);
 		
 	}
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 내역
+	 * ------------------------------------------
+	 * 코드 설명 : 푸드 트럭 넘버를 이용해서 사업자가 받은 주문 내역을 받아오는 메서드입니다.
+	 * foodTruckNumber와 pageNo를 DAO에 매개 변수로 넘겨줍니다. 주문내역은 BookingVO 타입의
+	 * 데이터를 List 형식으로 받아옵니다.
+	 */
 	@Override
 	public ListVO getBookingVO(String foodTruckNumber, String pageNo) {
-		// TODO Auto-generated method stub
-		return null;
+		List<BookingVO> list=mypageDAO.getBookingVO(foodTruckNumber);
+		int totalCount=list.size();
+
+		PagingBean pagingBean = null;
+		if (pageNo == null){
+			pagingBean = new PagingBean(totalCount, 1);
+			pagingBean.setContentNumberPerPage(9);
+		}else{
+			pagingBean = new PagingBean(totalCount, Integer.parseInt(pageNo));
+			pagingBean.setContentNumberPerPage(9);
+		}
+		
+		pagingBean.setFoodTruckNumber(foodTruckNumber);
+		ListVO listVO=new ListVO();
+		listVO.setBookingNumberList(mypageDAO.getBookingVO(pagingBean));
+		listVO.setPagingBean(pagingBean);
+		return listVO;
 	}
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 메뉴 내역
+	 * ----------------------------------------------------
+	 * 코드 설명 : 위의 메서드 getBookingVO로 받아온 주문 내역에는 주문 메뉴의 상세 내역이 없다.
+	 * 그래서 getBookingDetailVO 메서드를 이용하여 해당 예약 번호에 속한 상세 메뉴 내역(수량, 가격, 메뉴이름)을 가져온다.
+	 * BookingVO를 매개변수로 하여 그 안에 있는 예약 번호를 이용해서 주문 내역을 찾는다.
+	 * 
+	 */
 	@Override
 	public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
-		// TODO Auto-generated method stub
-		return null;
+		return mypageDAO.getBookingDetailVO(bookingVO);
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void freeboardDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.freeboardDeleteInMaypage(contentNo);
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 창업게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	 * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	 * 페이징 빈을 set 해준다
+	 */
 	@Override
 	public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalbusinessCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentBybusinessList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void businessDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.businessDeleteInMaypage(contentNo);
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	 * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	 * 페이징 빈을 set 해준다
+	 */
 	@Override
 	public ListVO showMyContentByqnaList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalqnaCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentByqnaList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void qnaDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.qnaDeleteInMaypage(contentNo);
 	}
+	
 	@Override
 	public int checkBookingState(String id) {
 		// TODO Auto-generated method stub

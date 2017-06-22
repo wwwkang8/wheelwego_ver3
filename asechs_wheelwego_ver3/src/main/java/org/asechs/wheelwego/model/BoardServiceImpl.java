@@ -25,16 +25,7 @@ public class BoardServiceImpl implements BoardService {
 
 	////////// 강정호. 자유게시판
 	////////// Service/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 자유게시판 게시물 목록 보기
-	 * -------------------------------------------
-	 * 코드 설명 : 자유 게시판의 게시물 목록을 페이지 번호와 함께 보여준다.
-	 * 사용자가 처음 게시판에 접속 할 때는 페이지 번호는 null로 받아오고
-	 * 페이지 번호가 2,3,4 등 null이 아닐 경우로 케이스를 나누어 페이징 빈 객체를 활용한다.
-	 * 페이징 빈 객체에는 총 게시물 수와 페이지 번호를 넣어 준 후 DAO에 보낸다.
-	 */
+
 	@Override
 	public ListVO getFreeBoardList(String pageNo) {
 		int totalCount = boardDAO.getFreeBoardTotalContentCount();
@@ -45,18 +36,7 @@ public class BoardServiceImpl implements BoardService {
 			pagingBean = new PagingBean(totalCount, Integer.parseInt(pageNo));
 		return new ListVO((List<BoardVO>) boardDAO.getFreeBoardList(pagingBean), pagingBean);
 	}
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 자유 게시판 글 등록
-	 * ---------------------------------------
-	 * 코드 설명 : 자유게시판에 글 등록과 파일업로드를 하기 위한 메서드이다.
-	 * 글 등록 기능은 3가지의 메서드로 이루어집니다.
-	 * freeboardWrite() : 글 정보를 등록하는 메서드입니다.  글번호, 글제목, 내용, 작성자 등의 정보를 데이터베이스에 등록합니다.
-	 *  transferTo() : uploadPath(파일을 업로드할 경로), fileName을 이용하여 서버상에 MultipartFile 형식의 첨부 사진을 올려줍니다.
-	 *  freeboardWriteFileUpload() : 첨부 사진 이름을 데이터 베이스에 저장하는 메서드입니다.
-	 *  나중에 첨부 사진 이름과 경로를 이용하여 글 상세보기에서 사진을 불러올 수 있습니다.
-	 */
+
 	@Override
 	public void freeboardWrite(BoardVO bvo, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
@@ -172,14 +152,7 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.getFreeBoardFilePath(no);
 	}
 
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 댓글 등록
-	 * --------------------------------
-	 * 코드 설명 : Controller로부터 받아온 댓글 정보인 CommentVO를 DAO에 넘겨서
-	 * 데이터 베이스에 insert 해주기 위한 메서드
-	 */
+
 	@Override
 	public void writeFreeboardComment(CommentVO cvo) {
 		boardDAO.writeFreeboardComment(cvo);
@@ -189,37 +162,19 @@ public class BoardServiceImpl implements BoardService {
 	public List<CommentVO> getFreeboardCommentList(String no) {
 		return boardDAO.getFreeboardCommentList(no);
 	}
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 댓글 삭제
-	 * ---------------------------------
-	 * 코드 설명 : 댓글을 삭제하는 메서드입니다. 게시물 번호와 댓글 번호를 사용하여 삭제합니다.
-	 */
+
 	@Override
 	public void deleteFreeboardComment(CommentVO cvo) {
 		boardDAO.deleteFreeboardComment(cvo);
 	}
 
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 댓글 불러오기
-	 * ----------------------------------------
-	 * 코드 설명 : 수정, 삭제시에 댓글
-	 */
+
 	@Override
 	public CommentVO getFreeboardComment(CommentVO cvo) {
 		return boardDAO.getFreeboardComment(cvo);
 	}
 
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 게시판 - 댓글 수정
-	 * -----------------------------------------------------
-	 * 코드 설명 : 사용자가 수정한 댓글정보를 Controller로부터 받아 업데이트 해주는 메서드입니다.
-	 */
+
 	@Override
 	public void updateFreeboardComment(CommentVO cvo) {
 		boardDAO.updateFreeboardComment(cvo);
@@ -355,7 +310,8 @@ public class BoardServiceImpl implements BoardService {
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return boardDAO.business_getNameById(bvo);
 	}
-
+	
+	
 	@Override
 	public List<FileVO> getBusinessFilePath(String no) {
 		return boardDAO.getBusinessFilePath(no);
