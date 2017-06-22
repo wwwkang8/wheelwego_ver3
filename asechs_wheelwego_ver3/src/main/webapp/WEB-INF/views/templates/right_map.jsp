@@ -6,7 +6,7 @@
 
 <script>
 var HOME_PATH = window.HOME_PATH || '.';
-var position = new naver.maps.LatLng("${param.latitude}", "${param.longitude}");
+var position = new naver.maps.LatLng("${sessionScope.latitude}", "${sessionScope.longitude}");
 
 var map = new naver.maps.Map('map', {
     center: position,

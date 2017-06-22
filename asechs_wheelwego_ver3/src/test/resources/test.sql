@@ -117,7 +117,7 @@ insert into foodtruckfile values ('80나0055', '한입만_트럭1.PNG');
 insert into foodtruck (foodtruck_number, seller_id, foodtruck_name, introduction, register_timeposted, latitude, longitude) values ('80나0056', 'seller56', '휴하우스', '잘생긴 주인장! 맛있는 스테이크! 세련된 디자인! 3가지를 한번에 잡아본다 휴하우스 푸드트럭! ', sysdate, 37.659729, 126.770449);
 insert into foodtruckfile values ('80나0056', '휴하우스_트럭1.JPG');
 --------------------------------------------------------------------------------------------------------일산----------------------------------------------------------------------------------------------------------------------
-
+select * from foodtruckfile;
 select * from seller;
 select * from member;
 select * from foodtruck order by foodtruck_number asc;

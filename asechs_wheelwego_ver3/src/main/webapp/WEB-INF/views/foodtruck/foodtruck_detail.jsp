@@ -76,6 +76,11 @@ $(document).ready(function(){
 });
 });
 </script>
+
+${param.latitude}<br>
+${param.longitude}<br>
+
+
 <!-- Header -->
 <header class="bgimg w3-display-container" id="home">
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
@@ -420,7 +425,7 @@ document.getElementById("myLink").click();
 
 <script>
 var HOME_PATH = window.HOME_PATH || '.';
-var position = new naver.maps.LatLng("${param.latitude}", "${param.longitude}");
+var position = new naver.maps.LatLng("${sessionScope.latitude}", "${sessionScope.longitude}");
 
 var map = new naver.maps.Map('map', {
     center: position,

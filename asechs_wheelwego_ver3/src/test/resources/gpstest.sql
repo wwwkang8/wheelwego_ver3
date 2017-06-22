@@ -1,3 +1,131 @@
+select * from foodtruckfile;
+select * from foodtruck;
+select * from menu;
+
+delete from foodtruckfile;
+
+delete from menu;
+create sequence menu_seq;
+
+insert into menu values (menu_seq.nextval, '80나0001', );
+
+insert into foodtruckfile values  ('80나0001', '80나0001.jpg');
+insert into foodtruckfile values  ('80나0002', '80나0002.jpg');
+insert into foodtruckfile values  ('80나0003', '80나0003.jpg');
+insert into foodtruckfile values  ('80나0004', '80나0004.jpg');
+insert into foodtruckfile values  ('80나0005', '80나0005.jpg');
+insert into foodtruckfile values  ('80나0006', '80나0006.jpg');
+insert into foodtruckfile values  ('80나0007', '80나0007.jpg');
+insert into foodtruckfile values  ('80나0008', '80나0008.jpg');
+insert into foodtruckfile values  ('80나0009', '80나0009.jpg');
+insert into foodtruckfile values  ('80나0010', '80나0010.jpg');
+
+insert into foodtruckfile values  ('80나0011', '80나0011.jpg');
+insert into foodtruckfile values  ('80나0012', '80나0012.jpg');
+insert into foodtruckfile values  ('80나0013', '80나0013.jpg');
+insert into foodtruckfile values  ('80나0014', '80나0014.jpg');
+insert into foodtruckfile values  ('80나0015', '80나0015.jpg');
+insert into foodtruckfile values  ('80나0016', '80나0016.jpg');
+insert into foodtruckfile values  ('80나0017', '80나0017.jpg');
+insert into foodtruckfile values  ('80나0018', '80나0018.jpg');
+insert into foodtruckfile values  ('80나0019', '80나0019.jpg');
+insert into foodtruckfile values  ('80나0020', '80나0020.jpg');
+
+insert into foodtruckfile values  ('80나0021', '80나0021.jpg');
+insert into foodtruckfile values  ('80나0022', '80나0022.jpg');
+insert into foodtruckfile values  ('80나0023', '80나0023.jpg');
+insert into foodtruckfile values  ('80나0024', '80나0024.jpg');
+insert into foodtruckfile values  ('80나0025', '80나0025.jpg');
+insert into foodtruckfile values  ('80나0026', '80나0026.jpg');
+insert into foodtruckfile values  ('80나0027', '80나0027.jpg');
+insert into foodtruckfile values  ('80나0028', '80나0028.jpg');
+insert into foodtruckfile values  ('80나0029', '80나0029.jpg');
+insert into foodtruckfile values  ('80나0030', '80나0030.jpg');
+
+
+insert into foodtruckfile values  ('80나0031', '80나0031.jpg');
+insert into foodtruckfile values  ('80나0032', '80나0032.jpg');
+insert into foodtruckfile values  ('80나0033', '80나0033.jpg');
+insert into foodtruckfile values  ('80나0034', '80나0034.jpg');
+insert into foodtruckfile values  ('80나0035', '80나0035.jpg');
+insert into foodtruckfile values  ('80나0036', '80나0036.jpg');
+insert into foodtruckfile values  ('80나0037', '80나0037.jpg');
+insert into foodtruckfile values  ('80나0038', '80나0038.jpg');
+insert into foodtruckfile values  ('80나0039', '80나0039.jpg');
+insert into foodtruckfile values  ('80나0040', '80나0040.jpg');
+
+insert into foodtruckfile values  ('80나0041', '80나0041.jpg');
+insert into foodtruckfile values  ('80나0042', '80나0042.jpg');
+insert into foodtruckfile values  ('80나0043', '80나0043.jpg');
+insert into foodtruckfile values  ('80나0044', '80나0044.jpg');
+insert into foodtruckfile values  ('80나0045', '80나0045.jpg');
+insert into foodtruckfile values  ('80나0046', '80나0046.jpg');
+insert into foodtruckfile values  ('80나0047', '80나0047.png');
+insert into foodtruckfile values  ('80나0048', '80나0048.jpg');
+insert into foodtruckfile values  ('80나0049', '80나0049.jpg');
+insert into foodtruckfile values  ('80나0050', '80나0050.jpg');
+
+insert into foodtruckfile values  ('80나0051', '80나0051.png');
+insert into foodtruckfile values  ('80나0052', '80나0052.jpg');
+insert into foodtruckfile values  ('80나0053', '80나0053.jpg');
+insert into foodtruckfile values  ('80나0054', '80나0054.jpg');
+insert into foodtruckfile values  ('80나0055', '80나0055.jpg');
+insert into foodtruckfile values  ('80나0056', '80나0056.jpg');
+
+
+
+
+
+
+
+insert into foodtruckfile values  ('80나0002', '80나0002.jpg');
+insert into foodtruckfile values  ('80나0003', '80나0003.jpg');
+insert into foodtruckfile values  ('80나0004', '80나0004.jpg');
+insert into foodtruckfile values  ('80나0005', '80나0005.jpg');
+insert into foodtruckfile values  ('80나0006', '80나0006.jpg');
+insert into foodtruckfile values  ('80나0007', '80나0007.jpg');
+insert into foodtruckfile values  ('80나0008', '80나0008.jpg');
+insert into foodtruckfile values  ('80나0009', '80나0009.jpg');
+insert into foodtruckfile values  ('80나0010', '80나0010.jpg');
+
+insert into foodtruckfile values  ('80나0001', '80나0001.jpg');
+insert into foodtruckfile values  ('80나0002', '80나0002.jpg');
+insert into foodtruckfile values  ('80나0003', '80나0003.jpg');
+insert into foodtruckfile values  ('80나0004', '80나0004.jpg');
+insert into foodtruckfile values  ('80나0005', '80나0005.jpg');
+insert into foodtruckfile values  ('80나0006', '80나0006.jpg');
+insert into foodtruckfile values  ('80나0007', '80나0007.jpg');
+insert into foodtruckfile values  ('80나0008', '80나0008.jpg');
+insert into foodtruckfile values  ('80나0009', '80나0009.jpg');
+insert into foodtruckfile values  ('80나0010', '80나0010.jpg');
+
+insert into foodtruckfile values  ('80나0001', '80나0001.jpg');
+insert into foodtruckfile values  ('80나0002', '80나0002.jpg');
+insert into foodtruckfile values  ('80나0003', '80나0003.jpg');
+insert into foodtruckfile values  ('80나0004', '80나0004.jpg');
+insert into foodtruckfile values  ('80나0005', '80나0005.jpg');
+insert into foodtruckfile values  ('80나0006', '80나0006.jpg');
+insert into foodtruckfile values  ('80나0007', '80나0007.jpg');
+insert into foodtruckfile values  ('80나0008', '80나0008.jpg');
+insert into foodtruckfile values  ('80나0009', '80나0009.jpg');
+insert into foodtruckfile values  ('80나0010', '80나0010.jpg');
+
+insert into foodtruckfile values  ('80나0001', '80나0001.jpg');
+insert into foodtruckfile values  ('80나0002', '80나0002.jpg');
+insert into foodtruckfile values  ('80나0003', '80나0003.jpg');
+insert into foodtruckfile values  ('80나0004', '80나0004.jpg');
+insert into foodtruckfile values  ('80나0005', '80나0005.jpg');
+insert into foodtruckfile values  ('80나0006', '80나0006.jpg');
+insert into foodtruckfile values  ('80나0007', '80나0007.jpg');
+insert into foodtruckfile values  ('80나0008', '80나0008.jpg');
+insert into foodtruckfile values  ('80나0009', '80나0009.jpg');
+insert into foodtruckfile values  ('80나0010', '80나0010.jpg');
+
+
+
+
+select * from foodtruckfile;
+
 select * from seller;
 
 select * from foodtruck where foodtruck_name = 'Friend';
@@ -38,18 +166,18 @@ values ('80나1010', 'seller110', '그남자의소시지1010', '그남자의소�
 insert into foodtruck (foodtruck_number, seller_id, foodtruck_name, introduction)
 values ('80나1011', 'seller111', '그남자의소시지1011', '그남자의소시지1011');
 
-insert into foodtruckfile values ('80나1000', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1001', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1002', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1003', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1004', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1005', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1006', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1007', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1008', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1009', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1010', '그남자의소시지_트럭1.PNG');
-insert into foodtruckfile values ('80나1011', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1000', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1001', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1002', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1003', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1004', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1005', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1006', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1007', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1008', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1009', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1010', '그남자의소시지_트럭1.PNG');
+insert into foodtruckfile values  values ('80나1011', '그남자의소시지_트럭1.PNG');
 
 delete from foodtruck;
 insert into foodtruck (foodtruck_number, seller_id, foodtruck_name, introduction, register_timeposted, latitude, longitude) values ('80나0010', 'seller10', '달콤크레페', '달콤하고 맛있는 크레페를 팔고 있습니다. ', sysdate, 37.411823, 127.129187);
