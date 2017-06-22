@@ -20,7 +20,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		phonenumber=#{phoneNumber}
 	</select>
    <update id="forgetMemberPassword" parameterType="memberVO">
-   		update member set password=#{password} where id=#{id} and member_name=#{memberName} and phonenumber=#{phoneNumber}
+   		update member set password=#{password} where id=#{id}
+   		and member_name=#{memberName} and phonenumber=#{phoneNumber}
    </update>
 	<update id="updateMember" parameterType="memberVO">
 		update member set password=#{password}, address=#{address}, addressdetail = #{addressDetail}, phonenumber=#{phoneNumber}, postcode=#{postCode} where id=#{id}

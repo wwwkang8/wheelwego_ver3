@@ -196,7 +196,8 @@ function geoFindMe2() {
                <div class="col-lg-4">
            <!-- 푸드트럭 검색 폼 -->
          <form class="subscribe_form">
-              <input type="text" placeholder="Search foodtruck!" class="email" id="searchFoodtruckName" name="searchFoodtruckName" required="required">
+              <input type="text" placeholder="Search foodtruck!" class="email" 
+              id="searchFoodtruckName" name="searchFoodtruckName" required="required">
               <input type="button" class="subscribe" name="search" value="Search" onclick="geoFindMe()">
             </form>
            </div>
@@ -214,29 +215,29 @@ function geoFindMe2() {
          </div>
          
       <div class="row" >
-      <!-- begin, end 값을 설정하여 전체 트럭 목록 중, 6개만 랜덤으로 뽑아낸다 -->
+      <!-- begin, end 값을 설정하여 전체 트럭 목록 중, 9개만 랜덤으로 뽑아낸다 -->
       <c:forEach items="${trucklist}" begin="0" end="8" var="truckVO">
          <div class="col-lg-4 col-sm-6 portfolio-item" >
             <div class="flip-container"
                ontouchstart="this.classList.toggle('hover');" style="margin: 0 auto;">
-               <div class="flipper">  
-<!--                   <a href="#portfolioModal1" onclick="hoverClick(this.id)" id=${truckVO.foodtruckNumber} class="portfolio-link"
-                        data-toggle="modal"> -->
+               <div class="flipper">
                <div style="CURSOR:pointer" class="detailLink">
                      <input type="hidden" name="foodturckNo" value="${truckVO.foodtruckNumber}">
                       <input type="hidden" name="latitude" value="${truckVO.latitude}">
                        <input type="hidden" name="longitude" value="${truckVO.longitude}">
                      <div class="front" >
-                        <img class="img-circle  center-block food-img img-responsive"
-                           src="${pageContext.request.contextPath}/resources/upload/${truckVO.fileVO.filepath}"
-                           alt="" >
+                     <img class="img-circle  center-block food-img img-responsive"
+                      src="${pageContext.request.contextPath}/resources/upload/${truckVO.fileVO.filepath}"
+                      alt="" >
                      </div>
                      <div class="back cbx-back-side">
                         <div class="text-center back-single-text">
                            <p>${truckVO.foodtruckName}</p>
                            <p class="truck-simple-info"><br><br><br>
-              <span class="glyphicon glyphicon-map-marker"></span> <span id="${truckVO.foodtruckName}" class="address"></span><br>
-            <Br><span class="glyphicon glyphicon-star" style="color:orange"></span> ${truckVO.avgGrade}</p>
+              <span class="glyphicon glyphicon-map-marker"></span>
+              <span id="${truckVO.foodtruckName}" class="address">
+              </span><br><br>
+              <span class="glyphicon glyphicon-star" style="color:orange"></span> ${truckVO.avgGrade}</p>
                         </div>
                      </div>
                   </div>
