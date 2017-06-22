@@ -19,10 +19,10 @@ public interface FoodTruckService {
 	//int getAvgGradeByTruckNumber(String foodtruckNumber);
 	/*ListVO getFoodTruckListByGPS(String pageNo, TruckVO gpsInfo);*/
 	ListVO filtering(String option, String name, String pageNo, TruckVO gpsInfo);
-	void bookingMenu(BookingVO bookingVO);
-	int getRecentlyBookingNumberBySellerId(String id);
-	int getPreviousBookingNumberBySellerId(String id);
-	String getBookingStateBybookingNumber(String bookingNumber);
+	void bookingMenu(BookingVO bookingVO); //예약
+	int getRecentlyBookingNumberBySellerId(String id); //예약
+	int getPreviousBookingNumberBySellerId(String id); //예약
+	String getBookingStateBybookingNumber(String bookingNumber); //예약
 	List<String> getFoodtruckNumberList(TruckVO truckVO);
-	String getPreviousBookingNumberByCustomerId(String id);
+	String getPreviousBookingNumberByCustomerId(String id); //예약
 }

@@ -11,23 +11,23 @@ import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
 
 public interface MypageService {
-	List<String> findMenuIdByBookingNumber(String bookingNumber);
+	List<String> findMenuIdByBookingNumber(String bookingNumber); //예약
 	
 	String findFoodTruckNumberByMenuId(String menuId); 
 	
 	String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber);
 	
-	ListVO customerBookingList(String pageNo, String customerId);
+	ListVO customerBookingList(String pageNo, String customerId); //예약
 	
-	List<BookingVO> getBookingList(int bookingNumber);
+	List<BookingVO> getBookingList(int bookingNumber); //예약
 	
-    public void calPoint(String usePoint, String totalAmount, int bookingNumber);
+    public void calPoint(String usePoint, String totalAmount, int bookingNumber); //예약
 
-	public void minusPoint(int usePoint, int bookingNumber);
+	public void minusPoint(int usePoint, int bookingNumber);//예약
 	   
-	public void addPoint(int totalAmount, int bookingNumber);
+	public void addPoint(int totalAmount, int bookingNumber);//예약
 	   
-	public int getMyPoint(String customerId);
+	public int getMyPoint(String customerId); //예약
 	
 	List<WishlistVO> heartWishList(String id);
 	
@@ -71,7 +71,7 @@ public interface MypageService {
 
 	ListVO showMyContentByFreeList(String id, String contentPageNo);
 
-	void updateBookingState(BookingVO bookingVO);//강정호. 결제완료->조리중->조리상태 바꿔주는 메서드
+	void updateBookingState(BookingVO bookingVO);//강정호. 결제완료->조리중->조리상태 바꿔주는 메서드 , 예약
 
 	//List<BookingVO> getBookingVO(String foodTruckNumber);
 	
@@ -91,8 +91,8 @@ public interface MypageService {
 
 	void qnaDeleteInMaypage(String contentNo);
 
-	int checkBookingState(String id);
+	int checkBookingState(String id); //예약
 
-	ListVO getPointListById(String id, String nowPage);
+	ListVO getPointListById(String id, String nowPage);//예약
 
 }

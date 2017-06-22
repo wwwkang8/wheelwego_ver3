@@ -13,7 +13,8 @@
 		
 		document.getElementById('latitude').value = latitude;
 		document.getElementById('longitude').value= longitude;
-				
+		alert(latitude);
+		alert(longitude);
 		var gpsForm = document.getElementById("gpsForm"); 
 		alert(latitude + " " + longitude);
 		gpsForm.submit();	
