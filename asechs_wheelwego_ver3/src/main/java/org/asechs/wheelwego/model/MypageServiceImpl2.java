@@ -494,7 +494,7 @@ public class MypageServiceImpl2 implements MypageService {
 	/**
 	 * 김호겸
 	 * 2017.6.13 (수정 완료) 
-	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 *마이페이지-내가 쓴 게시글 창업게시글 삭제
 	 */
 	@Override
 	public void businessDeleteInMaypage(String contentNo) {

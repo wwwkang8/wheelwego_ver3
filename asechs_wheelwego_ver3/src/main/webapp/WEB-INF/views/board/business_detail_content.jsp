@@ -21,12 +21,14 @@
 			location.href="${pageContext.request.contextPath}/business_list.do";
 		})//수정버튼
 		$("#modifyBtn").click(function()	{
-			location.href="${pageContext.request.contextPath}/afterLogin_board/business_update_form.do?no="+${requestScope.detail_business.no};
+			location.href="${pageContext.request.contextPath}/afterLogin_board/business_update_form.do?no="
+					+${requestScope.detail_business.no};
 		})// 삭제버튼
 		$("#deleteBtn").click(function()	{
 			var info=confirm("게시물을 삭제합니까?");
 			if(info){				
-			location.href="${pageContext.request.contextPath}/afterLogin_board/businessDelete.do?no="+${requestScope.detail_business.no};
+			location.href="${pageContext.request.contextPath}/afterLogin_board/businessDelete.do?no="
+					+${requestScope.detail_business.no};
 			}else{
 			}
 		})// 삭제버튼 끝
