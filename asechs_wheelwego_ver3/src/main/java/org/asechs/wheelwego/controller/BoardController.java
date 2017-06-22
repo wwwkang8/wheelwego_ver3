@@ -65,14 +65,10 @@ public class BoardController {
 		@RequestMapping("/board/freeboard_detail_content.do")
 		public String freeboard_detail_content(String no, Model model) {
 			int hits = Integer.parseInt(no);
-			// 조회수 올리기
 			boardService.updateHits(hits);
-			// 글제목, 조회수, 내용 가져오는 메서드
 			BoardVO bvo = boardService.getFreeBoardDetail(no);
-			// 파일 이름 가져오는 메서드
 			List<FileVO> fileNameList=boardService.getFreeBoardFilePath(no);
 			List<CommentVO> freeboardCommentList=boardService.getFreeboardCommentList(no);
-			// 작성자 이름 갖고오기
 			MemberVO name = boardService.getNameById(bvo);
 			model.addAttribute("detail_freeboard", bvo);
 			model.addAttribute("fileNameList",fileNameList);
@@ -241,11 +237,9 @@ public class BoardController {
 		@RequestMapping("board/business_detail_content.do")
 		public String business_detail_content(String no, Model model) {
 			int hits = Integer.parseInt(no);
-			// 조회수 올리기
 			boardService.updateHitsBusiness(hits);
 			BoardVO bvo = boardService.getBusinessBoardDetail(no);
 			List<FileVO> fileNameList=boardService.getBusinessFilePath(no);
-			// 댓글 불러오는 메서
 			List<CommentVO> businessCommentList=boardService.getbusinessCommentList(no);
 			MemberVO name = boardService.business_getNameById(bvo);
 			model.addAttribute("detail_business", bvo);
@@ -360,7 +354,6 @@ public class BoardController {
 	@RequestMapping("board/qna_detail_content.do")
 	public String qna_detail_content(String no, Model model) {
 		int hits = Integer.parseInt(no);
-		// 조회수 올리기
 		boardService.updateHitsqna(hits);
 		BoardVO bvo = boardService.getqnaBoardDetail(no);
 		List<FileVO> fileNameList=boardService.getqnaFilePath(no);
