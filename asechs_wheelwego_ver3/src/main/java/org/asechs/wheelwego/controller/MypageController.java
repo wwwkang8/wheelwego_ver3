@@ -231,13 +231,26 @@ public class MypageController {
       mypageService.updateMyReview(reviewVO);
       return "redirect:/afterLogin_mypage/showMyReviewList.do?customerId=" + reviewVO.getCustomerId();
    }
-
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 -
+    * @param sellerId
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/checkTruckGPS.do")
    public ModelAndView checkTruckGPS(String sellerId) {
       TruckVO gpsInfo = mypageService.getGPSInfo(sellerId);
       return new ModelAndView("mypage/checkTruckGPS.tiles", "gpsInfo", gpsInfo);
    }
-
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 -    * @param sellerId
+    * @param latitude
+    * @param longitude
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/setTruckGPS.do")
    @ResponseBody
    public String setTruckGPS(String sellerId, String latitude, String longitude) {
@@ -253,6 +266,13 @@ public class MypageController {
 
       return "설정 완료";
    }   
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 -
+    * @param sellerId
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/set_TruckGPS.do")
    public String setTruckGPS(String sellerId){
       TruckVO gpsInfo = new TruckVO();
@@ -263,17 +283,31 @@ public class MypageController {
       
       return "redirect:../afterLogin_mypage/mypage.do";
    }
-
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 -
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/test.do")
    public String test() {
       return "mypage/test";
    }
-
+   /**
+    * 박다혜
+    * 2017.06.22 수정중
+    * 마이페이지 - 푸드트럭 번호 확인하기
+    * ----------------------------------------
+    * 푸드트럭 등록 시 같은 번호의 등록을 피하기 위해
+    * 푸드트럭 번호가 이미 존재한다면 true를,
+    * 없다면 false를 반환한다.
+    * @param foodtruckNumber
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/checkFoodtruckNumber.do")
    @ResponseBody
    public boolean checkFoodtruckNumber(String foodtruckNumber) {
-      TruckVO truckVO = mypageService.findtruckInfoByTruckNumber(foodtruckNumber);
-      if (truckVO == null)
+      if (mypageService.findtruckInfoByTruckNumber(foodtruckNumber) == null)
          return false;
       else
          return true;

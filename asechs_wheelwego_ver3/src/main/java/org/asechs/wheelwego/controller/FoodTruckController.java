@@ -260,14 +260,22 @@ public class FoodTruckController {
 		else
 			return "fail";
 	}
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 예약 - 선행주문이 있는지 체크
+	 * ------------------------------------------
+	 * 아이디에 해당하는 선행주문이 있는지 체크하여
+	 * count가 0이라면 선행주문이 없는 것이므로 ok를,
+	 *  0이아니라면 선행주문이 있는 것이므로 no를 반환한다.
+	 * @param request
+	 * @return
+	 */
 	   @RequestMapping("afterLogin_foodtruck/checkBooking.do")
 	   @ResponseBody
 	   public String checkBooking(HttpServletRequest request) {
-	      System.out.println("실행됨");
-	      HttpSession session = request.getSession();
-	      MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");      
+	      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");      
 	      int count = mypageService.checkBookingState(memberVO.getId());
-	      System.out.println(count);
 	      return (count==0) ? "ok":"no";
 	   }
 	   /**
