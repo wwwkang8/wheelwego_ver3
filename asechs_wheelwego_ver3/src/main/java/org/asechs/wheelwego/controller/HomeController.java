@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.asechs.wheelwego.model.FoodTruckService;
 import org.asechs.wheelwego.model.vo.TruckVO;
@@ -37,15 +39,34 @@ public class HomeController {
 	@Resource(name="foodTruckServiceImpl2")
 	private FoodTruckService foodTruckService;
 
+	/**
+	 *	황윤상
+	 *	2017.06.21 (수정 완료)
+	 *	멤버 - 현재 위치정보 가져오기
+	 *	home.do가 실행되면, 자바스크립트 기반의 JSP에서 위치정보 가져오고, main.do를 실행한다.
+	 *  즉, main.do가 기존의 home.do를 대체하는 것이다.
+	 */	
+	@RequestMapping("home.do")
+	public String home() {
+		return "member/getLocation";
+	}
+	
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
  	푸드트럭 - main 랜덤 리스트
  	기능설명 : 푸드트럭 리스트를 받아온 뒤,
  			Collections.shuffle()을 사용하여 음식목록(foodList)를 랜덤으로 뿌려준다
-  */
-	@RequestMapping("home.do")
-	public ModelAndView foodtruckList() {
+ 	황윤상		
+ 	2017.06.21 (수정 완료)
+ 	멤버 - 현재 위치정보를 세션에 저장
+ 	기능설명 : 메인 페이지를 호출하면, 현재의 위치정보를 세션에 저장함으로써, 페이지를 이동해도 위치정보를 유지토록 한다.		
+	 */		
+	@RequestMapping("main.do")
+	public ModelAndView foodtruckList(HttpServletRequest request, String latitude, String longitude) {		
+		HttpSession session=request.getSession();
+		session.setAttribute("latitude", Double.parseDouble(latitude));
+		session.setAttribute("longitude", Double.parseDouble(longitude));
 		List<TruckVO> truckList = foodTruckService.foodtruckList();
 		Collections.shuffle(truckList); 
 		return new ModelAndView("main_home.tiles", "trucklist", truckList);

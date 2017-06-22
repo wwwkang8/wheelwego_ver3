@@ -127,7 +127,6 @@ geoFindMe();
 	});
 
 		$("#sellerBookingListBtn").click(function(){
-			alert("aa");
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/sellerBookingList.do?sellerId=${sessionScope.memberVO.id}";
 		});
 

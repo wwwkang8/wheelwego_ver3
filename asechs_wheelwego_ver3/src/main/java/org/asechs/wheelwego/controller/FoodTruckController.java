@@ -47,8 +47,8 @@ public class FoodTruckController {
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByName.do")
-	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, 
-			String longitude,HttpServletRequest request,String option) {
+	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String _option) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
@@ -74,7 +74,8 @@ public class FoodTruckController {
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByGPS.do")
-	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String option,HttpServletRequest request) {
+	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String _option,HttpServletRequest request) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
 		TruckVO gpsInfo = new TruckVO();

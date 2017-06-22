@@ -69,23 +69,23 @@
                                 		<td style="font-weight: bold; padding-bottom: 10px;">예약일시</td><td style="padding-bottom: 10px; width:100px;">${bookingList.bookingDate}</td>
                                 	</tr>
                                 	<tr>
-                                		<td style="font-weight: bold; width:96px; padding-bottom: 15px;">메뉴명</td>
-                                		<td style="font-weight: bold; width:30px; padding-bottom: 15px;">단가</td>
-                                		<td style="font-weight: bold; width:45px; padding-bottom: 15px;">수량</td>
-                                		<td style="font-weight: bold; width:33px; padding-bottom: 15px;">금액</td>
+                                		<td style="font-weight: bold; width:140px; padding-bottom: 10px;">메뉴명</td>
+                                		<td style="font-weight: bold; width:30px; padding-bottom: 10px;">단가</td>
+                                		<td style="font-weight: bold; width:45px; padding-bottom: 10px;">수량</td>
+                                		<td style="font-weight: bold; width:33px; padding-bottom: 10px;">금액</td>
                                 	</tr>
                                 	<c:set value="0" var="totalPrice"/>
                                 	<c:set value="0" var="i"/>
                                 	<c:forEach items="${bookingList.bookingDetail }" var="bookingDetail">
                                 	<tr>
-                                		<td style=" padding-bottom: 15px;">${bookingDetail.menuName }
+                                		<td style=" padding-bottom: 10px;">${bookingDetail.menuName }
                                 		<input type="hidden" name="bookingDetail[${i}].menuId" value="${bookingDetail.menuId}">
                                 		</td>                       		
-                                		<td style=" padding-bottom: 15px;">${bookingDetail.menuPrice }</td>
-                                		<td style=" padding-bottom: 15px;">${bookingDetail.bookingQuantity }
+                                		<td style=" padding-bottom: 10px;">${bookingDetail.menuPrice }</td>
+                                		<td style=" padding-bottom: 10px;">${bookingDetail.bookingQuantity }
                                 		<input type="hidden" name="bookingDetail[${i}].bookingQuantity" value="${bookingDetail.bookingQuantity}">
                                 		</td>
-                                		<td style=" padding-bottom: 15px;">${bookingDetail.menuPrice*bookingDetail.bookingQuantity }</td>
+                                		<td style=" padding-bottom: 10px;">${bookingDetail.menuPrice*bookingDetail.bookingQuantity }</td>
                                 	<c:set value="${totalPrice+bookingDetail.bookingQuantity*bookingDetail.menuPrice}" var="totalPrice"/>
 	       						 	<c:set value="${i+1}" var="i"/>
                                 	</tr>
@@ -97,10 +97,10 @@
                                 	</tr>
                                 	<tr>
                                 		<td>
-		                                		<input type="button"  class="cookingBtn" value="조리중">
+		                                		<input type="button"  class="cookingBtn btn"  value="조리중">
 								        </td>
 								        <td>
-								        	<input type="button" class="finishedCookingBtn" value="조리완료">
+								        	<input type="button" class="finishedCookingBtn btn " value="조리완료">
 								        </td>
                                 	</tr>
                                 </table>              

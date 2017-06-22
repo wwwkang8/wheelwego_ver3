@@ -1,6 +1,6 @@
 select * from seller;
 
-select * from foodtruck;
+select * from foodtruck where foodtruck_name = 'Friend';
 
 insert into foodtruck (foodtruck_number, seller_id, foodtruck_name, introduction)
 values ('80나1000', 'seller100', '그남자의소시지1000', '그남자의소시지1000');

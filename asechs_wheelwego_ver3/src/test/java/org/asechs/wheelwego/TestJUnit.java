@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.asechs.wheelwego.model.MypageService;
+//github.com/parkdahye/wheelwego_ver3.git
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
