@@ -47,10 +47,10 @@ public class FoodTruckController {
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByName.do")
-	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
+	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String _option) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
-		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
 		ListVO listVO =foodTruckService.filtering(option, name, pageNo,null);
 		modelAndView.addObject("pagingList", listVO);
@@ -62,18 +62,20 @@ public class FoodTruckController {
 		if(session != null){
 			MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 			if(memberVO != null){
-				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); //사용자 id의 단골트럭 목록을 보낸다.
+				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); 
+				//사용자 id의 단골트럭 목록을 보낸다.
 			}
 		}
 		return modelAndView;
 	}
 	/**
-	 * 황윤상 GPS 기반 푸드트럭수동검색
+	 * 황윤상 GPS 기반 푸드트럭검색
 	 * @param name
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByGPS.do")
-	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String option,HttpServletRequest request) {
+	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String _option,HttpServletRequest request) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
 		TruckVO gpsInfo = new TruckVO();
@@ -82,8 +84,6 @@ public class FoodTruckController {
 		gpsInfo.setLongitude(Double.parseDouble(longitude));
 		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");
-		//ListVO listVO1 = foodTruckService.getFoodTruckListByGPS(pageNo, gpsInfo);
-		//System.out.println(listVO1);
 		ListVO listVO =foodTruckService.filtering(option,null, pageNo,gpsInfo);
 		HttpSession session=request.getSession(false);
 		String id=null;
