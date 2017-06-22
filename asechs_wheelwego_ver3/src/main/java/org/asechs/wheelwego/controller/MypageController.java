@@ -31,13 +31,13 @@ public class MypageController {
    private FoodTruckService foodtruckService;
 
 	/**
-	 *  김래현
+	 *  김래현 황윤상
 	 *  2017.06.21 수정완료
 	 *  마이페이지/단골트럭/단골트럭리스트 불러오기
 	 *  ----------------------- 
 	 *    세션이 없으면 홈으로 보냄
 	 *    위도 경도를 세팅해주어 현재위치를 알수있음
-	 *    
+	 *    페이징빈 적용
 	 */
    @RequestMapping("afterLogin_mypage/wishlist.do")
    public ModelAndView myWishList(HttpServletRequest request, String id, String pageNo,String latitude, String longitude) {
@@ -57,7 +57,7 @@ public class MypageController {
       }
    }
    /**
-    * 김래현
+    * 김래현 황윤상
     * 2017.06.21 수정완료
     * 마이페이지/단골트럭/단골트럭 삭제
     * -------------------------
