@@ -13,29 +13,12 @@ import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-/**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
- * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+
 @Repository
 public class FoodTruckDAOImpl implements FoodTruckDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
 
-	@Override
-	public String findFoodtruckNameByMenuId(String menuId){
-		return sqlSessionTemplate.selectOne("foodtruck.findFoodtruckNameByMenuId", menuId);
-	}
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
@@ -47,25 +30,10 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		return sqlSessionTemplate.selectList("foodtruck.foodtruckList");
 	}
 
-	/** 	  
-	정현지
-	2017.06.21 (수정완료)
- 	푸드트럭 - 푸드트럭명으로 검색한 푸드트럭 리스트
- 	기능설명 : 푸드트럭명으로 검색한 foodtruck 리스트를 받아온다
-  */
-	@Override
-	public List<TruckVO> searchFoodTruckList(String name) {
-		return sqlSessionTemplate.selectList("foodtruck.searchFoodTruckList", name);
-	}
 
 	@Override
 	public int getTruckListTotalContentCountByName(String name) {
 		return sqlSessionTemplate.selectOne("foodtruck.getTruckListTotalContentCountByName", name);
-	}
-
-	@Override
-	public List<TruckVO> searchFoodTruckByGPS(TruckVO gpsInfo) {
-		return sqlSessionTemplate.selectList("foodtruck.searchFoodTruckByGPS", gpsInfo);
 	}
 
 	/** 	  
@@ -131,39 +99,67 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public List<TruckVO> getFoodTruckListByName(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("foodtruck.getFoodTruckListByName",pagingBean);
 	}
-	
-/*	@Override
-	public int findTruckNumberInReview(String foodtruckNumber) {
-		return sqlSessionTemplate.selectOne("foodtruck.findTruckNumberInReview", foodtruckNumber);
-	}*/
+
 
 	@Override
 	public int getTruckListTotalContentCountByGPS(TruckVO gpsInfo) {
 		return sqlSessionTemplate.selectOne("foodtruck.getTruckListTotalContentCountByGPS", gpsInfo);
 	}
-
-	@Override
-	public List<TruckVO> getFoodTruckListByGPS(PagingBean pagingBean) {
-		return sqlSessionTemplate.selectList("foodtruck.getFoodTruckListByGPS",pagingBean);
-	}
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 최신순 필터링
+	 * --------------------------------
+	 * FOODTRUCK 테이블의 register_timeposted 을 기준으로 내림차순 정렬한다.
+	 * 
+	 * 동적쿼리를 이용하여 이름검색과 위치기반 검색을 구분한다.
+	 */
 	@Override
 	public List<TruckVO> filteringByDate(PagingBean pagingbean) {
 		return sqlSessionTemplate.selectList("foodtruck.filteringByDate", pagingbean);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 즐겨찾기순 필터링
+	 * -----------------------------------
+	 * FOODTRUCK 테이블과 WISHLIST테이블을 foodtruck_number를 기준으로
+	 * 조인하고 FOODTRUCK 테이블의 컬럼을 그룹으로 묶어 
+	 * 해당 푸드트럭의 customer_id수를 카운트한다
+	 * 후에 wishlist count 순을 기준으로 내림차순한다.
+	 * 
+	 * 동적쿼리를 이용하여 이름검색과 위치기반 검색을 구분한다.
+	 */
 	@Override
 	public List<TruckVO> filteringByWishlist(PagingBean pagingbean) {
-		System.out.println("DAO gpsInfo:"+pagingbean.getGpsInfo());
-		System.out.println("dao 결과 : "+sqlSessionTemplate.selectList("foodtruck.filteringByWishlist", pagingbean));
 		return sqlSessionTemplate.selectList("foodtruck.filteringByWishlist", pagingbean);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 평점순 필터링
+	 * ------------------------------
+	 * FOODTRUCK 테이블과 REVIEW테이블을 foodtruck_number를 기준으로
+	 * 조인하고 FOODTRUCK 테이블의 컬럼을 그룹으로 묶어 
+	 * 해당 푸드트럭의 평점을 구한다
+	 * 후에 Avg grade를 기준으로 내림차순한다.
+	 * 
+	 * 동적쿼리를 이용하여 이름검색과 위치기반 검색을 구분한다.
+	 * 
+	 * nvl() : null값을 원하는 값으로 처리하기 위한 함수
+	 * trunc() : 원하는 소수점까지 나타내주는 함수
+	 */
 	@Override
 	public List<TruckVO> filteringByAvgGrade(PagingBean pagingbean) {
 		return sqlSessionTemplate.selectList("foodtruck.filteringByAvgGrade", pagingbean);
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 푸드트럭 번호에 해당하는 평점 조회
+	 * -----------------------------------------------------
+	 * FOODTRUCK 테이블과 REVIEW 테이블을 foodtruck_number를 기준으로
+	 * Outer 조인한다. (REVIEW 테이블에 없는 foodtruck_number까지 조회하기 위함)
 	 */
 	@Override
 	public double findAvgGradeByTruckNumber(String truckNumber) {
@@ -171,11 +167,17 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 푸드트럭 - 푸드트럭 번호에 해당하는 즐겨찾기 수 조회
+	 * -----------------------------------------------------------
+	 * FOODTRUCK 테이블과 WISHLIST 테이블을 foodtruck_number를 기준으로
+	 * Outer 조인한다. (WISHLIST 테이블에 없는 foodtruck_number까지 조회하기 위함)
 	 */
 	@Override
 	public int findWishlistCountByTruckNumber(String foodtruckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findWishlistCountByTruckNumber", foodtruckNumber);
 	}
+
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {
 		sqlSessionTemplate.insert("foodtruck.bookingMenu", bookingVO);
@@ -191,17 +193,34 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		System.out.println("dao"+id);
 		return sqlSessionTemplate.selectList("foodtruck.getBookingListBySellerId", id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 결제완료상태인 최근 예약번호 가져오기 (ajax)
+	 * ----------------------------------------------------------------------
+	 * 주문이 들어왔을 때 결제완료 상태이므로 
+	 * 주문이 들어왔는지 알기위해 결제완료상태인 최근 예약번호를 가져온다.
+	 */
 	@Override
 	public int getRecentlyBookingNumberBySellerId(String id) {
 		return sqlSessionTemplate.selectOne("foodtruck.getRecentlyBookingNumberBySellerId", id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 이전 예약번호 가져오기  (ajax)
+	 * -------------------------------------------------------
+	 * 예약 상태에 상관 없이 사업자의 최근 예약 번호를 가져온다.
+	 */
 	@Override
 	public int getPreviousBookingNumberBySellerId(String id) {
 		return sqlSessionTemplate.selectOne("foodtruck.getPreviousBookingNumberBySellerId", id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 예약번호에 해당하는 예약상태 가져오기  (ajax)
+	 */
 	@Override
 	public String getBookingStateBybookingNumber(int bookingNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.getBookingStateBybookingNumber", bookingNumber);
@@ -211,6 +230,14 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	      return sqlSessionTemplate.selectList("foodtruck.getFoodtruckNumberList", gpsInfo);
 	   }
 
+	 
+		/**
+		 * 박다혜
+		 * 2017.06.22 수정중
+		 * 예약 - 사용자아이디에 해당하는 이전의 예약넘버 가져오기  (ajax)
+		 * --------------------------------------------------------------------------
+		 * 사용자의 아이디에 해당하는 결제완료상태인 이전의 예약번호를 조회하여 반환
+		 */
 	@Override
 	public String getPreviousBookingNumberByCustomerId(String id) {
 		return sqlSessionTemplate.selectOne("foodtruck.getPreviousBookingNumberByCustomerId", id);

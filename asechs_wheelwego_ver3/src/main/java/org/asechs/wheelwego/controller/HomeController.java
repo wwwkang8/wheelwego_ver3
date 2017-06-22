@@ -64,7 +64,6 @@ public class HomeController {
 	 */		
 	@RequestMapping("main.do")
 	public ModelAndView foodtruckList(HttpServletRequest request, String latitude, String longitude) {		
-		System.out.println("좌표정보 : " + latitude + " " + longitude);
 		HttpSession session=request.getSession();
 		session.setAttribute("latitude", Double.parseDouble(latitude));
 		session.setAttribute("longitude", Double.parseDouble(longitude));

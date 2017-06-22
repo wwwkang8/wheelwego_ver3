@@ -15,7 +15,12 @@ select menu_id from booking_detail where booking_number='61' -- 20
 select foodtruck_number from menu where menu_id='20' -- 80나0009
 select foodtruck_name from foodtruck where foodtruck_number='80나0009' -- 달리는 타코
 
-select foodtruck_number from(select menu_id from booking_detail)
+select f.foodtruck_name from BOOKING_DETAIL bd, menu m, FOODTRUCK f
+where f.foodtruck_number=m.foodtruck_number and m.menu_id=bd.menu_id and bd.booking_number='48' 
+and m.menu_id='20' and f.foodtruck_number='80나0009'
+
+
+select foodtruck_number from menu
 
 select t.*, f.foodtruck_filepath, m.menu_filename
 		from(select * from foodtruck)t, foodtruckfile f, menu m

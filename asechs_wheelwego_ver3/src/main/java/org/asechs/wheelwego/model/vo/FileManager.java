@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileManager {
    private MultipartFile imgFile;
    //private String newFilePath="C:\\Users\\User\\AppData\\Roaming\\SPB_16.6\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\upload\\";
-   private String newFilePath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\upload\\";
+   private String newFilePath="C:\\Users\\Administrator\\git\\wheelwego_ver3\\asechs_wheelwego_ver3\\src\\main\\webapp\\resources\\upload\\";
    private String newFileFullName;
    private  String newFileName;
 
@@ -46,7 +46,7 @@ public class FileManager {
    }
 
    public void uploadFile(MultipartFile imgFile,String renamedFile) throws IOException {
-      imgFile.transferTo(new File(/*newFilePath+*/renamedFile)); //서버에 전송하여 저장      
+      imgFile.transferTo(new File(newFilePath+renamedFile)); //서버에 전송하여 저장      
       System.out.println("업로드 완료");
    }
    

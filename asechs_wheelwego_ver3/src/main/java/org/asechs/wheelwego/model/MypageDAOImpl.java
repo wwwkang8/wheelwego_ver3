@@ -29,7 +29,7 @@ import org.springframework.stereotype.Repository;
 public class MypageDAOImpl implements MypageDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-
+	
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
@@ -107,14 +107,20 @@ public class MypageDAOImpl implements MypageDAO {
 	/**
 	 * 박다혜
 	 * 2017.06.21 수정완료
-
+	 * 마이페이지 - 푸드트럭 등록
+	 * ---------------------------------
+	 * 사용자가 입력한 푸드트럭 정보를 insert
 	 */
 	public void registerFoodtruck(TruckVO tvo) {
 		sqlSessionTemplate.insert("mypage.registerFoodtruck", tvo);
 	}
 	/**
 	 * 박다혜
-	 * 2017.06.21
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 푸드트럭 번호에 해당하는 트럭 정보 조회
+	 * --------------------------------------------------------------
+	 * 트럭정보 조회 시 파일명까지 함께 조회하기 위해 
+	 * foodtruck_number를 기준으로 equi join하여 select 한다
 	 */
 	@Override
 	public TruckVO findtruckInfoByTruckNumber(String truckNumber) {
@@ -122,7 +128,8 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
-	 * 2017.06.21
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 푸드트럭 번호에 해당하는 이미지 경로 저장하기
 	 */
 	@Override
 	public void saveFilePath(FileVO fileVO) {
@@ -130,6 +137,11 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 나의 푸드트럭 정보 수정하기
+	 * --------------------------------------------------
+	 * Foodtruck table로부터 푸드트럭 번호에 해당하는 트럭정보를
+	 * 사용자가 입력한 푸드트럭 정보로 수정한다.
 	 */
 	@Override
 	public void updateMyfoodtruck(TruckVO truckVO) {
@@ -137,67 +149,86 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 트럭 파일 경로 업데이트
+	 * --------------------------------------------
+	 * FoodtruckFile table로부터
+	 * 푸드트럭 번호에 해당하는 트럭 이미지 경로를 수정한다.
 	 */
 	@Override
 	public void updateFilePath(FileVO fileVO) {
 		sqlSessionTemplate.update("mypage.updateFilePath", fileVO);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 사업자 아이디에 해당하는 푸드트럭 번호 조회하기
+	 */
 	@Override
 	public String findtruckNumberBySellerId(String sellerId) {
 		return sqlSessionTemplate.selectOne("mypage.findtruckNumberBySellerId", sellerId);
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 푸드트럭 번호에 해당하는 메뉴리스트 조회
 	 */
 	@Override
 	public List<FoodVO> showMenuList(String truckNumber) {
 		return sqlSessionTemplate.selectList("mypage.showMenuList", truckNumber);
 	}
 
-	@Override
-	public void deleteAllMenu(String truckNumber) {
-		sqlSessionTemplate.delete("mypage.deleteAllMenu", truckNumber);
-	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 메뉴 정보 등록하기
 	 */
 	@Override
 	public void registerMenu(FoodVO foodVO) {
 		sqlSessionTemplate.insert("mypage.registerMenu", foodVO);
 	}
 
-	@Override
-	public void deleteMenu(String menuId) {
-		sqlSessionTemplate.delete("mypage.deleteMenu", menuId);
-	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 메뉴 정보 업데이트
+	 * ------------------------------------
+	 * 수정할 메뉴 이미지 파일이 있는 경우에만 이미지 경로를 수정한다.
 	 */
 	@Override
 	public void updateMenu(FoodVO foodVO) {
 		sqlSessionTemplate.update("mypage.updateMenu", foodVO);
 	}
 
-	@Override
-	public FoodVO findMenuByMenuId(String menuId) {
-		return sqlSessionTemplate.selectOne("mypage.findMenuByMenuId", menuId);
-	}
-
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 해당 푸드트럭의 정보를 삭제한다.
+	 */
 	@Override
 	public void deleteMyTruck(String foodtruckNumber) {
 		sqlSessionTemplate.delete("mypage.deleteMyTruck", foodtruckNumber);
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 나의 리뷰목록 보기
+	 * ----------------------------------------------------------------
+	 * 페이징 객체에 설정된 사용자 아이디에 해당하는 검색조건으로
+	 * 현재 페이지의 startRowNumber와 endRowNumber에 해당하는
+	 * 나의 리뷰 목록을 조회하여 반환한다.
 	 */
 	@Override
 	public List<ReviewVO> showMyReviewList(PagingBean pagingBean) {
-		return sqlSessionTemplate.selectList("mypage.showMyReview", pagingBean);
+		return sqlSessionTemplate.selectList("mypage.showMyReviewList", pagingBean);
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지- 마이 리뷰 수정하기
+	 * --------------------------------------
+	 * 리뷰번호에 해당하는 리뷰정보를
+	 * 사용자가 입력한 리뷰 내용으로 수정한다.
 	 */
 	@Override
 	public void updateMyReview(ReviewVO reviewVO) {
@@ -205,6 +236,10 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 리뷰 삭제하기
+	 * --------------------------------
+	 * 리뷰번호에 해당하는 리뷰 정보를 삭제한다.
 	 */
 	@Override
 	public void deleteMyReview(String reviewNo) {
@@ -212,6 +247,8 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 리뷰번호에 해당하는 리뷰정보 조회하기
 	 */
 	@Override
 	public ReviewVO findReviewInfoByReviewNo(String reviewNo) {
@@ -220,19 +257,16 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public TruckVO getGPSInfo(String sellerId) {
-		System.out.println(sellerId);
 		return sqlSessionTemplate.selectOne("mypage.getGPSInfo", sellerId);
 	}
 
 	@Override
 	public void stayFoodtruck(TruckVO gpsInfo) {
-		System.out.println("stay 실행 " + gpsInfo);
 		sqlSessionTemplate.update("mypage.stayFoodtruck", gpsInfo);
 	}
 
 	@Override
 	public void leaveFoodtruck(TruckVO gpsInfo) {
-		System.out.println("leave 실행 " + gpsInfo);
 		sqlSessionTemplate.update("mypage.leaveFoodtruck", gpsInfo);
 	}
 
@@ -243,10 +277,13 @@ public class MypageDAOImpl implements MypageDAO {
 
 	@Override
 	public List<TruckVO> getWishList(PagingBean pagingBean) {
-		System.out.println("dao: " + sqlSessionTemplate.selectList("mypage.getWishList", pagingBean));
 		return sqlSessionTemplate.selectList("mypage.getWishList", pagingBean);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 사용자 아이디가 작성한 총 리뷰 게시물 수 가져오기
+	 */
 	@Override
 	public int getTotalReviewCount(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalReviewCount", customerId);
@@ -256,25 +293,49 @@ public class MypageDAOImpl implements MypageDAO {
 	public int getWishListFlag(WishlistVO wishlistVO) {
 		return sqlSessionTemplate.selectOne("mypage.getWishListFlag", wishlistVO);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 주문 상태 업데이트
+	 * ------------------------------------------
+	 * 코드 설명 : 사업자 주문 내역에서 조리중 버튼, 조리 완료 버튼을 눌러 주문 상태를 업데이트
+	 * 할 때 사용하는 메서드. BookingVO에 있는 예약 번호를 이용하여 업데이트 할 주문 내역을 찾는다.
+	 */
 	@Override
-
 	public void updateBookingState(BookingVO bookingVO) {
 		sqlSessionTemplate.update("mypage.updateBookingState", bookingVO);
 
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 개수 가져오는 메서드
+	 * ------------------------------------------------------------
+	 * 코드설명 : 푸드 트럭 넘버를 이용하여 사업자가 받은 주문 개수를 받아온다.
+	 */
 	@Override
 	public List<BookingVO> getBookingVO(String foodTruckNumber) {
-		System.out.println("getBookingVO 푸드트럭 넘버" + foodTruckNumber);
 		return sqlSessionTemplate.selectList("mypage.getBookingVOCount", foodTruckNumber);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 내역
+	 * ---------------------------------------------------
+	 * 코드 설명 : 푸드 트럭 번호를 이용하여 사업자가 받은 주문내역을 불러오는 메서드
+	 */
 	@Override
 	public List<BookingVO> getBookingVO(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getBookingVO", pagingBean);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 사업자 주문 상세 메뉴 내역
+	 * ---------------------------------------------------
+	 * 코드 설명 : 사업자가 받은 주문의 상세 메뉴 내역(수량, 단가, 메뉴이름)을 불러오는 메서드
+	 */
 	@Override
 	public List<BookingDetailVO> getBookingDetailVO(BookingVO bookingVO) {
 		return sqlSessionTemplate.selectList("mypage.getBookingDetailVO", bookingVO);
@@ -375,7 +436,13 @@ public class MypageDAOImpl implements MypageDAO {
 		sqlSessionTemplate.delete("board.qnaDelete", contentNo);
 
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 일반회원 주문 내역 확인
+	 * ----------------------------------------------------
+	 * 코드 설명 : 일반회원의 예약 번호를 회원 아이디를 이용해 조회한다.
+	 */
 	@Override
 	public String getBookingNumberByCustomerId(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getBookingNumberListByCustomerId", id);
@@ -386,16 +453,30 @@ public class MypageDAOImpl implements MypageDAO {
 	public int checkBookingState(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.checkBookingState", customerId);
 	}
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 마이페이지 - 주문 갯수 확인
+	 * -------------------------------------------
+	 * 코드 설명 : 주문 갯수를 확인하여 사업자, 일반회원의 주문내역에 페이징 빈을 적용할 때 사용한다
+	 */
 	@Override
 	public int getTotalBookingCount(String foodTruckNumber) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalBookingCount", foodTruckNumber);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지 - 사용자 아이디에 해당하는 총 포인트 목록 수 반환
+	 */
 	public int getTotalPointCountById(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalPointCountById", id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지-사용자 아이디와 현재페이지에 해당하는 포인트 내역 반환
+	 */
 	@Override
 	public List<PointVO> getPointListById(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getPointListById", pagingBean);
@@ -407,6 +488,8 @@ public class MypageDAOImpl implements MypageDAO {
 	}
 	/**
 	 * 박다혜
+	 * 2017.06.21 수정완료
+	 * 마이페이지-메뉴 시퀀스 nextval 조회하기
 	 */
 	@Override
 	public String getNextMenuSequence() {

@@ -68,10 +68,19 @@ public class MemberServiceImpl2 implements MemberService {
 		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
 		return memberDAO.forgetMemberPassword(vo);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 멤버- 회원 정보 수정
+	 * 기능 설명 : Controller에서 넘어온 수정된 MemberVO 정보를
+	 * DAO에 보내서 데이터 베이스에 업데이트 해준다.
+	 * 비밀번호는 암호화 되어야 하기 때문에 encoding을 해준다.
+	 */
 	@Override
 	public void updateMember(MemberVO vo) {
-		// TODO Auto-generated method stub
+		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+		memberDAO.updateMember(vo);
 
 	}
 
@@ -88,8 +97,7 @@ public class MemberServiceImpl2 implements MemberService {
 
 	@Override
 	public MemberVO findMemberById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.findMemberById(id);
 	}
 
 	/**
@@ -131,8 +139,7 @@ public class MemberServiceImpl2 implements MemberService {
 
 	@Override
 	public String getMemberType(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.getMemberType(id);
 	}
 	/**
 	 * 박다혜
