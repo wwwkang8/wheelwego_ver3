@@ -1,5 +1,6 @@
 package org.asechs.wheelwego.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -443,10 +444,11 @@ public class MypageController {
    }
    /** 	  
 	정현지
-	2017.06.21 (수정완료)
+	2017.06.22 (수정완료)
 	마이페이지 - 나의 주문내역 리스트 (pagingBean 적용)
 	기능설명 : 사용자 아이디로 주문 내역을 list로 받아온다
 			주문 내역이 있을 경우, 주문 내역 detail을 받아와 주문 목록(list)에 setting 해준다
+			주문번호로 푸드트럭 이름을 가져와 setting 해준다
 			주문 내역은 마이페이지 - 주문 내역 리스트에서 확인할 수 있다
     */
    @RequestMapping("afterLogin_mypage/customerBookingList.do")
@@ -457,13 +459,18 @@ public class MypageController {
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
+	          List<String> menuId =  mypageService.findMenuIdByBookingNumber(myBookingList.get(i).getBookingNumber());
+	          for(int j=0; j<1; j++){
+	        	  String foodtruckNumber = mypageService.findFoodTruckNumberByMenuId(menuId.get(j));
+	        	  String foodtruckName = mypageService.findFoodtruckNameByFoodTruckNumber(foodtruckNumber);
+	        	  myBookingList.get(i).setFoodtruckName(foodtruckName);
+	          }
 	       }
-	    }      
+	    }    
 	    model.addAttribute("myBookingList", myBookingList);
 	    model.addAttribute("listVO", listVO);
 	    return "mypage/mypage_customer_order_list.tiles";
 	   }
-
    /**
     * 강정호
     * 2017.06.22(수정완료)

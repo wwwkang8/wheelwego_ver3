@@ -55,8 +55,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		<result column="point_type" property="pointType"/>
    		<result column="point_date" property="pointDate"/>
    </resultMap>
+<resultMap type="String" id="foodtruckNameRM">
+   <result column="booking_number" property="bookingNumber"/>
+   <result column="menu_id" property="menuId"/>
+   <result column="foodtruck_number" property="foodTruckNumber"/>
+   <result column="foodtruck_name" property="foodtruckName"/>
+</resultMap>
+
+<select id="findMenuIdByBookingNumber" resultType="String">
+select menu_id from booking_detail where booking_number=#{value}
+</select>
+<select id="findFoodTruckNumberByMenuId" resultType="String">
+select foodtruck_number from menu where menu_id=#{value}
+</select>   
+<select id="findFoodtruckNameByFoodTruckNumber" resultType="String">
+select foodtruck_name from foodtruck where foodtruck_number=#{value}
+</select>
    
-      <select id = "getCustomerBookingListCount" resultType="int">
+    <select id = "getCustomerBookingListCount" resultType="int">
          select count(*) from booking where customer_id = #{value}
    </select>
    <select id="customerBookingList" resultMap="bookingRM" parameterType="pagingBean">

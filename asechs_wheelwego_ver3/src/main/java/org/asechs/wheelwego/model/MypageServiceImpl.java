@@ -28,6 +28,18 @@ public class MypageServiceImpl implements MypageService {
    private FoodTruckDAO foodtruckDAO;
   
    @Override
+	public List<String> findMenuIdByBookingNumber(String bookingNumber){
+		return mypageDAO.findMenuIdByBookingNumber(bookingNumber);
+	}
+   @Override
+	public String findFoodTruckNumberByMenuId(String menuId){
+		return mypageDAO.findFoodTruckNumberByMenuId(menuId);
+	}
+	@Override
+	public String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber){
+		return mypageDAO.findFoodtruckNameByFoodTruckNumber(foodtruckNumber);
+	}
+   @Override
    public ListVO customerBookingList(String pageNo, String customerId) {
 	      System.out.println("customerId : " + customerId);
 	      int totalCount = mypageDAO.getCustomerBookingListCount(customerId);
