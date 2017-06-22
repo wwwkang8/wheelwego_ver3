@@ -310,7 +310,8 @@ public class BoardServiceImpl implements BoardService {
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return boardDAO.business_getNameById(bvo);
 	}
-
+	
+	
 	@Override
 	public List<FileVO> getBusinessFilePath(String no) {
 		return boardDAO.getBusinessFilePath(no);
