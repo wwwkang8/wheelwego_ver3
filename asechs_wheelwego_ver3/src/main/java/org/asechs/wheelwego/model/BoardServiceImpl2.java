@@ -188,11 +188,10 @@ public class BoardServiceImpl2 implements BoardService {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public MemberVO getNameById(BoardVO bvo) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.getNameById(bvo);
 	}
 
 	@Override
