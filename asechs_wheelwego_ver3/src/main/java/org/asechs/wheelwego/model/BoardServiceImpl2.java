@@ -103,39 +103,34 @@ public class BoardServiceImpl2 implements BoardService {
 
 	@Override
 	public BoardVO getFreeBoardDetail(String no) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.getFreeBoardDetail(no);
 	}
 
 	@Override
 	public void freeboardDelete(String no) {
-		// TODO Auto-generated method stub
-		
+		boardDAO.freeboardDelete(no);
 	}
 
-	@Override
-	public void updateHits(int hits) {
-		// TODO Auto-generated method stub
-		
-	}
+	// 자유게시판 조회수 업데이트
+		@Override
+		public void updateHits(int hits) {
+			boardDAO.updateHits(hits);
+		}
 
-	@Override
-	public void updateHitsBusiness(int hits) {
-		// TODO Auto-generated method stub
-		
-	}
+		@Override
+		public void updateHitsBusiness(int hits) {
+			boardDAO.updateHitsBusiness(hits);
+		}
 
-	@Override
-	public BoardVO getBusinessBoardDetail(String no) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public BoardVO getBusinessBoardDetail(String no) {
+			return boardDAO.getBusinessBoardDetail(no);
+		}
 
-	@Override
-	public void businessDelete(String no) {
-		// TODO Auto-generated method stub
-		
-	}
+		@Override
+		public void businessDelete(String no) {
+			boardDAO.businessDelete(no);
+		}
 	
 	/**
 	 * 강정호
@@ -182,11 +177,60 @@ public class BoardServiceImpl2 implements BoardService {
 			}
 		}
 	}
-
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 자유게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void updateBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
-		
+		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
+		// 사진을 받아오고
+		List<MultipartFile> fileList = vo.getFile();
+		// 글 수정을 먼저 한다
+		String contentNo = boardDAO.updateBoard(vo);
+		ArrayList<String> list=new ArrayList<String>();
+		for(int i=0;i<vo.getFile().size();i++){
+			String modityFile=vo.getFile().get(i).getOriginalFilename();
+			if (!modityFile.equals(""))
+				list.add(modityFile.trim());
+			else
+			System.out.println("list isEmpty");
+		}
+		if(list.isEmpty()){
+			boardDAO.updateBoard(vo);
+			return;
+		}else{
+			boardDAO.freeboardDeleteFile(contentNo);
+			for (int i = 0; i < fileList.size(); i++) {
+				if (fileList.isEmpty() == false) {
+					String fileName = fileList.get(i).getOriginalFilename();
+					BoardVO boardVO = new BoardVO();
+					FileVO fileVO = new FileVO();
+					if (fileName.equals("") == false) {
+						try {
+							fileList.get(i).transferTo(new File(uploadPath + fileName));
+							// 파일 넘버 지정
+							fileVO.setNo(contentNo);
+							// 파일 경로 지정
+							fileVO.setFilepath(fileName);
+							// 보드VO 에 파일VO 저장
+							boardVO.setFileVO(fileVO);
+							// 새로운 사진 서버에 업데이트
+							boardDAO.freeboardWriteFileUpload(boardVO);
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -196,14 +240,12 @@ public class BoardServiceImpl2 implements BoardService {
 
 	@Override
 	public MemberVO business_getNameById(BoardVO bvo) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.business_getNameById(bvo);
 	}
 
 	@Override
 	public List<FileVO> getFreeBoardFilePath(String no) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.getFreeBoardFilePath(no);
 	}
 	
 	/**
@@ -329,14 +371,12 @@ public class BoardServiceImpl2 implements BoardService {
 
 	@Override
 	public MemberVO qna_getNameById(BoardVO bvo) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.qna_getNameById(bvo);
 	}
 
 	@Override
 	public BoardVO getqnaBoardDetail(String no) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.getqnaBoardDetail(no);
 	}
 	
 	/**
@@ -377,28 +417,129 @@ public class BoardServiceImpl2 implements BoardService {
 		boardDAO.deleteFreeboardComment(cvo);
 	}
 
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 창업게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void businessupdateBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
-		
+		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
+		List<MultipartFile> fileList = vo.getFile();// 사진을 받아오고
+		// 글 수정을 먼저 한다
+		String contentNo = boardDAO.businessupdateBoard(vo);
+		ArrayList<String> list=new ArrayList<String>();
+		for(int i=0;i<vo.getFile().size();i++){
+			String modityFile=vo.getFile().get(i).getOriginalFilename();
+			if (!modityFile.equals(""))
+				list.add(modityFile.trim());
+			else
+			System.out.println("list isEmpty");
+		}
+		if(list.isEmpty()){
+			boardDAO.businessupdateBoard(vo);
+			return;
+		}else{
+			boardDAO.businessDeleteFile(contentNo);
+			for (int i = 0; i < fileList.size(); i++) {
+				if (fileList.isEmpty() == false) {
+					String fileName = fileList.get(i).getOriginalFilename();
+					BoardVO boardVO = new BoardVO();
+					FileVO fileVO = new FileVO();
+					if (fileName.equals("") == false) {
+						try {
+							fileList.get(i).transferTo(new File(uploadPath + fileName));
+							// 파일 넘버 지정
+							fileVO.setNo(contentNo);
+							// 파일 경로 지정
+							fileVO.setFilepath(fileName);
+							// 보드VO 에 파일VO 저장
+							boardVO.setFileVO(fileVO);
+							// 새로운 사진 서버에 업데이트
+							boardDAO.businessWriteFileUpload(boardVO);
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void qnaDelete(String no) {
-		// TODO Auto-generated method stub
-		
+		boardDAO.qnaDelete(no);
 	}
-
+	
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * QnA게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public void qnaupdateBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
-		
+		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
+		List<MultipartFile> fileList = vo.getFile();// 사진을 받아오고
+		// 글 수정을 먼저 한다
+		String contentNo = boardDAO.qnaupdateBoard(vo);
+		ArrayList<String> list=new ArrayList<String>();
+		for(int i=0;i<vo.getFile().size();i++){
+			String modityFile=vo.getFile().get(i).getOriginalFilename();
+			// 사용자가 사진을 하나 이상 수정한다고 하면 
+			// 리스트에 사용자가 보낸파일 명을 저장시킨다
+			// 아무것도 수정하지 않으면 리스트에 아무것도 없게된다
+			if (!modityFile.equals(""))
+				list.add(modityFile.trim());
+			else
+			System.out.println("list isEmpty");
+		}
+		// 리스트가 비워져 있음 글을 업데이트하고 리턴으로 나간다
+		if(list.isEmpty()){
+			boardDAO.qnaupdateBoard(vo);
+			return;
+		}else{
+			// 리스트 존재시 기존 파일을 삭제하고 수정하고자 하는 파일을 재등록한다.
+			boardDAO.qnaDeleteFile(contentNo);
+			for (int i = 0; i < fileList.size(); i++) {
+				if (fileList.isEmpty() == false) {
+					String fileName = fileList.get(i).getOriginalFilename();
+					BoardVO boardVO = new BoardVO();
+					FileVO fileVO = new FileVO();
+					if (fileName.equals("") == false) {
+						try {
+							fileList.get(i).transferTo(new File(uploadPath + fileName));
+							// 파일 넘버 지정
+							fileVO.setNo(contentNo);
+							// 파일 경로 지정
+							fileVO.setFilepath(fileName);
+							// 보드VO 에 파일VO 저장
+							boardVO.setFileVO(fileVO);
+							// 새로운 사진 서버에 업데이트
+							boardDAO.qnaWriteFileUpload(boardVO);
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void updateHitsqna(int hits) {
-		// TODO Auto-generated method stub
-		
+		boardDAO.updateHitsqna(hits);
 	}
 	
 	/**
@@ -550,7 +691,4 @@ public class BoardServiceImpl2 implements BoardService {
 		boardDAO.updateqnaComment(cvo);
 		
 	}
-
-	
-
 }
