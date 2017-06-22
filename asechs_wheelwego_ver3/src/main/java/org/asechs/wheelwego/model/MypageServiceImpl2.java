@@ -150,14 +150,14 @@ public class MypageServiceImpl2 implements MypageService {
 	@Override
 	public void registerFoodtruck(TruckVO tvo, String uploadPath) {
 		
-			FileManager fm=new FileManager();
+		FileManager fm=new FileManager();
 	      MultipartFile truckFile=tvo.getFoodtruckFile(); 
 	      String renamedFile=fm.rename(truckFile,tvo.getFoodtruckNumber());
 	      tvo.setFileVO(new FileVO(tvo.getFoodtruckName(), renamedFile));
-	       mypageDAO.registerFoodtruck(tvo); //FOODTRUCK Table에 저장
-	       mypageDAO.saveFilePath(new FileVO(tvo.getFoodtruckNumber(),renamedFile)); //FOODTRUCKFILE table에 이미지경로저장
 	            try {
-					fm.uploadFile(truckFile,uploadPath+renamedFile); //서버 전송
+	            	mypageDAO.registerFoodtruck(tvo); //FOODTRUCK Table에 저장
+	            	mypageDAO.saveFilePath(new FileVO(tvo.getFoodtruckNumber(),renamedFile)); //FOODTRUCKFILE table에 이미지경로저장
+					fm.uploadFile(truckFile,/*uploadPath+*/renamedFile); //서버 전송
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -208,12 +208,14 @@ public class MypageServiceImpl2 implements MypageService {
 		        FileManager fm=new FileManager();
 		         String renamedFile=fm.rename(truckFile,truckVO.getFoodtruckNumber()); //파일 Rename
 		         mypageDAO.updateFilePath(new FileVO(truckVO.getFoodtruckNumber(), renamedFile)); //파일 경로 update
-		          fm.uploadFile(truckFile, uploadPath+renamedFile); //서버 전송
+		         fm.uploadFile(truckFile, /*uploadPath+*/renamedFile); //서버 전송
+		         mypageDAO.updateMyfoodtruck(truckVO); 
 	         } catch (IOException e) {
 	            e.printStackTrace();
 	         }
+	      }else{
+		         mypageDAO.updateMyfoodtruck(truckVO); 
 	      }
-	         mypageDAO.updateMyfoodtruck(truckVO); 
 	}
 	/**
 	 * 박다혜
@@ -231,16 +233,16 @@ public class MypageServiceImpl2 implements MypageService {
 	 * -------------------------------------------------
 	 * 트럭으로부터 메뉴 리스트 꺼내온다.
 	 * 각 메뉴에 대한 메뉴이미지파일이 있다면
-	 * 이미지를 받아와서 서버로 전송한다.
-	 * 그 후 파일 존재여부와 상관 없이 메뉴 정보를 수정한다. 
+	 * 이미지를 받아와서 서버로 전송한 뒤 메뉴 정보를 수정한다. 
 	 *  
+	 *  메뉴파일이 없다면 메뉴정보만 수정한다.
 	 */
 	@Transactional
 	@Override
 	public void updateMenu(TruckVO truckVO, String uploadPath) {
 		 List<FoodVO> foodList=truckVO.getFoodList();
 		 String renamedFile=null;
-		 
+		 System.out.println(foodList);
 	      for(int i=0;i<foodList.size();i++){
 	    	  MultipartFile foodFile=foodList.get(i).getMenuFile();
 	    	  if(foodFile!=null){ 
@@ -248,13 +250,15 @@ public class MypageServiceImpl2 implements MypageService {
 		            FileManager fm=new FileManager();
 		            renamedFile=fm.rename(foodFile,truckVO.getFoodtruckNumber()+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
 		            foodList.get(i).setFileVO(new FileVO(foodList.get(i).getMenuId(),renamedFile)); //foodList에 renamed 되어진 FileVO정보를 setting
-		            fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 전송하여 덮어씌운다.
+		            fm.uploadFile(foodFile, /*uploadPath+*/renamedFile); //서버에 전송하여 덮어씌운다.
+		            mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
 		         }
 		         catch (Exception e) {
 		            e.printStackTrace();
 		         }
+	    	 }else{	    		 
+	    		 mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
 	    	 }
-	         mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
 	      }
 	}
 	/**
@@ -534,7 +538,7 @@ public class MypageServiceImpl2 implements MypageService {
 		        	 renamedFile=fm.rename(foodFile,foodtruckNumber+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
 		        	 foodList.get(i).setFileVO(new FileVO(foodtruckNumber, renamedFile)); //rename된 파일 이름 setting
 		        	 mypageDAO.registerMenu(foodList.get(i)); //db에 메뉴를 등록한다.
-		            fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 파일 업로드
+		            fm.uploadFile(foodFile,/* uploadPath+*/renamedFile); //서버에 파일 업로드
 	         	}catch (Exception e) {
 	         		e.printStackTrace();
 	         	}

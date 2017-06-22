@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class FoodTruckController {
 	@Resource(name="foodTruckServiceImpl")
 	private FoodTruckService foodTruckService;
-	@Resource(name="mypageServiceImpl")
+	@Resource(name="mypageServiceImpl2")
 	private MypageService mypageService; 
 	
 	/**
@@ -202,12 +202,7 @@ public class FoodTruckController {
 		mv.addObject("bvo",bvo);
 		return mv;
 	}
-	/**
-	 * 다혜 : 메뉴 예약하기
-	 * @param bookingVO
-	 * @param request
-	 * @return
-	 */
+
 	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
 	public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
 		foodTruckService.bookingMenu(bookingVO);
@@ -216,19 +211,44 @@ public class FoodTruckController {
 		request.getSession(false).setAttribute("bookingNumber", bookingNumber);
 		return "redirect:../foodtruck/foodtruck_booking_confirm_result.do";
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 최근 예약번호 가져오기 (ajax)
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getRecentlyBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getRecentlybookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getRecentlyBookingNumberBySellerId(id);
 		return bookingNumber;
 	}
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 이전 예약번호 가져오기  (ajax)
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getPreviousbookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getPreviousBookingNumberBySellerId(id);
 		return bookingNumber;
 	}
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 예약번호에 해당하는 예약상태 가져오기  (ajax)
+	 * ----------------------------------------------------------------
+	 * ajax통신하여
+	 * 사용자의 아이디에 해당하는 결제완료상태인 예약번호가 있을 때
+	 * 조리완료가 될때까지 계속 통신하도록 한다.
+	 * @param bookingNumber
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getBookingStateBybookingNumber.do")
 	@ResponseBody
 	public String getBookingStateBybookingNumber(String bookingNumber,HttpServletRequest request){
@@ -250,7 +270,17 @@ public class FoodTruckController {
 	      System.out.println(count);
 	      return (count==0) ? "ok":"no";
 	   }
-	   
+	   /**
+	    * 박다혜
+	    * 2017.06.22 수정중
+	    * 예약 - 사용자아이디에 해당하는 이전의 예약넘버 가져오기  (ajax)
+	    * -------------------------------------------------------------------------
+	    * ajax통신하여
+	    * 사용자의 아이디에 해당하는 결제완료상태인 예약번호가 있다면
+	    * 조리완료가 될때까지 계속 통신하도록 한다.
+	    * @param id
+	    * @return
+	    */
 		@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberByCustomerId.do")
 		@ResponseBody
 		public String getPreviousBookingNumberByCustomerId(String id){
