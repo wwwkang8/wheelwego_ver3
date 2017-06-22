@@ -27,7 +27,7 @@ public class MypageController {
 	@Resource(name="mypageServiceImpl2")
    private MypageService mypageService;
 
-	@Resource(name="foodTruckServiceImpl")
+	@Resource(name="foodTruckServiceImpl2")
    private FoodTruckService foodtruckService;
 
 	/**
