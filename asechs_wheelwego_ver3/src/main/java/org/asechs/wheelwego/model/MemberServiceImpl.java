@@ -42,14 +42,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.forgetMemberPassword(vo);
 	}
 	
-	/**
-	 * 강정호
-	 * 2017.06.21(수정완료)
-	 * 멤버- 회원 정보 수정
-	 * 기능 설명 : Controller에서 넘어온 수정된 MemberVO 정보를
-	 * DAO에 보내서 데이터 베이스에 업데이트 해준다.
-	 * 비밀번호는 암호화 되어야 하기 때문에 encoding을 해준다.
-	 */
+	
 	@Override
 	public void updateMember(MemberVO vo) {
 		vo.setPassword(passwordEncoder.encode(vo.getPassword()));

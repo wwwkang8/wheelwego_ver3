@@ -320,16 +320,12 @@ public ListVO showMyContentByFreeList(String id,String contentPageNo) {
      pagingContentList.setPagingBean(pagingBean);
      return pagingContentList;
 }
+
 @Override
 public void updateBookingState(BookingVO bookingVO) {
 	mypageDAO.updateBookingState(bookingVO);
 	
 }
-/*@Override
-public List<BookingVO> getBookingVO(String foodTruckNumber) {
-	//List<BookingVO> list=mypageDAO.getBookingVO
-	return mypageDAO.getBookingVO(foodTruckNumber);
-}*/
 
 @Override
 public ListVO getBookingVO(String foodTruckNumber, String pageNo) {

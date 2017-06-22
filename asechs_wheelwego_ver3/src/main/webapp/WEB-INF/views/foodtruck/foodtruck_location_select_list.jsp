@@ -43,10 +43,10 @@ select .selected {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 
 $(document).ready(function(){
-   var option="${requestScope.option}";
+	var option="${requestScope.option}";
    var sel=document.getElementById("option");
    for(var i=0; i<sel.options.length; i++){
       if(sel.options[i].value==option){
@@ -66,11 +66,11 @@ $(document).ready(function(){
      var foodtruckNumber = $(this).attr('name');
      var insertBtn=$(this);
      var id = "${sessionScope.memberVO.id}";
-
+	var memberType="${sessionScope.memberVO.memberType}";
     if(id==""){
        alert("로그인이 필요합니다.");
     }
-    else if(${sessionScope.memberVO.memberType=='seller'}){
+    else if(memberType=="seller"){
     	alert("일반회원 전용 서비스입니다.");
     }
     else{
@@ -92,14 +92,14 @@ $(document).ready(function(){
    });
     }
 });
-   $(":input[name=option]").change(function(){
-      var optionVal=$(this).val();
-      var flag="${requestScope.flag}";
-      if(flag=="false"){
+   $("#option").change(function(){
+       var optionVal=$(this).val();
+      var GPSflag="${requestScope.GPSflag}";
+      if(GPSflag=="false"){
            location.href="${pageContext.request.contextPath}/searchFoodTruckByName.do?latitude=${param.latitude}&longitude=${param.longitude}&name=${param.name}&option="+optionVal;
       }else{
            location.href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude=${param.latitude}&longitude=${param.longitude}&option="+optionVal;
-      }
+      } 
    });
 });
 </script>
@@ -178,7 +178,7 @@ $(document).ready(function(){
     -->      
    <c:if test="${pb.previousPageGroup}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
+            <c:when test="${requestScope.GPSflag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">◀&nbsp; </a>
             </c:when>
             <c:otherwise>
@@ -197,7 +197,7 @@ $(document).ready(function(){
    <c:choose>
    <c:when test="${pb.nowPage!=i}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
+            <c:when test="${requestScope.GPSflag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">${i}</a>
             </c:when>
             <c:otherwise>
@@ -214,7 +214,7 @@ $(document).ready(function(){
 
    <c:if test="${pb.nextPageGroup}">
          <c:choose>
-            <c:when test="${requestScope.flag==false}">
+            <c:when test="${requestScope.GPSflag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">▶</a>
             </c:when>
             <c:otherwise>

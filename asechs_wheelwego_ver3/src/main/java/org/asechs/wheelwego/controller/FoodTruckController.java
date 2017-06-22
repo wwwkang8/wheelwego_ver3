@@ -19,65 +19,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-/**
- * 본인 이름
- *  수정 날짜 (수정 완료)
- * 대제목[마이페이지/푸드트럭/멤버/게시판/예약] - 소제목
- * ------------------------------------------------------
- * 코드설명
- * 
- * EX)
-	박다혜
-	 2017.06.21 (수정완료) / (수정중)
- 	마이페이지 - 마이트럭설정
-	---------------------------------
-	~~~~~
-  */
+
 @Controller
 public class FoodTruckController {
 	@Resource(name="foodTruckServiceImpl")
 	private FoodTruckService foodTruckService;
-	@Resource(name="mypageServiceImpl")
+	@Resource(name="mypageServiceImpl2")
 	private MypageService mypageService; 
-
-	/** 	  
-		정현지
-		2017.06.21 (수정완료)
-	 	푸드트럭 - 푸드트럭명으로 검색하기
-	 	기능설명 : 푸드트럭명 검색(searchFoodtruckName)리스트를 TruckVO 객체로 받아온다
-	 			return 값은 푸드트럭 검색 리스트 페이지로 보낸다
-	  */
-	@RequestMapping("searchFoodTruckList.do")
-	public ModelAndView searchFoodTruckList(String searchFoodtruckName){
-		List<TruckVO> searchList = foodTruckService.searchFoodTruckList(searchFoodtruckName);
-		return new ModelAndView("foodtruck/foodtruck_location_select_list.tiles", "pagingList", searchList);
-	}
 	
-	
-	/* 검색 결과 푸드트럭 리스트 */
+	/**
+	 * 박다혜
+	 * 2017.06.21 (수정 중)
+	 * 푸드트럭 - 푸드트럭 명으로 검색하기
+	 * ------------------------------------------------------------------
+	 * option이 null이라면 최신순 필터링을 적용한다.
+	 * option과 현재 페이지 번호, 검색 조건에 해당하는 푸드트럭 리스트를 반환받고
+	 * modelAndView 객체에 푸드트럭 리스트를 설정한다.
+	 *  또한 페이징시를 대비해 검색조건과 option도 함께 설정한다.
+	 * 
+	 * 
+	 * @param name : 검색조건
+	 * @param pageNo : 현재 페이지
+	 * @param latitude
+	 * @param longitude
+	 * @param request
+	 * @param option : 필터링 옵션
+	 * @return
+	 */
 	@RequestMapping("searchFoodTruckByName.do")
-
 	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
 		if(option==null)
 			option="ByDate";
+		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
-		ListVO listVO =foodTruckService.filtering(option, name, pageNo, latitude, longitude,null);
+		ListVO listVO =foodTruckService.filtering(option, name, pageNo,null);
 		modelAndView.addObject("pagingList", listVO);
 		modelAndView.addObject("name", name);
+		modelAndView.addObject("option", option);
+		modelAndView.addObject("GPSflag", "false");	
+		
 		HttpSession session=request.getSession(false);
-		String id=null;
-		List<WishlistVO> heartWishList=null;
 		if(session != null){
 			MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 			if(memberVO != null){
-				id = memberVO.getId();
-				heartWishList = mypageService.heartWishList(id);
-				modelAndView.addObject("heartWishlist",heartWishList);
-				System.out.println(heartWishList);
+				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); //사용자 id의 단골트럭 목록을 보낸다.
 			}
 		}
-		modelAndView.addObject("option", option);		
-		modelAndView.addObject("flag", "false");	
 		return modelAndView;
 	}
 	/**
@@ -97,7 +84,7 @@ public class FoodTruckController {
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");
 		//ListVO listVO1 = foodTruckService.getFoodTruckListByGPS(pageNo, gpsInfo);
 		//System.out.println(listVO1);
-		ListVO listVO =foodTruckService.filtering(option,null, pageNo, latitude, longitude,gpsInfo);
+		ListVO listVO =foodTruckService.filtering(option,null, pageNo,gpsInfo);
 		HttpSession session=request.getSession(false);
 		String id=null;
 		List<WishlistVO> heartWishList=null;
@@ -112,7 +99,7 @@ public class FoodTruckController {
 		modelAndView.addObject("pagingList", listVO);
 		modelAndView.addObject("gpsInfo", gpsInfo);
 		modelAndView.addObject("option", option);	
-		modelAndView.addObject("flag", "true");	
+		modelAndView.addObject("GPSflag", "true");	
 		return modelAndView;
 	}
 	/** 	  
@@ -215,12 +202,7 @@ public class FoodTruckController {
 		mv.addObject("bvo",bvo);
 		return mv;
 	}
-	/**
-	 * 다혜 : 메뉴 예약하기
-	 * @param bookingVO
-	 * @param request
-	 * @return
-	 */
+
 	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
 	public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
 		foodTruckService.bookingMenu(bookingVO);
@@ -229,19 +211,44 @@ public class FoodTruckController {
 		request.getSession(false).setAttribute("bookingNumber", bookingNumber);
 		return "redirect:../foodtruck/foodtruck_booking_confirm_result.do";
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 최근 예약번호 가져오기 (ajax)
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getRecentlyBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getRecentlybookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getRecentlyBookingNumberBySellerId(id);
 		return bookingNumber;
 	}
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 이전 예약번호 가져오기  (ajax)
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getPreviousbookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getPreviousBookingNumberBySellerId(id);
 		return bookingNumber;
 	}
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 예약번호에 해당하는 예약상태 가져오기  (ajax)
+	 * ----------------------------------------------------------------
+	 * ajax통신하여
+	 * 사용자의 아이디에 해당하는 결제완료상태인 예약번호가 있을 때
+	 * 조리완료가 될때까지 계속 통신하도록 한다.
+	 * @param bookingNumber
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("afterLogin_foodtruck/getBookingStateBybookingNumber.do")
 	@ResponseBody
 	public String getBookingStateBybookingNumber(String bookingNumber,HttpServletRequest request){
@@ -263,7 +270,17 @@ public class FoodTruckController {
 	      System.out.println(count);
 	      return (count==0) ? "ok":"no";
 	   }
-	   
+	   /**
+	    * 박다혜
+	    * 2017.06.22 수정중
+	    * 예약 - 사용자아이디에 해당하는 이전의 예약넘버 가져오기  (ajax)
+	    * -------------------------------------------------------------------------
+	    * ajax통신하여
+	    * 사용자의 아이디에 해당하는 결제완료상태인 예약번호가 있다면
+	    * 조리완료가 될때까지 계속 통신하도록 한다.
+	    * @param id
+	    * @return
+	    */
 		@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberByCustomerId.do")
 		@ResponseBody
 		public String getPreviousBookingNumberByCustomerId(String id){

@@ -31,13 +31,13 @@ public class MypageController {
    private FoodTruckService foodtruckService;
 
 	/**
-	 *  김래현
+	 *  김래현 황윤상
 	 *  2017.06.21 수정완료
 	 *  마이페이지/단골트럭/단골트럭리스트 불러오기
 	 *  ----------------------- 
 	 *    세션이 없으면 홈으로 보냄
 	 *    위도 경도를 세팅해주어 현재위치를 알수있음
-	 *    
+	 *    페이징빈 적용
 	 */
    @RequestMapping("afterLogin_mypage/wishlist.do")
    public ModelAndView myWishList(HttpServletRequest request, String id, String pageNo,String latitude, String longitude) {
@@ -57,7 +57,7 @@ public class MypageController {
       }
    }
    /**
-    * 김래현
+    * 김래현 황윤상
     * 2017.06.21 수정완료
     * 마이페이지/단골트럭/단골트럭 삭제
     * -------------------------
@@ -183,7 +183,7 @@ public class MypageController {
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
 	   System.out.println("트럭삭제");
       mypageService.deleteMyTruck(foodtruckNumber);
-      request.getSession(false).setAttribute("foodtruckNumber", "");
+      request.getSession(false).removeAttribute("foodtruckNumber");
       return "redirect:/afterLogin_mypage/mypage.do";
    }
 	/** 	  
@@ -376,9 +376,24 @@ public class MypageController {
       mypageService.qnaDeleteInMaypage(contentNo);
       return "deleteOk";
    }
-   /**
-    * 강정호. Seller가 받은 주문 내역 확인하는 메서드
-    */
+  /**
+   * 강정호
+   * 2017.06.21(수정완료)
+   * 마이페이지 - 사업자 주문 내역
+   * -----------------------------------------------
+   * 코드 설명 : 사업자 주문 내역은 3가지의 메서드로 이루어져 있다.
+   * findtruckNumberBySellerId(sellerId) : 세션의 sellerId를 이용하여 푸드 트럭 넘버를 가져오는 메서드
+   * getBookingVO(foodTruckNumber, pageNo) : 푸드 트럭 넘버에 해당하는 주문 내역을 BookingVO형식으로
+   * 불러온다. 이때 예약 번호, 주문한 회원아이디, 주문상태, 주문 일시 등의 정보를 받아온다.
+   * getBookingDetailVO(): 앞서 받아온 BookingVO에 있는 예약 번호에 해당하는 상세 메뉴 내역을 불러와서
+   * BookingVO에 있는 BookingDetailVO에 set 해주는 메서드이다.
+   * 
+   * 위의 3가지 메서드를 이용해서 사업자의 BookingVO와 BookingDetailVO에 대한 정보를 불러와서
+   * View에서 사업자가 받은 주문 내역을 보여준다.
+   * @param model
+   * @param request
+   * @return
+   */
    @RequestMapping("afterLogin_mypage/sellerBookingList.do")
    public String sellerBookingList(Model model, HttpServletRequest request){
 	   String sellerId=request.getParameter("sellerId");
@@ -413,7 +428,6 @@ public class MypageController {
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
-	          // myBookingList.get(i).getBookingNumber(); // 예약번호로 푸드트럭 find하기
 	       }
 	    }      
 	    model.addAttribute("myBookingList", myBookingList);
@@ -436,14 +450,20 @@ public class MypageController {
 	   return bookingVO;
    }
    /**
-    * 포인트적립내역보기
+    * 박다혜
+    * 2016.06.21 (수정 완료)
+    * 마이페이지 - 마이 포인트 적립/사용 내역
+    * -----------------------------------------------
+    * 사용자 아이디에 해당하는 포인트 적립/사용내역을 불러와
+    * modelAndView 객체에 실어 보낸다.
+    *  이 때 사용자의 현재 포인트를 함께 보여주기 위해
+    *   사용자 아이디에 해당하는 포인트를 조회하여 함께 보낸다.
     * @param id
     * @param nowPage
     * @return
     */
    @RequestMapping("afterLogin_mypage/showMyPointList.do")
    public ModelAndView showMyPointList(String customerId, String nowPage){
-	   System.out.println(customerId);
 	   ListVO pointList=mypageService.getPointListById(customerId, nowPage);
 	   ModelAndView mv=new ModelAndView("mypage/mypage_point_list.tiles");
 	   mv.addObject("pointList", pointList);
