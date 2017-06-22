@@ -151,26 +151,39 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {
-		// TODO Auto-generated method stub
-		
+		foodTruckDAO.bookingMenu(bookingVO);		
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 최근 예약번호 가져오기 (ajax)
+	 * -----------------------------------------------------
+	 * 주문이 들어왔을 때 결제완료 상태이므로 
+	 * 주문이 들어왔는지 알기위해 결제완료상태인 최근 예약번호를 가져온다.
+	 */
 	@Override
 	public int getRecentlyBookingNumberBySellerId(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return foodTruckDAO.getRecentlyBookingNumberBySellerId(id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사업자의 이전 예약번호 가져오기  (ajax)
+	 * -------------------------------------------------------------------
+	 * 예약 상태에 상관 없이 사업자의 최근 예약 번호를 가져온다.
+	 */
 	@Override
 	public int getPreviousBookingNumberBySellerId(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return foodTruckDAO.getPreviousBookingNumberBySellerId(id);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 예약번호에 해당하는 예약상태 가져오기  (ajax)
+	 */
 	@Override
 	public String getBookingStateBybookingNumber(String bookingNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return foodTruckDAO.getBookingStateBybookingNumber(Integer.parseInt(bookingNumber));
 	}
 
 	@Override
@@ -178,11 +191,14 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정중
+	 * 예약 - 사용자아이디에 해당하는 결제 완료 상태의 이전 예약넘버 가져오기  (ajax)
+	 */
 	@Override
 	public String getPreviousBookingNumberByCustomerId(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return foodTruckDAO.getPreviousBookingNumberByCustomerId(id);
 	}
 	
 }

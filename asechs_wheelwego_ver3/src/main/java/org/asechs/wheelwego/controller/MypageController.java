@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MypageController {
-	@Resource(name="mypageServiceImpl")
+	@Resource(name="mypageServiceImpl2")
    private MypageService mypageService;
 
 	@Resource(name="foodTruckServiceImpl")
@@ -183,7 +183,7 @@ public class MypageController {
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
 	   System.out.println("트럭삭제");
       mypageService.deleteMyTruck(foodtruckNumber);
-      request.getSession(false).setAttribute("foodtruckNumber", "");
+      request.getSession(false).removeAttribute("foodtruckNumber");
       return "redirect:/afterLogin_mypage/mypage.do";
    }
 	/** 	  

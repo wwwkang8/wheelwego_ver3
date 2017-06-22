@@ -134,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <update id="updateMenu" parameterType="foodVO">
       update menu set menu_name=#{menuName}, menu_price=#{menuPrice}
       <if test="fileVO.filepath!=null">
-      	,menu_filepath=#{fileVO.filepath}
+      	,menu_filename=#{fileVO.filepath}
       </if>
        where menu_id=#{menuId}
    </update>
