@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- <!-- 강정호 창업게시판 글쓰기 폼 작성 -->
+ <!-- 강정호 창업게시판 글쓰기 폼 작성 수정완료-->
   <head> 
 <meta charset="utf-8"> 
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> 

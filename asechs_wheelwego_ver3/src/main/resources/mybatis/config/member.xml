@@ -23,7 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		update member set password=#{password} where id=#{id} and member_name=#{memberName} and phonenumber=#{phoneNumber}
    </update>
 	<update id="updateMember" parameterType="memberVO">
-		update member set password=#{password}, address=#{address}, addressdetail = #{addressDetail}, phonenumber=#{phoneNumber}, postcode=#{postCode} where id=#{id}
+		update member set password=#{password}, address=#{address}, addressdetail = #{addressDetail}, 
+		phonenumber=#{phoneNumber}, postcode=#{postCode} where id=#{id}
 	</update>
 	<insert id="registerMember" parameterType="memberVO">
 		insert into member(id, password, member_name, postcode, address, addressdetail, phonenumber, member_type) values
