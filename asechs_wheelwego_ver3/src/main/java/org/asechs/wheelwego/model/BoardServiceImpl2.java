@@ -242,7 +242,14 @@ public class BoardServiceImpl2 implements BoardService {
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return boardDAO.business_getNameById(bvo);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판- 게시물 상세보기 사진 불러오기
+	 * ----------------------------------------------
+	 * 코드 설명 : 게시판 게시물 상세보기시 사진 불러오는 경로 가져오는 메서드
+	 */
 	@Override
 	public List<FileVO> getFreeBoardFilePath(String no) {
 		return boardDAO.getFreeBoardFilePath(no);
