@@ -154,7 +154,17 @@ public class FoodTruckController {
 		foodTruckService.registerReview(reviewVO); // 푸드 트럭 등록
 		return "foodtruck/foodtruck_detail.tiles";
 	}
-
+	/**
+	 *  김래현
+	 *	2017.06.22 (수정완료)
+	 *	기능설명 : 즐겨찾기 등록
+	 *---------------------------
+	 * 코드설명:
+	 * view 페이지에서 ajax로 통신할때
+	 * 컨트롤러에서 리턴값을 on , off 로하여 
+	 * 즐겨찾기 등록,삭제 시 하트색을 바꿀수 있게한다
+	 *    
+	 */
 	@RequestMapping(value = "afterLogin_foodtruck/registerBookMark.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String registerBookMark(String id, String foodtruckNumber){

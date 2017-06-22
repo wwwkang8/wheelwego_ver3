@@ -52,7 +52,7 @@ public class MypageController {
          ListVO listVO = mypageService.getWishList(pageNo, id);
          modelAndView.addObject("wishlist", listVO);
          modelAndView.addObject("gpsInfo", gpsInfo);
-         // System.out.println(listVO.getTruckList());
+         System.out.println(listVO.getTruckList());
          return modelAndView;
       }
    }
