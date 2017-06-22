@@ -199,12 +199,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<selectKey keyProperty="commentNo" resultType="Integer" order="BEFORE">
 			select informationcomment_seq.nextval from dual
 		</selectKey>
-		insert into informationcomment(informationcomment_no, id, informationcomment_content, information_no, informationcomment_timeposted, informationcomment_parent)
+		insert into informationcomment(informationcomment_no, id, informationcomment_content, information_no,
+		 informationcomment_timeposted, informationcomment_parent)
 		values(#{commentNo},#{id},#{comment},#{contentNo},sysdate,0)
 	</insert>
 	
 	<delete id="deletebusinessComment" parameterType="commentVO">
-		delete from informationcomment where informationcomment_no=#{commentNo} and information_no=#{contentNo}
+		delete from informationcomment where informationcomment_no=#{commentNo}
+		 and information_no=#{contentNo}
 	</delete>
 	
 	<select id="getbusinessComment" parameterType="commentVO" resultType="commentVO" resultMap="businessCommentRM">

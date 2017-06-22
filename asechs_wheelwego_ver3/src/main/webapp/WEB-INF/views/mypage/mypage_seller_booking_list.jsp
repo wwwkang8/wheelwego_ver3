@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
+<!-- 강정호 사업자 주문확인 내역 페이지. 수정완료 -->
  <jsp:include page="../mypage/mypage.jsp"/>
 
 <br><br>

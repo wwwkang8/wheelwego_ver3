@@ -172,16 +172,19 @@ $(document).ready(function(){
 	        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">
 	        <c:choose>
 	           <c:when test="${wishlistInfo.foodtruckNumber eq truckInfo.foodtruckNumber}">
-	                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
+	                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	                 src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
 	           </c:when>
 	           <c:otherwise>
-	              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	              src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
 	           </c:otherwise>
 	        </c:choose>
 	        </c:forEach>
 	       </c:when>
 	       <c:otherwise>
-	          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	          src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
 	       </c:otherwise>
 	       </c:choose>
 	        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>

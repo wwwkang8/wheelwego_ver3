@@ -19,12 +19,12 @@ create sequence booking_seq start with 150;
 create sequence review_seq start with 201;
 create sequence menu_seq start with 123;
 
-create sequence information_seq start with 257;
+create sequence information_seq start with 280;
 create sequence informationcomment_seq;
 create sequence qna_seq start with 257;
-create sequence qnacomment_seq;
+create sequence qnacomment_seq start with 3000;
 create sequence freeboard_seq start with 257;
-create sequence freeboardcomment_seq;
+create sequence freeboardcomment_seq start with 3000;
 -------------------------------------------------------------------------------
 select * from member;
 -------------------------------------------------------------------------------

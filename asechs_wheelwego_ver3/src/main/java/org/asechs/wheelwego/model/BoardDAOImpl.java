@@ -462,7 +462,7 @@ public class BoardDAOImpl implements BoardDAO {
 	 * ---------------------------------------
 	 * 코드 설명 : 사용자의 글 정보(작성자, 글 제목, 내용)을 등록하는 메서드입니다.
 	 * 데이터 베이스에 insert 시에 게시물 번호를 <selectKey>를 이용하여 
-	 * ServiceImpl에 있는 freeboardWrite()로 리턴해준다.
+	 * ServiceImpl에 있는 qnaWrite()로 리턴해준다.
 	 * 리턴 해준 게시물 번호(시퀀스)를 이용하여 파일 업로드를 할 수 있다.
 	 */
 	@Override

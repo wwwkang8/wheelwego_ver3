@@ -23,7 +23,7 @@
 		<tr>
 			<th>NO</th>
 			<th>Title</th>
-			<th>timePosted</th>
+			<th>Time</th>
 			<th>hits</th>
 			<th></th>
 		</tr>

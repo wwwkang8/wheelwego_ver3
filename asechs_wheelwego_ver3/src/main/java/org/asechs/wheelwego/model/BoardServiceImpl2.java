@@ -162,8 +162,10 @@ public class BoardServiceImpl2 implements BoardService {
 	 * ---------------------------------------
 	 * 코드 설명 : 자유게시판에 글 등록과 파일업로드를 하기 위한 메서드이다.
 	 * 글 등록 기능은 3가지의 메서드로 이루어집니다.
-	 * freeboardWrite() : 글 정보를 등록하는 메서드입니다.  글번호, 글제목, 내용, 작성자 등의 정보를 데이터베이스에 등록합니다.
-	 *  transferTo() : uploadPath(파일을 업로드할 경로), fileName을 이용하여 서버상에 MultipartFile 형식의 첨부 사진을 올려줍니다.
+	 * freeboardWrite() : 글 정보를 등록하는 메서드입니다. 
+	 * 글번호, 글제목, 내용, 작성자 등의 정보를 데이터베이스에 등록합니다.
+	 *  transferTo() : uploadPath(파일을 업로드할 경로), fileName을 이용하여 
+	 * 서버상에 MultipartFile 형식의 첨부 사진을 올려줍니다.
 	 *  freeboardWriteFileUpload() : 첨부 사진 이름을 데이터 베이스에 저장하는 메서드입니다.
 	 *  나중에 첨부 사진 이름과 경로를 이용하여 글 상세보기에서 사진을 불러올 수 있습니다.
 	 */

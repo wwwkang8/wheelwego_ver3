@@ -15,7 +15,7 @@
 <script>
 	$(document).ready(function(){
 		$("#freeboardBtn").click(function(){
-			location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyContentByFreeList.do?id=${sessionScope.memberVO.id}";
+			location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyContentByFreeList.do?id	=${sessionScope.memberVO.id}";
 		});
 		$("#businessBtn").click(function(){
 			location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyContentBybusinessList.do?id=${sessionScope.memberVO.id}";
