@@ -29,7 +29,7 @@ import org.springframework.stereotype.Repository;
 public class MypageDAOImpl implements MypageDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-
+	
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)
