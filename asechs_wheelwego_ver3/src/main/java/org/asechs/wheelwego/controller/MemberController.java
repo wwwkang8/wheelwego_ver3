@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 
 public class MemberController {
-	@Resource(name="memberServiceImpl")
+	@Resource(name="memberServiceImpl2")
 
 	private MemberService memberService;
 

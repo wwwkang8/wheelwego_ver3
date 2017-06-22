@@ -103,27 +103,21 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 	   @Override
 	   public ListVO filtering(String option, String searchWord, String pageNo, TruckVO gpsInfo) {
 	      List<TruckVO> truckList=null;
-	      
 	      if(pageNo==null)
 	         pageNo="1";
 	      ListVO pagingList=new ListVO();
 	      int totalCount=0;
 	      if(searchWord!=null)
 	          totalCount=foodTruckDAO.getTruckListTotalContentCountByName(searchWord);
-	   
-	      
-	      
 	      if(gpsInfo!=null){
 	         totalCount=foodTruckDAO.getTruckListTotalContentCountByGPS(gpsInfo);
 	         //pagingbean.setGpsInfo(gpsInfo);
-	      }
-	      
+	      }    
 	      PagingBean pagingbean = new PagingBean(Integer.parseInt(pageNo),totalCount,searchWord);
-	      
 	      if(gpsInfo!=null){
 	         pagingbean.setGpsInfo(gpsInfo);
 	      }
-	      
+   
 	      if(option.equals("byAvgGrade")){
 	         truckList=foodTruckDAO.filteringByAvgGrade(pagingbean);
 	      }else if(option.equals("byWishlist")){
