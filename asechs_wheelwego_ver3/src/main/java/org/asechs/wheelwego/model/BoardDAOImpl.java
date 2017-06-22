@@ -56,12 +56,20 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getFreeBoardTotalContentCount() {
 		return template.selectOne("board.getFreeBoardTotalContentCount");
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getFreeBoardDetail(String no) {
 		return (BoardVO) template.selectOne("board.getFreeBoardDetail", no);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 자유게시판 게시물 삭제
+	 */
 	@Override
 	public void freeboardDelete(String no) {
 		template.delete("board.freeboardDelete", no);
@@ -95,12 +103,26 @@ public class BoardDAOImpl implements BoardDAO {
 		template.insert("board.freeboardWriteFileUpload", boardVO);
 		
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판-게시글 볼때 조회수 올리기
+	 */
 	@Override
 	public void updateHits(int hits) {
 		template.update("board.updateCount", hits);
 	}
-	
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 자유게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	public String updateBoard(BoardVO vo) {
 		template.update("board.updateBoard",vo);
 		return vo.getNo();
@@ -117,12 +139,20 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<FileVO> getFreeBoardFilePath(String no) {
 		return template.selectList("board.getFreeBoardFilePath",no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO getNameById(BoardVO bvo) {
 		return template.selectOne("board.getNameById", bvo);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 사진 수정하기
+	 */
 	@Override
 	public void freeboardUpdateFileUpload(BoardVO boardVO) {
 		template.update("board.freeboardUpdateFileUpload", boardVO);
@@ -226,27 +256,47 @@ public class BoardDAOImpl implements BoardDAO {
 		return template.selectOne("board.getBusinessInfoBoardTotalContentCount");
 	}
 	
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 게시판 게시물 조회수 올리기
+	 */
 	@Override
 	public void updateHitsBusiness(int hits) {
 		template.update("board.updateHitsBusiness", hits);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getBusinessBoardDetail(String no) {
 		return template.selectOne("board.getBusinessBoardDetail", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 게시판 게시물 삭제
+	 */
 	@Override
 	public void businessDelete(String no) {
 		template.delete("board.businessDelete", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진 수정하기
+	 */
 	@Override
 	public void business_updateBoard(BoardVO vo) {
 		template.update("board.business_updateBoard", vo);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return template.selectOne("board.business_getNameById", bvo);
@@ -356,13 +406,23 @@ public class BoardDAOImpl implements BoardDAO {
 		template.update("board.updatebusinessComment",cvo);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진삭제
+	 * ---------------------------------------------
+	 * 사진 수정시 기존의 있던 사진을 삭제한다.
+	 */
 	@Override
 	public void businessDeleteFile(String no) {
 		template.delete("board.businessDeleteFile", no);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진수정
+	 */
 	@Override
 	public String businessupdateBoard(BoardVO vo) {
 		template.update("board.businessupdateBoard",vo);
@@ -436,34 +496,66 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<FileVO> getqnaFilePath(String no) {
 		 return template.selectList("board.getqnaFilePath",no);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO qna_getNameById(BoardVO bvo) {
 		return template.selectOne("board.qna_getNameById", bvo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getqnaBoardDetail(String no) {
 		return template.selectOne("board.getqnaBoardDetail", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 사진삭제
+	 * ---------------------------------------------
+	 * 사진 수정시 기존의 있던 사진을 삭제한다.
+	 */
 	@Override
 	public void qnaDeleteFile(String no) {
 		template.delete("board.qnaDeleteFile", no);
 	}
-
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * QnA게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public String qnaupdateBoard(BoardVO vo) {
 		template.update("board.qnaupdateBoard",vo);
 		return vo.getNo();
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시판 게시물 삭제
+	 */
 	@Override
 	public void qnaDelete(String no) {
 		template.delete("board.qnaDelete", no);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시물 조회수 올리기
+	 */
 	@Override
 	public void updateHitsqna(int hits) {
 		template.update("board.updateHitsqna", hits);
