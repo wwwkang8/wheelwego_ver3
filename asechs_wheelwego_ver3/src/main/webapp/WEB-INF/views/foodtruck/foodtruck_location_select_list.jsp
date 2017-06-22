@@ -53,13 +53,13 @@ $(document).ready(function(){
          sel.options[i].selected = true;
       }
    }
-
-	$(".detailLink").bind("click",function(){
-		var address=$(this).parent().find(".address").text();
-		var foodtruckNo=$(this).parent().find(":input[name=foodtruckNo]").val();
-		var latitude=$(this).parent().find(":input[name=latitude]").val();
-		var longitude=$(this).parent().find(":input[name=longitude]").val();
-		$(this).attr("href","${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+foodtruckNo+"&latitude="+latitude+"&longitude="+longitude+"&address="+address);
+   
+	$(".detailLink").click(function(){
+		var address=$(this).parent().find(".address").text();		
+		document.getElementById('address').value = address;
+        var truckInfoForm = document.getElementById("truckInfoForm"); 
+        
+        truckInfoForm.submit();	
 	});
 
    $("input#insertBtn").click(function(){
@@ -69,9 +69,11 @@ $(document).ready(function(){
 
     if(id==""){
        alert("로그인이 필요합니다.");
+       return false;
     }
     else if("${sessionScope.memberVO.memberType=='seller'}"){
     	alert("일반회원 전용 서비스입니다.");
+    	return false;
     }
     else{
      $.ajax({
@@ -138,32 +140,36 @@ $(document).ready(function(){
   <c:forEach items="${requestScope.pagingList.truckList}" var="truckInfo">
     <div class="col-sm-6">
       <div class="thumbnail">
-   <input type="hidden" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
-      <input type="hidden" name="latitude" value="${truckInfo.latitude}">
-      <input type="hidden" name="longitude" value="${truckInfo.longitude}">
-      <a class="detailLink" href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckInfo.foodtruckNumber}&latitude=${truckInfo.latitude}&longitude=${truckInfo.longitude}">
-        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
-        </a>
-        <c:choose>
-        <c:when test="${requestScope.heartWishlist!='[]'&& requestScope.heartWishlist!=null}">
-        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">
-        <c:choose>
-           <c:when test="${wishlistInfo.foodtruckNumber eq truckInfo.foodtruckNumber}">
-                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
-           </c:when>
-           <c:otherwise>
-              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
-           </c:otherwise>
-        </c:choose>
-        </c:forEach>
-       </c:when>
-       <c:otherwise>
-          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
-       </c:otherwise>
-       </c:choose>
-        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>
-        <strong style="font-size:15px; "><span class="glyphicon glyphicon-star" style="color:orange"> </span>&nbsp;&nbsp;${truckInfo.avgGrade}&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-heart" style="color:red"></span>&nbsp;&nbsp;${truckInfo.wishlistCount }</strong>
-        <br><p id = "${truckInfo.foodtruckName}" style="font-size:13px; color: grey;" class="address"></p>
+      <form name = "truckInfoForm"  id="truckInfoForm" method="post" action="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do">
+	  	  <input type="hidden" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
+	      <input type="hidden" name="latitude" value="${truckInfo.latitude}">
+	      <input type="hidden" name="longitude" value="${truckInfo.longitude}">
+	      <input type="hidden" id = "address" name = "address" value = "">
+	      <input type="hidden" id = "option" name = "option" value = "">
+	      <a class="detailLink">
+	        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
+	        </a>
+	        <c:choose>
+	        <c:when test="${requestScope.heartWishlist!='[]'&& requestScope.heartWishlist!=null}">
+	        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">
+	        <c:choose>
+	           <c:when test="${wishlistInfo.foodtruckNumber eq truckInfo.foodtruckNumber}">
+	                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
+	           </c:when>
+	           <c:otherwise>
+	              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	           </c:otherwise>
+	        </c:choose>
+	        </c:forEach>
+	       </c:when>
+	       <c:otherwise>
+	          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	       </c:otherwise>
+	       </c:choose>
+	        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>
+	        <strong style="font-size:15px; "><span class="glyphicon glyphicon-star" style="color:orange"> </span>&nbsp;&nbsp;${truckInfo.avgGrade}&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-heart" style="color:red"></span>&nbsp;&nbsp;${truckInfo.wishlistCount }</strong>
+	        <br><p id = "${truckInfo.foodtruckName}" style="font-size:13px; color: grey;" class="address"></p>      
+      </form>
       </div>
     </div>
   </c:forEach>

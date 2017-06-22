@@ -2,6 +2,7 @@
    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%-- 황윤상 - 수정된 공통사항 : location.href() 사용시, get방식으로 인해 위치 정보가 파라미터에 명시되는 문제를, post 방식의 form 기반 submit()으로 대체함 --%>
 <script type="text/javascript">
 	//황윤상 : 푸드트럭에 저장된 좌표를 기반으로 주소 변환	
 	<c:forEach items="${requestScope.trucklist}" var="truckInfo" varStatus="status">
@@ -47,12 +48,13 @@
 	}
 	
 	//황윤상 : 사용자의 좌표 기반으로 푸드트럭 리스트를 검색 (자동검색)
-	function searchFoodTruckByGPS() {
-		location.href = "${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude=${sessionScope.latitude}&longitude=${sessionScope.longitude}";
+	function searchFoodTruckByGPSAuto() {
+		var mainForm = document.getElementById("mainForm");
+		mainForm.submit();
 	}
 	
 	//황윤상 : 사용자의 검색어에 따라 푸드트럭 리스트를 검색 (수동검색)
-	function sample6_execDaumPostcode() {
+	function searchFoodTruckByGPSManual() {
 	    new daum.Postcode({
 	        oncomplete: function(data) {
 	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -97,15 +99,24 @@
 	               var latitude  = items[0].point.y;
 	               var longitude = items[0].point.x;
 	               
-	               location.href = "${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude="+latitude+"&longitude="+longitude;
+	               document.getElementById('latitude').value = latitude;
+		    	   document.getElementById('longitude').value= longitude;
+	               
+	               var mainForm = document.getElementById("mainForm"); 
+	               mainForm.submit();		               
 	           });                
 	        }
 	    }).open();
 	}
 	
-	//정현지 : 추천리스트(hover) 클릭 시, 상세 페이지로 이동
+	//정현지 : 추천리스트(hover) 클릭 시, 상세 페이지로 이동 
 	function hoverClick(foodtruckNo,address){
-		location.href = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+foodtruckNo+"&latitude=${sessionScope.latitude}&longitude=${sessionScope.longitude}"+"&address="+address;
+		document.getElementById('address').value = address;
+		document.getElementById('foodtruckNo').value = foodtruckNo;
+		
+        var mainForm = document.getElementById("mainForm"); 
+        mainForm.action = "${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do";
+        mainForm.submit();	
 	} 
 	
 	$(document).ready(function(){
@@ -133,9 +144,13 @@
                 <li>
                  <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-map-marker fa-3x"></i></a>
                  <div class="dropdown-menu" style="padding: 15px; padding-bottom: 15px;" id="roundCorner">
-                 <form>
-                  <input class="btn btn-warning" onclick="sample6_execDaumPostcode()" style="width: 100%;" value="수동검색" style="">
-                  <input class="btn btn-warning" onclick="searchFoodTruckByGPS()" style="width: 100%;" value="자동검색" style="">
+                 <form name = "mainForm"  id="mainForm" method="post" action="${pageContext.request.contextPath}/searchFoodTruckByGPS.do">
+					<input 	type = "hidden" id = "latitude" name = "latitude" value = "${sessionScope.latitude}">
+					<input type = "hidden" id = "longitude" name = "longitude" value = "${sessionScope.longitude}">
+					<input type = "hidden" id = "address" name = "address" value = "">
+					<input type = "hidden" id = "foodtruckNo" name = "foodtruckNo" value = "">				
+                  	<input class="btn btn-warning" onclick="searchFoodTruckByGPSManual()" style="width: 100%;" value="수동검색" style="">
+                  	<input class="btn btn-warning" onclick="searchFoodTruckByGPSAuto()" style="width: 100%;" value="자동검색" style="">
               	 </form>
                </div>
                 </li>
@@ -143,11 +158,12 @@
             </div>
            <div class="col-lg-4">
            <!-- 푸드트럭 검색 폼 -->
-         	<form class="subscribe_form" action="${pageContext.request.contextPath}/searchFoodTruckByName.do">      	  
+         	<form class="subscribe_form" method="post" action="${pageContext.request.contextPath}/searchFoodTruckByName.do">
+         	  <input type = "hidden" id = "latitude" name = "latitude" value = "${sessionScope.latitude}">
+			  <input type = "hidden" id = "longitude" name = "longitude" value = "${sessionScope.longitude}">	         	      	  
               <input type="text" placeholder="Search foodtruck!" class="email" id="name" name="name" required="required">
               <input type="submit" class="subscribe" name="search" value="Search">
-            </form>
-            
+            </form>            
            </div>
              <div class="col-lg-4"></div>
          </div>
@@ -169,8 +185,6 @@
             <div class="flip-container"
                ontouchstart="this.classList.toggle('hover');" style="margin: 0 auto;">
                <div class="flipper">  
-<!--                   <a href="#portfolioModal1" onclick="hoverClick(this.id)" id=${truckVO.foodtruckNumber} class="portfolio-link"
-                        data-toggle="modal"> -->
                <div style="CURSOR:pointer" class="detailLink">
                      <input type="hidden" name="foodturckNo" value="${truckVO.foodtruckNumber}">
                       <input type="hidden" name="latitude" value="${truckVO.latitude}">
