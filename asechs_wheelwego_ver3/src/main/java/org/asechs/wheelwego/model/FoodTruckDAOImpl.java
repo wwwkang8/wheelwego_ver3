@@ -30,7 +30,11 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		return sqlSessionTemplate.selectList("foodtruck.foodtruckList");
 	}
 
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 검색명에 해당하는 푸드트럭 리스트의 수 반환
+	 */
 	@Override
 	public int getTruckListTotalContentCountByName(String name) {
 		return sqlSessionTemplate.selectOne("foodtruck.getTruckListTotalContentCountByName", name);
@@ -48,7 +52,11 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		return sqlSessionTemplate.selectOne("foodtruck.foodtruckDetail", foodtruckNo);
 	}
 
-	/* foodtruck 상세보기에 들어갈 menu list */
+	/**
+	 * 정현지
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 해당 푸드트럭의 음식 리스트 가져오기
+	 */
 	@Override
 	public List<FoodVO> foodListDetail(String foodtruckNo) {
 		return sqlSessionTemplate.selectList("foodtruck.foodListDetail", foodtruckNo);
@@ -74,16 +82,33 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public List<ReviewVO> getReviewListByTruckNumber(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("foodtruck.getReviewListByTruckNumber", pagingBean);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 해당 푸드트럭의 총 리뷰 수 반환
+	 */
 	@Override
 	public int getReivewTotalCount(String foodtruckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.getReivewTotalCount",foodtruckNumber);
 	}
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 단골트럭 등록하기
+	 */
 	@Override
 	public void registerBookMark(WishlistVO wishlistVO) {
-		sqlSessionTemplate.insert("foodtruck.registerBookMark", wishlistVO);
-		
+		sqlSessionTemplate.insert("foodtruck.registerBookMark", wishlistVO);	
 	}
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 단골트럭 등록여부
+	 * -----------------------
+	 * 단골트럭 등록이되어있으면 1을반환
+	 * else 0을반환하여
+	 * select 할때 1인것만 리스트에 나오게 출력
+	 */
 	@Override
 	public int getBookMarkCount(WishlistVO wishlistVO) {
 		
@@ -100,7 +125,13 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		return sqlSessionTemplate.selectList("foodtruck.getFoodTruckListByName",pagingBean);
 	}
 
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - GPS기반 푸드트럭 검색 결과 총 푸드트럭 수 반환
+	 * --------------------------------------------------------------------
+	 * GPS정보를 바탕으로 그의 반경 1km 이내의 푸드트럭의 총 갯수를 반환한다.
+	 */
 	@Override
 	public int getTruckListTotalContentCountByGPS(TruckVO gpsInfo) {
 		return sqlSessionTemplate.selectOne("foodtruck.getTruckListTotalContentCountByGPS", gpsInfo);
@@ -116,6 +147,7 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	 */
 	@Override
 	public List<TruckVO> filteringByDate(PagingBean pagingbean) {
+		System.out.println(sqlSessionTemplate.selectList("foodtruck.filteringByDate", pagingbean));
 		return sqlSessionTemplate.selectList("foodtruck.filteringByDate", pagingbean);
 	}
 	/**
@@ -177,10 +209,20 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public int findWishlistCountByTruckNumber(String foodtruckNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.findWishlistCountByTruckNumber", foodtruckNumber);
 	}
-
+	
+	/**
+	 * 정현지
+	 * 2017.06.22 수정중
+	 * 예약 - 메뉴 예약하기
+	 * -----------------------------
+	 *  예약 정보를
+	 *  1. booking 테이블에 booking_number, customer_id, booking_Date를 insert한다.
+	 *  2. 예약정보로부터 상세 예약 정보리스트를 불러와 booking_number를 setting하고
+	 *     사용자로부터 입력받은 ,menu_id,menu_quantity를 booking_number와 함께 bookingDetail 테이블에 insert한다.
+	 */
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {
-		sqlSessionTemplate.insert("foodtruck.bookingMenu", bookingVO);
+		sqlSessionTemplate.insert("foodtruck.bookingMenu", bookingVO); //Booking table에 data insert
 		List<BookingDetailVO> bookingDetailList=bookingVO.getBookingDetail();
 		for(int i=0; i<bookingDetailList.size();i++){
 			bookingDetailList.get(i).setBookingNumber(bookingVO.getBookingNumber());
@@ -188,11 +230,6 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 		}
 	}
 
-	@Override
-	public List<BookingVO> getBookingListBySellerId(String id) {
-		System.out.println("dao"+id);
-		return sqlSessionTemplate.selectList("foodtruck.getBookingListBySellerId", id);
-	}
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중
@@ -225,6 +262,12 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	public String getBookingStateBybookingNumber(int bookingNumber) {
 		return sqlSessionTemplate.selectOne("foodtruck.getBookingStateBybookingNumber", bookingNumber);
 	}
+	
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 푸드트럭 - gps정보의 반경 1km 내 해당하는 푸드트럭 번호 리스트를 가져온다.
+	 */
 	 @Override
 	   public List<String> getFoodtruckNumberList(TruckVO gpsInfo) {
 	      return sqlSessionTemplate.selectList("foodtruck.getFoodtruckNumberList", gpsInfo);

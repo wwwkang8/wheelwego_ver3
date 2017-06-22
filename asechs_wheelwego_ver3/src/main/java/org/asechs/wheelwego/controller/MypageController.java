@@ -1,5 +1,6 @@
 package org.asechs.wheelwego.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,7 +28,7 @@ public class MypageController {
 	@Resource(name="mypageServiceImpl2")
    private MypageService mypageService;
 
-	@Resource(name="foodTruckServiceImpl")
+	@Resource(name="foodTruckServiceImpl2")
    private FoodTruckService foodtruckService;
 
 	/**
@@ -52,7 +53,7 @@ public class MypageController {
          ListVO listVO = mypageService.getWishList(pageNo, id);
          modelAndView.addObject("wishlist", listVO);
          modelAndView.addObject("gpsInfo", gpsInfo);
-         // System.out.println(listVO.getTruckList());
+         System.out.println(listVO.getTruckList());
          return modelAndView;
       }
    }
@@ -181,7 +182,6 @@ public class MypageController {
     */
    @RequestMapping("afterLogin_mypage/deleteMyTruck.do")
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
-	   System.out.println("트럭삭제");
       mypageService.deleteMyTruck(foodtruckNumber);
       request.getSession(false).removeAttribute("foodtruckNumber");
       return "redirect:/afterLogin_mypage/mypage.do";
@@ -231,13 +231,29 @@ public class MypageController {
       mypageService.updateMyReview(reviewVO);
       return "redirect:/afterLogin_mypage/showMyReviewList.do?customerId=" + reviewVO.getCustomerId();
    }
-
+   /**
+    * 황윤상
+    * 2017.06.22 수정완료
+    * 마이페이지 - 사업자의 gps정보가 존재하는 확인
+    * @param sellerId
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/checkTruckGPS.do")
    public ModelAndView checkTruckGPS(String sellerId) {
       TruckVO gpsInfo = mypageService.getGPSInfo(sellerId);
       return new ModelAndView("mypage/checkTruckGPS.tiles", "gpsInfo", gpsInfo);
    }
-
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 - 사업자 위치정보 설정
+    * -----------------------------------------
+    * 사업자가 푸드트럭의 위치를 설정할 때 Database에 위치 정보를 update해준다.
+    * @param sellerId
+    * @param latitude
+    * @param longitude
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/setTruckGPS.do")
    @ResponseBody
    public String setTruckGPS(String sellerId, String latitude, String longitude) {
@@ -253,6 +269,15 @@ public class MypageController {
 
       return "설정 완료";
    }   
+   /**
+    * 황윤상
+    * 2017.06.22 수정중
+    * 마이페이지 - 사업자 위치정보 설정
+    * ----------------------------------------
+    * 사용자가 푸드트럭의 위치를 해제할 때 gps정보를 null로 처리하기 위한 컨트롤러
+    * @param sellerId
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/set_TruckGPS.do")
    public String setTruckGPS(String sellerId){
       TruckVO gpsInfo = new TruckVO();
@@ -264,16 +289,21 @@ public class MypageController {
       return "redirect:../afterLogin_mypage/mypage.do";
    }
 
-   @RequestMapping("afterLogin_mypage/test.do")
-   public String test() {
-      return "mypage/test";
-   }
-
+   /**
+    * 박다혜
+    * 2017.06.22 수정중
+    * 마이페이지 - 푸드트럭 번호 확인하기
+    * ----------------------------------------
+    * 푸드트럭 등록 시 같은 번호의 등록을 피하기 위해
+    * 푸드트럭 번호가 이미 존재한다면 true를,
+    * 없다면 false를 반환한다.
+    * @param foodtruckNumber
+    * @return
+    */
    @RequestMapping("afterLogin_mypage/checkFoodtruckNumber.do")
    @ResponseBody
    public boolean checkFoodtruckNumber(String foodtruckNumber) {
-      TruckVO truckVO = mypageService.findtruckInfoByTruckNumber(foodtruckNumber);
-      if (truckVO == null)
+      if (mypageService.findtruckInfoByTruckNumber(foodtruckNumber) == null)
          return false;
       else
          return true;
@@ -414,10 +444,11 @@ public class MypageController {
    }
    /** 	  
 	정현지
-	2017.06.21 (수정완료)
+	2017.06.22 (수정완료)
 	마이페이지 - 나의 주문내역 리스트 (pagingBean 적용)
 	기능설명 : 사용자 아이디로 주문 내역을 list로 받아온다
 			주문 내역이 있을 경우, 주문 내역 detail을 받아와 주문 목록(list)에 setting 해준다
+			주문번호로 푸드트럭 이름을 가져와 setting 해준다
 			주문 내역은 마이페이지 - 주문 내역 리스트에서 확인할 수 있다
     */
    @RequestMapping("afterLogin_mypage/customerBookingList.do")
@@ -428,15 +459,24 @@ public class MypageController {
 	       for(int i=0; i<myBookingList.size(); i++){
 	          List<BookingDetailVO> myBookingDetailList = mypageService.getBookingDetailVO(myBookingList.get(i));
 	          myBookingList.get(i).setBookingDetail(myBookingDetailList);
+	          List<String> menuId =  mypageService.findMenuIdByBookingNumber(myBookingList.get(i).getBookingNumber());
+	          for(int j=0; j<1; j++){
+	        	  String foodtruckNumber = mypageService.findFoodTruckNumberByMenuId(menuId.get(j));
+	        	  String foodtruckName = mypageService.findFoodtruckNameByFoodTruckNumber(foodtruckNumber);
+	        	  myBookingList.get(i).setFoodtruckName(foodtruckName);
+	          }
 	       }
-	    }      
+	    }    
 	    model.addAttribute("myBookingList", myBookingList);
 	    model.addAttribute("listVO", listVO);
 	    return "mypage/mypage_customer_order_list.tiles";
 	   }
-
    /**
-    * 강정호. 조리 상태 업데이트 해주는 메서드
+    * 강정호
+    * 2017.06.22(수정완료)
+    * 마이페이지 - 주문 상태 업데이트
+    * ----------------------------------------
+    * 코드 설명 : 주문 상태를 결제 완료에서 "조리중", "조리완료"로 변경해주는 메서드
     */
    @RequestMapping(value="afterLogin_mypage/updateState.do",method=RequestMethod.POST)
    @ResponseBody

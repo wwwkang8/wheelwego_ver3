@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FoodTruckController {
-	@Resource(name="foodTruckServiceImpl")
+	@Resource(name="foodTruckServiceImpl2")
 	private FoodTruckService foodTruckService;
 	@Resource(name="mypageServiceImpl2")
 	private MypageService mypageService; 
@@ -105,16 +105,27 @@ public class FoodTruckController {
 		return modelAndView;
 	}
 	/** 	  
-	정현지
+	정현지 & 박다혜 & 황윤상
 	2017.06.21 (수정완료)
  	푸드트럭 - 푸드트럭 상세보기 
- 	기능설명 : 1. 푸드트럭 번호(foodtruckNo)로 푸드트럭 상세정보를 TruckVO 객체로 받아온다
- 			2. 푸드트럭 번호로 작성된 리뷰 리스트를 받아온다(리뷰 리스트 pagingBean 적용)
- 			-> return 값은 푸드트럭 detail 페이지로 보낸다
+ 	--------------------------------------
+ 	1. 푸드트럭 번호에 해당하는 푸드트럭 정보를 받아와서 modelAndView 객체에 정보를 실어 보낸다.
+ 	2. 사용자가 해당 푸드트럭의 1km이내에 존재한다면 
+ 	   예약이 가능하므로 이를 판별하기 위해 bookingPossible변수를 이용한다.
+ 	   사용자가 1km이내에 있다면 bookingPossible은 ok, 1m이내에 없다면 no를 보내게 된다. 
+    3. 해당 푸드트럭이 사용자의 단골 트럭인지 함께 나타내기 위해 flag를 이용한다.
+       만약 사용자가 로그인 상태라면 단골트럭인지 검사하여 wishlistFlag값을 modelAndView 객체에 정보를 실어 보낸다.
+    4. 푸드트럭 번호에 해당하는 리뷰리스트를 불러와 modelAndView 객체에 정보를 실어 보낸다.
   */
 	   @RequestMapping("foodtruck/foodTruckAndMenuDetail.do")
 	   public ModelAndView foodTruckAndMenuDetail(String foodtruckNo,String reviewPageNo, String latitude, String longitude, HttpServletRequest request){
-	      TruckVO truckDetail = foodTruckService.foodTruckAndMenuDetail(foodtruckNo);
+	     //푸드트럭의 상세정보
+		   TruckVO truckDetail = foodTruckService.foodTruckAndMenuDetail(foodtruckNo); //푸드트럭에 해당하는 푸드트럭 정보를 받아온다.
+	      ModelAndView mv= new ModelAndView();
+	      mv.setViewName("foodtruck/foodtruck_detail.tiles");
+	      mv.addObject("truckDetailInfo", truckDetail);
+	      
+	      //1km이내에 사용자가 존재하는지 판별
 	      String bookingPossible = "no";
 	      List<String> foodtruckNumberList = foodTruckService.getFoodtruckNumberList(new TruckVO(Double.parseDouble(latitude), Double.parseDouble(longitude)));
 	      for (int i = 0; i < foodtruckNumberList.size(); i++)
@@ -125,22 +136,22 @@ public class FoodTruckController {
 	            break;
 	         }            
 	      }
-	      ModelAndView mv= new ModelAndView();
-	      mv.setViewName("foodtruck/foodtruck_detail.tiles");
+	      mv.addObject("bookingPossible", bookingPossible);
+	      
+	      //단골트럭인지 판별하기 위한 flag
 	      HttpSession session=request.getSession(false);
-	      String id=null;
 	      if(session != null){
 	         MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 	         if(memberVO != null){
-	            id = memberVO.getId();
-	            int wishlistFlag=mypageService.getWishListFlag(id, foodtruckNo);
+	            int wishlistFlag=mypageService.getWishListFlag(memberVO.getId(), foodtruckNo);
 	            mv.addObject("wishlistFlag",wishlistFlag);
 	         }
 	      }
-	      mv.addObject("truckDetailInfo", truckDetail);
+	      
+	      //리뷰 리스트
 	      ListVO reviewList = foodTruckService.getReviewListByTruckNumber(reviewPageNo, foodtruckNo);
 	      mv.addObject("reviewlist", reviewList);
-	      mv.addObject("bookingPossible", bookingPossible);
+	      
 	      return mv;
 	   }
 	   /** 	  
@@ -156,7 +167,17 @@ public class FoodTruckController {
 		foodTruckService.registerReview(reviewVO); // 푸드 트럭 등록
 		return "foodtruck/foodtruck_detail.tiles";
 	}
-
+	/**
+	 *  김래현
+	 *	2017.06.22 (수정완료)
+	 *	기능설명 : 즐겨찾기 등록
+	 *---------------------------
+	 * 코드설명:
+	 * view 페이지에서 ajax로 통신할때
+	 * 컨트롤러에서 리턴값을 on , off 로하여 
+	 * 즐겨찾기 등록,삭제 시 하트색을 바꿀수 있게한다
+	 *    
+	 */
 	@RequestMapping(value = "afterLogin_foodtruck/registerBookMark.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String registerBookMark(String id, String foodtruckNumber){
@@ -204,13 +225,24 @@ public class FoodTruckController {
 		mv.addObject("bvo",bvo);
 		return mv;
 	}
-
+	/**
+	 * 정현지
+	 * 2017.06.22 수정중
+	 * 예약 - 메뉴 예약하기
+	 * ---------------------------------
+	 * 예약정보를 db에 insert 한 뒤 
+	 * 사용된 포인트와 총 결제금액을 이용하여 포인트를 차감/적립시킨다.
+	 * @param bookingVO
+	 * @param request
+	 * @param resultPoint
+	 * @param resultTotalAmount
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
 	public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
 		foodTruckService.bookingMenu(bookingVO);
 		String bookingNumber=bookingVO.getBookingNumber();
 		mypageService.calPoint(resultPoint, resultTotalAmount, Integer.parseInt(bookingNumber));
-		request.getSession(false).setAttribute("bookingNumber", bookingNumber);
 		return "redirect:../foodtruck/foodtruck_booking_confirm_result.do";
 	}
 	/**
@@ -262,14 +294,22 @@ public class FoodTruckController {
 		else
 			return "fail";
 	}
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 예약 - 선행주문이 있는지 체크
+	 * ------------------------------------------
+	 * 아이디에 해당하는 선행주문이 있는지 체크하여
+	 * count가 0이라면 선행주문이 없는 것이므로 ok를,
+	 *  0이아니라면 선행주문이 있는 것이므로 no를 반환한다.
+	 * @param request
+	 * @return
+	 */
 	   @RequestMapping("afterLogin_foodtruck/checkBooking.do")
 	   @ResponseBody
 	   public String checkBooking(HttpServletRequest request) {
-	      System.out.println("실행됨");
-	      HttpSession session = request.getSession();
-	      MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");      
+	      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");      
 	      int count = mypageService.checkBookingState(memberVO.getId());
-	      System.out.println(count);
 	      return (count==0) ? "ok":"no";
 	   }
 	   /**

@@ -5,6 +5,7 @@
 <jsp:include page="../mypage/mypage.jsp"/>
 <br><br>
         <c:choose>
+        <!-- 메뉴 수정 -->
         	<c:when test="${menuList!='[]'}">
         	<br>
        <form class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/updateMenu.do" enctype="multipart/form-data">
@@ -30,7 +31,9 @@
          		<button type="submit" class="checkBtn btn btn-warning" >수정</button>
          	</form>
         	</c:when>
+        	
         	<c:otherwise>
+        	<!-- 메뉴 등록 -->
          <form  class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/registerMenuList.do" enctype="multipart/form-data">
        	 <input type="hidden" name="foodtruckNumber" value="${sessionScope.foodtruckNumber}">
         	<table style="border: none; padding: 15px" class="table table-hover">

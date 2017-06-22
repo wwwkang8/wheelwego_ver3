@@ -30,8 +30,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Resource
 	SqlSessionTemplate template;
 	
-//////////강정호. 자유게시판 Service/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * 강정호
 	 * 2017.06.21(수정완료)
@@ -58,12 +56,20 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getFreeBoardTotalContentCount() {
 		return template.selectOne("board.getFreeBoardTotalContentCount");
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getFreeBoardDetail(String no) {
 		return (BoardVO) template.selectOne("board.getFreeBoardDetail", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 자유게시판 게시물 삭제
+	 */
 	@Override
 	public void freeboardDelete(String no) {
 		template.delete("board.freeboardDelete", no);
@@ -81,8 +87,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public String freeboardWrite(BoardVO bvo) {
 		template.insert("board.freeboardWrite",bvo);
-		//template 메서드 써서 가져온 게시물 번호와 파일명을 insert바로 하기
-		//여기서 bvo.getNo을 int로 넘겨주기
 		return bvo.getNo();
 	}
 	
@@ -99,27 +103,56 @@ public class BoardDAOImpl implements BoardDAO {
 		template.insert("board.freeboardWriteFileUpload", boardVO);
 		
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판-게시글 볼때 조회수 올리기
+	 */
 	@Override
 	public void updateHits(int hits) {
 		template.update("board.updateCount", hits);
 	}
-	
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * 자유게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	public String updateBoard(BoardVO vo) {
 		template.update("board.updateBoard",vo);
 		return vo.getNo();
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 게시물 상세보기 파일 경로 불러오기
+	 * -----------------------------------------------------------
+	 * 코드 설명 : 게시물 상세보기시 사진 파일 불러올 때 사진이 저장된 경로를 가져오는 메서드
+	 */
 	@Override
 	public List<FileVO> getFreeBoardFilePath(String no) {
 		return template.selectList("board.getFreeBoardFilePath",no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO getNameById(BoardVO bvo) {
 		return template.selectOne("board.getNameById", bvo);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 사진 수정하기
+	 */
 	@Override
 	public void freeboardUpdateFileUpload(BoardVO boardVO) {
 		template.update("board.freeboardUpdateFileUpload", boardVO);
@@ -138,6 +171,13 @@ public class BoardDAOImpl implements BoardDAO {
 		template.insert("board.writeFreeboardComment",cvo);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 리스트
+	 * -----------------------------------------------------------
+	 * 코드 설명 : 게시물 상세보기시 해당 게시물에 있는 댓글 목록 불러오는 메서드
+	 */
 	@Override
 	public List<CommentVO> getFreeboardCommentList(String no) {
 		return template.selectList("board.getFreeboardCommentList", no);
@@ -156,6 +196,13 @@ public class BoardDAOImpl implements BoardDAO {
 		
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 특정 댓글 불러오는 메서드
+	 * -----------------------------------------------------------
+	 * 코드 설명 : 댓글 수정, 삭제시 특정 댓글 한 개만 불러오는 메서드
+	 */
 	@Override
 	public CommentVO getFreeboardComment(CommentVO cvo) {
 		return template.selectOne("board.getFreeboardComment",cvo);
@@ -183,186 +230,395 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 	
 	
-//////////강정호. 창업게시판 Service/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 창업게시판 게시물 목록 보기
+	 * -------------------------------------------
+	 * 코드 설명 : 창업게시판 게시물 목록과 페이지 번호를 보여주기 위한 메서드이다.
+	 * 페이징 빈 객체를 ServiceImpl에서 받아와 페이지 번호당 게시물 개수를 10개로 정하여
+	 * 목록을 보여준다.
+	 */
 	@Override
 	public List<BoardVO> getBusinessInfoBoardList(PagingBean pagingBean) {
 		return template.selectList("board.getBusinessInfoBoardList", pagingBean);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 게시물 총 개수 구하는 메서드
+	 * --------------------------------------------------------------
+	 * 코드 설명 : 게시판 게시물 총 개수를 구하는 메서드입니다.
+	 */
 	@Override
 	public int getBusinessInfoBoardTotalContentCount() {
 		return template.selectOne("board.getBusinessInfoBoardTotalContentCount");
 	}
 	
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 게시판 게시물 조회수 올리기
+	 */
 	@Override
 	public void updateHitsBusiness(int hits) {
 		template.update("board.updateHitsBusiness", hits);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getBusinessBoardDetail(String no) {
 		return template.selectOne("board.getBusinessBoardDetail", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 게시판 게시물 삭제
+	 */
 	@Override
 	public void businessDelete(String no) {
 		template.delete("board.businessDelete", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진 수정하기
+	 */
 	@Override
 	public void business_updateBoard(BoardVO vo) {
 		template.update("board.business_updateBoard", vo);
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return template.selectOne("board.business_getNameById", bvo);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 창업게시판 글 등록
+	 * ---------------------------------------
+	 * 코드 설명 : 사용자의 글 정보(작성자, 글 제목, 내용)을 등록하는 메서드입니다.
+	 * 데이터 베이스에 insert 시에 게시물 번호를 <selectKey>를 이용하여 
+	 * ServiceImpl에 있는 freeboardWrite()로 리턴해준다.
+	 * 리턴 해준 게시물 번호(시퀀스)를 이용하여 파일 업로드를 할 수 있다.
+	 */
 	@Override
 	public String businessWrite(BoardVO bvo) {
 		template.insert("board.businessWrite",bvo);
 		return bvo.getNo();
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 창업 게시판 글 등록(첨부 사진 업로드 기능)
+	 * ---------------------------------------
+	 * 코드 설명 : boardVO에 있는 첨부 사진의 이름을 해당 게시물 번호를 이용하여
+	 * 데이터 베이스에 insert 해준다. 
+	 */
 	@Override
 	public void businessWriteFileUpload(BoardVO boardVO) {
 		template.insert("board.businessWriteFileUpload", boardVO);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 게시물 상세보기 파일 경로 불러오기
+	 * -----------------------------------------------------------
+	 * 코드 설명 : 게시물 상세보기시 사진 파일 불러올 때 사진이 저장된 경로를 가져오는 메서드
+	 */
 	@Override
 	public List<FileVO> getBusinessFilePath(String no) {
 		 return template.selectList("board.getBusinessFilePath",no);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 목록 불러오기
+	 * --------------------------------------------
+	 * 코드 설명 : 게시물 상세보기 페이지에서 댓글 목록을 불러오는 메서드입니다.
+	 * 게시물 번호를 이용하여 불러옵니다
+	 */
 	@Override
 	public List<CommentVO> getbusinessCommentList(String no) {
 		return template.selectList("board.getbusinessCommentList",no);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 삭제
+	 * --------------------------------------------
+	 * 코드 설명 : 댓글을 삭제하는 메서드
+	 */
 	@Override
 	public void deletebusinessComment(CommentVO cvo) {
 		template.delete("board.deletebusinessComment", cvo);
 		
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 등록
+	 * --------------------------------------------
+	 * 코드 설명 : 댓글을 등록하는 메서드입니다
+	 */
 	@Override
 	public void writebusinessComment(CommentVO cvo) {
 		template.insert("board.writebusinessComment",cvo);
 		
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 특정 댓글 1개 불러오기
+	 * --------------------------------------------
+	 * 코드 설명 : 댓글 수정, 삭제시 특정 댓글 1개를 불러오는 메서드입니다
+	 */
 	@Override
 	public CommentVO getbusinessComment(CommentVO cvo) {
 		return template.selectOne("board.getbusinessComment",cvo);
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 수정
+	 * --------------------------------------------
+	 * 코드 설명 : 댓글을 수정하는 메서드
+	 */
 	@Override
 	public void updatebusinessComment(CommentVO cvo) {
 		template.update("board.updatebusinessComment",cvo);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진삭제
+	 * ---------------------------------------------
+	 * 사진 수정시 기존의 있던 사진을 삭제한다.
+	 */
 	@Override
 	public void businessDeleteFile(String no) {
 		template.delete("board.businessDeleteFile", no);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 사진수정
+	 */
 	@Override
 	public String businessupdateBoard(BoardVO vo) {
 		template.update("board.businessupdateBoard",vo);
 		return vo.getNo();
 	}
 
-
-//////////강정호. Q&A게시판 Service/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 게시물 총 개수 구하는 메서드
+	 * --------------------------------------------------------------
+	 * 코드 설명 : 게시판 게시물 총 개수를 구하는 메서드입니다.
+	 */
 	@Override
 	public int getQnATotalContentCount() {
 		return template.selectOne("board.getQnATotalContentCount");
 	}
 	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 질문답변 게시물 목록 보기
+	 * -------------------------------------------
+	 * 코드 설명 : 질문답변 게시물 목록과 페이지 번호를 보여주기 위한 메서드이다.
+	 * 페이징 빈 객체를 ServiceImpl에서 받아와 페이지 번호당 게시물 개수를 10개로 정하여
+	 * 목록을 보여준다.
+	 */
 	@Override
 	public List<BoardVO> getQnABoardList(PagingBean pagingBean) {
 		return template.selectList("board.getQnABoardList", pagingBean);
 	}
 	
-
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 질문답변 게시판 글 등록
+	 * ---------------------------------------
+	 * 코드 설명 : 사용자의 글 정보(작성자, 글 제목, 내용)을 등록하는 메서드입니다.
+	 * 데이터 베이스에 insert 시에 게시물 번호를 <selectKey>를 이용하여 
+	 * ServiceImpl에 있는 freeboardWrite()로 리턴해준다.
+	 * 리턴 해준 게시물 번호(시퀀스)를 이용하여 파일 업로드를 할 수 있다.
+	 */
 	@Override
 	public String qnaWrite(BoardVO bvo) {
 		template.insert("board.qnaWrite",bvo);
 		return bvo.getNo();
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.21(수정완료)
+	 * 게시판 - 질문답변 게시판 글 등록(첨부 사진 업로드 기능)
+	 * ---------------------------------------
+	 * 코드 설명 : boardVO에 있는 첨부 사진의 이름을 해당 게시물 번호를 이용하여
+	 * 데이터 베이스에 insert 해준다. 
+	 */
 	@Override
 	public void qnaWriteFileUpload(BoardVO boardVO) {
 		template.insert("board.qnaWriteFileUpload",boardVO);
 		
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 게시물 상세보기 파일 경로 불러오기
+	 * -----------------------------------------------------------
+	 * 코드 설명 : 게시물 상세보기시 사진 파일 불러올 때 사진이 저장된 경로를 가져오는 메서드
+	 */
 	@Override
 	public List<FileVO> getqnaFilePath(String no) {
 		 return template.selectList("board.getqnaFilePath",no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO qna_getNameById(BoardVO bvo) {
 		return template.selectOne("board.qna_getNameById", bvo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getqnaBoardDetail(String no) {
 		return template.selectOne("board.getqnaBoardDetail", no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 사진삭제
+	 * ---------------------------------------------
+	 * 사진 수정시 기존의 있던 사진을 삭제한다.
+	 */
 	@Override
 	public void qnaDeleteFile(String no) {
 		template.delete("board.qnaDeleteFile", no);
 	}
-
+	/**
+	 * 김호겸 작성
+	 *  2017.6.9 (수정 완료)
+	 * QnA게시판- 글 수정하기 & 사진 수정
+	 * ------------------------------------------------------
+	 * 사용자가 정의한 사진을 받아오고 수정한 글을 수정을 먼저한다.
+	 * 글을 수정하면 해당 번호를 contentNo로 받고 사용자가 보낸 사진을 for 문을 돌려
+	 * modityFile 에 저장시킨다.
+	 * modityFile 이 존재하면 리스트에 저장하고 없으면 저장하지않는다.
+	 * 그 후 리스트가 존재하면 그 기존 사진을 지우고 새로운 사진을 insert 한다.
+	  */
 	@Override
 	public String qnaupdateBoard(BoardVO vo) {
 		template.update("board.qnaupdateBoard",vo);
 		return vo.getNo();
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시판 게시물 삭제
+	 */
 	@Override
 	public void qnaDelete(String no) {
 		template.delete("board.qnaDelete", no);
 		
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시물 조회수 올리기
+	 */
 	@Override
 	public void updateHitsqna(int hits) {
 		template.update("board.updateHitsqna", hits);
 		
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 목록 불러오기
+	 * -----------------------------------------
+	 * 코드 설명 : 특정 게시물 상세보기시 댓글 목록을 불러오는 메서드입니다
+	 */
 	@Override
 	public List<CommentVO> getqnaCommentList(String no) {
 		return template.selectList("board.getqnaCommentList",no);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 등록
+	 * --------------------------------
+	 * 코드 설명 : 질문답변 게시판에 있는 게시물에 대해 댓글을 등록하는 메서드이다
+	 */
 	@Override
 	public void writeqnaComment(CommentVO cvo) {
 		template.insert("board.writeqnaComment",cvo);
 		
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 삭제
+	 * -------------------------------------
+	 * 코드 설명 : 질문 답변 게시판에 있는 게시물의 댓글을 삭제하는 메서드이다
+	 */
 	@Override
 	public void deleteqnaComment(CommentVO cvo) {
 		template.delete("board.deleteqnaComment",cvo);
 		
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 1개 불러오기
+	 * ----------------------------------
+	 * 코드 설명 : 댓글 수정, 삭제시 특정 댓글 1개만 불러오는 메서드
+	 */
 	@Override
 	public CommentVO getqnaComment(CommentVO cvo) {
 		return template.selectOne("board.getqnaComment",cvo);
 	}
-
+	
+	/**
+	 * 강정호
+	 * 2017.06.22(수정완료)
+	 * 게시판 - 댓글 수정
+	 * ---------------------------
+	 * 코드 설명 : 질문답변 게시판에서 사용자가 수정한 댓글 정보를 insert하는 메서드입니다
+	 */
 	@Override
 	public void updateqnaComment(CommentVO cvo) {
 		template.update("board.updateqnaComment",cvo);
