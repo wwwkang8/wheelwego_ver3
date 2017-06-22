@@ -29,7 +29,36 @@ import org.springframework.stereotype.Repository;
 public class MypageDAOImpl implements MypageDAO {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-	
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step1) bookingNumber로 menuId 찾기
+	*/
+	@Override
+	public List<String> findMenuIdByBookingNumber(String bookingNumber){
+		return sqlSessionTemplate.selectList("mypage.findMenuIdByBookingNumber", bookingNumber);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step2) menuId로 foodtruckNumber 찾기
+	*/
+	@Override
+	public String findFoodTruckNumberByMenuId(String menuId){
+		return sqlSessionTemplate.selectOne("mypage.findFoodTruckNumberByMenuId", menuId);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step3) foodtruckNumber로 foodtruckName 찾기
+	*/
+	@Override
+	public String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber){
+		return sqlSessionTemplate.selectOne("mypage.findFoodtruckNameByFoodTruckNumber", foodtruckNumber);
+	}
 	/** 	  
 	정현지
 	2017.06.21 (수정완료)

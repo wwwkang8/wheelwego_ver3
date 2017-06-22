@@ -27,6 +27,36 @@ public class MypageServiceImpl2 implements MypageService {
    private MypageDAO mypageDAO;
    @Resource
    private FoodTruckDAO foodtruckDAO;
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step1) bookingNumber로 menuId 찾기
+	*/
+   @Override
+	public List<String> findMenuIdByBookingNumber(String bookingNumber){
+		return mypageDAO.findMenuIdByBookingNumber(bookingNumber);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step2) menuId로 foodtruckNumber 찾기
+	*/
+  @Override
+	public String findFoodTruckNumberByMenuId(String menuId){
+		return mypageDAO.findFoodTruckNumberByMenuId(menuId);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step3) foodtruckNumber로 foodtruckName 찾기
+	*/
+	@Override
+	public String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber){
+		return mypageDAO.findFoodtruckNameByFoodTruckNumber(foodtruckNumber);
+	}
 	/**
 	 * 김래현 황윤상
 	   2017.06.21 수정완료
