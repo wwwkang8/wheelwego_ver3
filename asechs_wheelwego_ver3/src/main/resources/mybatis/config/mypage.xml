@@ -126,7 +126,8 @@ select foodtruck_name from foodtruck where foodtruck_number=#{value}
       insert into foodtruckfile values (#{no},#{filepath})
    </insert>
    <update id="updateMyfoodtruck" parameterType="truckVO">
-      update foodtruck set foodtruck_name=#{foodtruckName}, introduction=#{introduction} where foodtruck_number=#{foodtruckNumber}
+      update foodtruck set foodtruck_name=#{foodtruckName}, introduction=#{introduction} 
+      where foodtruck_number=#{foodtruckNumber}
    </update>
    <update id="updateFilePath" parameterType="fileVO">
       update foodtruckfile set foodtruck_filepath=#{filepath} where foodtruck_number=#{no}
@@ -170,8 +171,14 @@ select foodtruck_name from foodtruck where foodtruck_number=#{value}
 </delete>
 <select id="showMyReviewList" resultMap="reviewRM" parameterType="pagingBean">
 select review_no, foodtruck_number,foodtruck_name, customer_id, review_content, review_timeposted, grade from(
-select row_number() over(order by r.review_timeposted desc) as rnum,r.review_no,t.foodtruck_number,r.customer_id,r.review_content, to_char(r.review_timeposted,'YYYY.MM.DD HH24:MI:SS') as review_timeposted, r.grade, t.foodtruck_name
-from review r, foodtruck t where r.customer_id=#{searchWord}  and r.foodtruck_number=t.foodtruck_number ) where rnum between #{startRowNumber} and #{endRowNumber}
+select row_number() over(order by r.review_timeposted desc) as rnum,
+r.review_no,t.foodtruck_number,r.customer_id,r.review_content, 
+to_char(r.review_timeposted,'YYYY.MM.DD HH24:MI:SS') as review_timeposted, 
+r.grade, t.foodtruck_name
+from review r, foodtruck t 
+where r.customer_id=#{searchWord}  
+and r.foodtruck_number=t.foodtruck_number )
+ where rnum between #{startRowNumber} and #{endRowNumber}
 </select>
 <update id="updateMyReview" parameterType="reviewVO"> 
    update review set review_content=#{reviewContent}, grade=#{grade} where review_no=#{reviewNo}

@@ -69,7 +69,7 @@ public class FoodTruckController {
 		return modelAndView;
 	}
 	/**
-	 * 황윤상 GPS 기반 푸드트럭수동검색
+	 * 황윤상 GPS 기반 푸드트럭검색
 	 * @param name
 	 * @return
 	 */
@@ -84,8 +84,6 @@ public class FoodTruckController {
 		gpsInfo.setLongitude(Double.parseDouble(longitude));
 		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");
-		//ListVO listVO1 = foodTruckService.getFoodTruckListByGPS(pageNo, gpsInfo);
-		//System.out.println(listVO1);
 		ListVO listVO =foodTruckService.filtering(option,null, pageNo,gpsInfo);
 		HttpSession session=request.getSession(false);
 		String id=null;
