@@ -15,6 +15,7 @@
 		document.getElementById('longitude').value= longitude;
 				
 		var gpsForm = document.getElementById("gpsForm"); 
+		alert(latitude + " " + longitude);
 		gpsForm.submit();	
 	};
 	function error() {

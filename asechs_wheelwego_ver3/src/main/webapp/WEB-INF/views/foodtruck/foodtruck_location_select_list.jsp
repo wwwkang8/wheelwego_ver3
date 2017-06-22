@@ -46,7 +46,9 @@ select .selected {
 <script type="text/javascript">
 
 function foodtruckDetail(){
-	var address=$(this).parent().find(".address").text();		
+	var address=$(this).parent().find(".address").text();
+	var foodtruckNo=$(this).parent().find(":input[name=foodtruckNo]").val();
+	document.getElementById('address').value = address;
 	document.getElementById('address').value = address;
 	var listForm = document.getElementById("listForm"); 
     listForm.submit();		   
