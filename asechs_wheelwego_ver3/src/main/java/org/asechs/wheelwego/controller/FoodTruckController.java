@@ -270,5 +270,4 @@ public class FoodTruckController {
 			String bookingNumber=foodTruckService.getPreviousBookingNumberByCustomerId(id);
 			return bookingNumber;
 		}
-		
 }
