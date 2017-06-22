@@ -342,11 +342,31 @@ public class MypageServiceImpl2 implements MypageService {
 	      else
 	         mypageDAO.stayFoodtruck(gpsInfo);
 	}
-	@Override
-	public ListVO getWishList(String pageNo, String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 단골트럭
+	 * ---------------
+	 * 자신이 등록한 단골트럭 리스트를 가져오는 메서드
+	 * 
+	 */
+	 @Override
+	   public ListVO getWishList(String pageNo, String id) {
+	      int totalCount=mypageDAO.getWishListTotalContentCount(id);
+	   
+	      PagingBean pagingBean=null;
+	      
+	      if(pageNo==null)
+	         pagingBean=new PagingBean(totalCount);
+	      else
+	         pagingBean=new PagingBean(totalCount,Integer.parseInt(pageNo));      
+	      
+	      pagingBean.setContentNumberPerPage(6);
+	      pagingBean.setCustomerId(id);
+	      
+	      System.out.println( "service : "+new ListVO(pagingBean, mypageDAO.getWishList(pagingBean)));
+	      return new ListVO(pagingBean, mypageDAO.getWishList(pagingBean));
+	   }
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정완료
