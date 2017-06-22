@@ -147,7 +147,6 @@ public class FoodTruckDAOImpl implements FoodTruckDAO {
 	 */
 	@Override
 	public List<TruckVO> filteringByDate(PagingBean pagingbean) {
-		System.out.println(sqlSessionTemplate.selectList("foodtruck.filteringByDate", pagingbean));
 		return sqlSessionTemplate.selectList("foodtruck.filteringByDate", pagingbean);
 	}
 	/**
