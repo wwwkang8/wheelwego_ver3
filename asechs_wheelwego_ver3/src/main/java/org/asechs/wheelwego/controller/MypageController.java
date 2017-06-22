@@ -229,7 +229,8 @@ public class MypageController {
    @RequestMapping("afterLogin_mypage/updateMyReview.do")
    public String updateMyReview(ReviewVO reviewVO) {
       mypageService.updateMyReview(reviewVO);
-      return "redirect:/afterLogin_mypage/showMyReviewList.do?customerId=" + reviewVO.getCustomerId();
+      return "redirect:/afterLogin_mypage/showMyReviewList.do?customerId=" 
+    		  + reviewVO.getCustomerId();
    }
    /**
     * 황윤상
