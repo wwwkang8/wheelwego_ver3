@@ -265,8 +265,6 @@ public class BoardDAOImpl implements BoardDAO {
 		
 	}
 
-
-
 	@Override
 	public void businessDeleteFile(String no) {
 		template.delete("board.businessDeleteFile", no);
@@ -343,13 +341,10 @@ public class BoardDAOImpl implements BoardDAO {
 		
 	}
 
-
 	@Override
 	public List<CommentVO> getqnaCommentList(String no) {
 		return template.selectList("board.getqnaCommentList",no);
 	}
-
-
 
 	@Override
 	public void writeqnaComment(CommentVO cvo) {
@@ -357,28 +352,21 @@ public class BoardDAOImpl implements BoardDAO {
 		
 	}
 
-
-
 	@Override
 	public void deleteqnaComment(CommentVO cvo) {
 		template.delete("board.deleteqnaComment",cvo);
 		
 	}
 
-
-
 	@Override
 	public CommentVO getqnaComment(CommentVO cvo) {
 		return template.selectOne("board.getqnaComment",cvo);
 	}
-
-
 
 	@Override
 	public void updateqnaComment(CommentVO cvo) {
 		template.update("board.updateqnaComment",cvo);
 		
 	}
-
 
 }
