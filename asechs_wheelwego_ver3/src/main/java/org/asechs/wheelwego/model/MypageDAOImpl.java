@@ -108,6 +108,12 @@ public class MypageDAOImpl implements MypageDAO {
 	public void addPoint(HashMap<String, Object> pointInfo) {
 		sqlSessionTemplate.insert("mypage.addPoint", pointInfo);
 	}
+	/** 	  
+	정현지
+	2017.06.21 (수정완료)
+	마이페이지 - 나의 위시리스트 목록
+	기능설명 : 사용자의 아이디로 위시리스트 목록을 가져온다
+	*/
 	@Override
 	public List<WishlistVO> heartWishList(String id) {
 		return sqlSessionTemplate.selectList("mypage.heartWishList", id);
@@ -283,27 +289,50 @@ public class MypageDAOImpl implements MypageDAO {
 	public ReviewVO findReviewInfoByReviewNo(String reviewNo) {
 		return sqlSessionTemplate.selectOne("mypage.findReviewInfoByReviewNo", reviewNo);
 	}
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 마이페이지- 사업자 아이디에 해당하는 GPS정보 조회
+	 */
 	@Override
 	public TruckVO getGPSInfo(String sellerId) {
 		return sqlSessionTemplate.selectOne("mypage.getGPSInfo", sellerId);
 	}
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 마이페이지- 사용자의 위치정보를 업데이트 (설정)
+	 * ----------------------------------------------
+	 * 사용자가 위치를 설정했을 경우 사용자의 latitude와 longitude를 설정해준다.
+	 */
 	@Override
 	public void stayFoodtruck(TruckVO gpsInfo) {
 		sqlSessionTemplate.update("mypage.stayFoodtruck", gpsInfo);
 	}
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정완료
+	 * 마이페이지- 사용자의 위치정보를 업데이트 (null설정)
+	 * ------------------------------------------------
+	 * 사용자가 위치를 해제했을 경우 
+	 * 사용자의 latitude와 longitude에 null을 설정해준다.
+	 */
 	@Override
 	public void leaveFoodtruck(TruckVO gpsInfo) {
 		sqlSessionTemplate.update("mypage.leaveFoodtruck", gpsInfo);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22
+	 * 마이페이지 - 사용자의 총 단골트럭 수를 반환
+	 */
 	@Override
 	public int getWishListTotalContentCount(String id) {
 		return sqlSessionTemplate.selectOne("mypage.getWishListTotalContentCount", id);
 	}
-
+	/**
+	 * 김래현
+	 */
 	@Override
 	public List<TruckVO> getWishList(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getWishList", pagingBean);
@@ -317,7 +346,14 @@ public class MypageDAOImpl implements MypageDAO {
 	public int getTotalReviewCount(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.getTotalReviewCount", customerId);
 	}
-
+	/**
+	 * 박다혜
+	 * 2017.06.22 수정완료
+	 * 마이페이지 - 해당 푸드트럭이 사용자의 위시리스트 사항인지 검사한다.
+	 * ---------------------------------------------------------------------------
+	 * WISHLIST 테이블에 사용자의 아이디와 푸드트럭번호에 해당하는 
+	 * 데이터가 존재한다면 1을, 존재하지 않는다면 0을 반환한다.
+	 */
 	@Override
 	public int getWishListFlag(WishlistVO wishlistVO) {
 		return sqlSessionTemplate.selectOne("mypage.getWishListFlag", wishlistVO);
@@ -477,7 +513,13 @@ public class MypageDAOImpl implements MypageDAO {
 		return sqlSessionTemplate.selectOne("mypage.getBookingNumberListByCustomerId", id);
 
 	}
-
+	/**
+	 * 황윤상 
+	 * 2017.06.22 수정완료
+	 * 예약 - 사용자 아이디에 해당하는 선행주문이 있는지 체크
+	 * ------------------------------------------------------------
+	 * 결제 완료 상태인 선행주문이 있는지 체크하여 있다면1을 없다면 0을 반환한다.
+	 */
 	@Override
 	public int checkBookingState(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.checkBookingState", customerId);
@@ -510,7 +552,11 @@ public class MypageDAOImpl implements MypageDAO {
 	public List<PointVO> getPointListById(PagingBean pagingBean) {
 		return sqlSessionTemplate.selectList("mypage.getPointListById", pagingBean);
 	}
-
+	/**
+	 * 정현지
+	 * 2017.06.21 수정완료
+	 * 예약 - 사용자아이디에 해당하는 총 예약 내역의 수 반환
+	 */
 	@Override
 	public int getCustomerBookingListCount(String customerId) {
 		return sqlSessionTemplate.selectOne("mypage.getCustomerBookingListCount", customerId);

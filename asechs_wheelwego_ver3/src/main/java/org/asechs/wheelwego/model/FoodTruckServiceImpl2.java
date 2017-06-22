@@ -53,17 +53,27 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 		tvo.setFoodList(fvo);
 		return tvo;
 	}
-
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 단골트럭 등록하기
+	 */
 	@Override
 	public void registerBookMark(WishlistVO wishlistVO) {
-		// TODO Auto-generated method stub
-		
+		foodTruckDAO.registerBookMark(wishlistVO);		
 	}
-
+	/**
+	 * 김래현
+	 * 2017.06.22 수정완료
+	 * 푸드트럭 - 단골트럭 등록여부
+	 * -----------------------
+	 * 단골트럭 등록이되어있으면 1을반환
+	 * else 0을반환하여
+	 * select 할때 1인것만 리스트에 나오게 출력
+	 */
 	@Override
 	public int getBookMarkCount(WishlistVO wishlistVO) {
-		// TODO Auto-generated method stub
-		return 0;
+		return foodTruckDAO.getBookMarkCount(wishlistVO);
 	}
 	/**
 	 * 박다혜
@@ -148,7 +158,11 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 	      pagingList.setPagingBean(pagingbean);
 	      return pagingList;
 	}
-
+	/**
+	 * 정현지
+	 * 2017.06.22 수정중
+	 * 예약 - 메뉴 예약하기
+	 */
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {
 		foodTruckDAO.bookingMenu(bookingVO);		
@@ -185,12 +199,16 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 	public String getBookingStateBybookingNumber(String bookingNumber) {
 		return foodTruckDAO.getBookingStateBybookingNumber(Integer.parseInt(bookingNumber));
 	}
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 푸드트럭 - gps정보의 반경 1km 내 해당하는 푸드트럭 번호 리스트를 가져온다.
+	 */
 	@Override
-	public List<String> getFoodtruckNumberList(TruckVO truckVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getFoodtruckNumberList(TruckVO gpsInfo) {
+		return foodTruckDAO.getFoodtruckNumberList(gpsInfo);
 	}
+	
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중

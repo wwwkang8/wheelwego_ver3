@@ -100,33 +100,56 @@ public class BoardServiceImpl2 implements BoardService {
 	
 		return new ListVO((List<BoardVO>) boardDAO.getQnABoardList(pagingBean), pagingBean);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getFreeBoardDetail(String no) {
 		return boardDAO.getFreeBoardDetail(no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 자유게시판 게시물 삭제
+	 */
 	@Override
 	public void freeboardDelete(String no) {
 		boardDAO.freeboardDelete(no);
 	}
-
-	// 자유게시판 조회수 업데이트
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판-게시글 볼때 조회수 올리기
+	 */
 		@Override
 		public void updateHits(int hits) {
 			boardDAO.updateHits(hits);
 		}
-
+		/**
+		 * 김호겸
+		 * 2017.06.21(수정완료)
+		 * 창업게시판 - 게시판 게시물 조회수 올리기
+		 */
 		@Override
 		public void updateHitsBusiness(int hits) {
 			boardDAO.updateHitsBusiness(hits);
 		}
-
+		/**
+		 * 김호겸
+		 * 2017.06.21(수정완료)
+		 * 창업게시판 - 상세보기
+		 */
 		@Override
 		public BoardVO getBusinessBoardDetail(String no) {
 			return boardDAO.getBusinessBoardDetail(no);
 		}
-
+		/**
+		 * 김호겸
+		 * 2017.06.21(수정완료)
+		 * 창업게시판 - 게시판 게시물 삭제
+		 */
 		@Override
 		public void businessDelete(String no) {
 			boardDAO.businessDelete(no);
@@ -149,10 +172,7 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session = request.getSession(false);
 		MemberVO mvo = (MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo = boardDAO.freeboardWrite(bvo);
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
@@ -191,17 +211,15 @@ public class BoardServiceImpl2 implements BoardService {
 	@Override
 	public void updateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
-		// 사진을 받아오고
 		List<MultipartFile> fileList = vo.getFile();
-		// 글 수정을 먼저 한다
 		String contentNo = boardDAO.updateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
-			if (!modityFile.equals(""))
+			if (!modityFile.equals("")){
 				list.add(modityFile.trim());
-			else
-			System.out.println("list isEmpty");
+			}else{
+			}
 		}
 		if(list.isEmpty()){
 			boardDAO.updateBoard(vo);
@@ -216,13 +234,9 @@ public class BoardServiceImpl2 implements BoardService {
 					if (fileName.equals("") == false) {
 						try {
 							fileList.get(i).transferTo(new File(uploadPath + fileName));
-							// 파일 넘버 지정
 							fileVO.setNo(contentNo);
-							// 파일 경로 지정
 							fileVO.setFilepath(fileName);
-							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							// 새로운 사진 서버에 업데이트
 							boardDAO.freeboardWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
 							e.printStackTrace();
@@ -232,12 +246,20 @@ public class BoardServiceImpl2 implements BoardService {
 			}
 		}
 	}
-	
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 자유게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO getNameById(BoardVO bvo) {
 		return boardDAO.getNameById(bvo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * 창업게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO business_getNameById(BoardVO bvo) {
 		return boardDAO.business_getNameById(bvo);
@@ -272,11 +294,8 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session = request.getSession(false);
 		MemberVO mvo = (MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo = boardDAO.businessWrite(bvo);
 
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
@@ -299,8 +318,7 @@ public class BoardServiceImpl2 implements BoardService {
 					}
 				}
 			}
-		}
-		
+		}	
 	}
 	
 	/**
@@ -332,15 +350,11 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session=request.getSession(false);
 		MemberVO mvo=(MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo=boardDAO.qnaWrite(bvo);
 		
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
-		//ArrayList<String> filePath=new ArrayList<String>();
 		ArrayList<String> nameList=new ArrayList<String>();
 		for(int i=0; i<fileList.size(); i++){
 			if(fileList.isEmpty()==false){
@@ -354,12 +368,11 @@ public class BoardServiceImpl2 implements BoardService {
 						fileVO.setFilepath(fileName);
 						boardVO.setFileVO(fileVO);
 						nameList.add(fileName);
-						//filePath.add(uploadPath+fileName);
 						boardDAO.qnaWriteFileUpload(boardVO);
 					}catch(IllegalStateException | IOException e){
 						e.printStackTrace();
-						}
 					}
+				}
 			}
 		}
 	}
@@ -375,12 +388,20 @@ public class BoardServiceImpl2 implements BoardService {
 	public List<FileVO> getqnaFilePath(String no) {
 		return boardDAO.getqnaFilePath(no);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 아이디에 해당하는 이름 갖고오기
+	 */
 	@Override
 	public MemberVO qna_getNameById(BoardVO bvo) {
 		return boardDAO.qna_getNameById(bvo);
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 상세보기
+	 */
 	@Override
 	public BoardVO getqnaBoardDetail(String no) {
 		return boardDAO.getqnaBoardDetail(no);
@@ -438,16 +459,15 @@ public class BoardServiceImpl2 implements BoardService {
 	@Override
 	public void businessupdateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
-		List<MultipartFile> fileList = vo.getFile();// 사진을 받아오고
-		// 글 수정을 먼저 한다
+		List<MultipartFile> fileList = vo.getFile();
 		String contentNo = boardDAO.businessupdateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
-			if (!modityFile.equals(""))
+			if (!modityFile.equals("")){
 				list.add(modityFile.trim());
-			else
-			System.out.println("list isEmpty");
+			}else{
+			}
 		}
 		if(list.isEmpty()){
 			boardDAO.businessupdateBoard(vo);
@@ -462,13 +482,9 @@ public class BoardServiceImpl2 implements BoardService {
 					if (fileName.equals("") == false) {
 						try {
 							fileList.get(i).transferTo(new File(uploadPath + fileName));
-							// 파일 넘버 지정
 							fileVO.setNo(contentNo);
-							// 파일 경로 지정
 							fileVO.setFilepath(fileName);
-							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							// 새로운 사진 서버에 업데이트
 							boardDAO.businessWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
 							e.printStackTrace();
@@ -478,7 +494,11 @@ public class BoardServiceImpl2 implements BoardService {
 			}
 		}
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시판 게시물 삭제
+	 */
 	@Override
 	public void qnaDelete(String no) {
 		boardDAO.qnaDelete(no);
@@ -498,26 +518,20 @@ public class BoardServiceImpl2 implements BoardService {
 	@Override
 	public void qnaupdateBoard(BoardVO vo) {
 		String uploadPath = "C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
-		List<MultipartFile> fileList = vo.getFile();// 사진을 받아오고
-		// 글 수정을 먼저 한다
+		List<MultipartFile> fileList = vo.getFile();
 		String contentNo = boardDAO.qnaupdateBoard(vo);
 		ArrayList<String> list=new ArrayList<String>();
 		for(int i=0;i<vo.getFile().size();i++){
 			String modityFile=vo.getFile().get(i).getOriginalFilename();
-			// 사용자가 사진을 하나 이상 수정한다고 하면 
-			// 리스트에 사용자가 보낸파일 명을 저장시킨다
-			// 아무것도 수정하지 않으면 리스트에 아무것도 없게된다
-			if (!modityFile.equals(""))
+			if (!modityFile.equals("")){
 				list.add(modityFile.trim());
-			else
-			System.out.println("list isEmpty");
+			}else{
+			}
 		}
-		// 리스트가 비워져 있음 글을 업데이트하고 리턴으로 나간다
 		if(list.isEmpty()){
 			boardDAO.qnaupdateBoard(vo);
 			return;
 		}else{
-			// 리스트 존재시 기존 파일을 삭제하고 수정하고자 하는 파일을 재등록한다.
 			boardDAO.qnaDeleteFile(contentNo);
 			for (int i = 0; i < fileList.size(); i++) {
 				if (fileList.isEmpty() == false) {
@@ -527,13 +541,9 @@ public class BoardServiceImpl2 implements BoardService {
 					if (fileName.equals("") == false) {
 						try {
 							fileList.get(i).transferTo(new File(uploadPath + fileName));
-							// 파일 넘버 지정
 							fileVO.setNo(contentNo);
-							// 파일 경로 지정
 							fileVO.setFilepath(fileName);
-							// 보드VO 에 파일VO 저장
 							boardVO.setFileVO(fileVO);
-							// 새로운 사진 서버에 업데이트
 							boardDAO.qnaWriteFileUpload(boardVO);
 						} catch (IllegalStateException | IOException e) {
 							e.printStackTrace();
@@ -543,7 +553,11 @@ public class BoardServiceImpl2 implements BoardService {
 			}
 		}
 	}
-
+	/**
+	 * 김호겸
+	 * 2017.06.21(수정완료)
+	 * QnA게시판 - 게시물 조회수 올리기
+	 */
 	@Override
 	public void updateHitsqna(int hits) {
 		boardDAO.updateHitsqna(hits);
@@ -696,6 +710,5 @@ public class BoardServiceImpl2 implements BoardService {
 	@Override
 	public void updateqnaComment(CommentVO cvo) {
 		boardDAO.updateqnaComment(cvo);
-		
 	}
 }

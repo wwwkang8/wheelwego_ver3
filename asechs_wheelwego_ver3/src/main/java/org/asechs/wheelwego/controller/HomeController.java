@@ -59,14 +59,12 @@ public class HomeController {
 	@RequestMapping("{dirName}/{viewName}.do")
 	public String showView(@PathVariable String dirName,
 			@PathVariable String viewName){
-		System.out.println("no check session");
 		return dirName+"/"+viewName+".tiles";
 	}
 	/*로그인 인증 서비스가 필요한 요청*/
 	@RequestMapping("afterLogin_{dirName}/{viewName}.do")
 	public String showViewAfterLogin(@PathVariable String dirName,
 			@PathVariable String viewName){
-		System.out.println("AfterLogin");
 		return dirName+"/"+viewName+".tiles";
 	}
 }
