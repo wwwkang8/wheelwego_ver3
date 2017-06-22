@@ -18,6 +18,12 @@ import org.asechs.wheelwego.model.vo.TruckVO;
 import org.asechs.wheelwego.model.vo.WishlistVO;
 
 public interface MypageDAO {
+	List<String> findMenuIdByBookingNumber(String bookingNumber);
+	
+	String findFoodTruckNumberByMenuId(String menuId);
+	
+	String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber);
+	
 	List<BookingVO> customerBookingList(PagingBean pagingBean);
 	
 	public List<BookingVO> getBookingList(int bookingNumber);

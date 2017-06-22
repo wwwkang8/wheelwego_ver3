@@ -28,7 +28,6 @@ public interface FoodTruckDAO {
 	double findAvgGradeByTruckNumber(String truckNumber);
 	int findWishlistCountByTruckNumber(String foodtruckNumber);
 	void bookingMenu(BookingVO bookingVO);
-	List<BookingVO> getBookingListBySellerId(String id);
 	int getRecentlyBookingNumberBySellerId(String id);
 	int getPreviousBookingNumberBySellerId(String id);
 	String getBookingStateBybookingNumber(int bookingNumber);

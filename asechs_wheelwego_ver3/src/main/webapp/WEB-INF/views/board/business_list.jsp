@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!-- 강정호 창업게시판 리스트 수정완료 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -33,7 +34,8 @@ $(document).ready(function(){
 			<c:forEach items="${requestScope.businessInfoBoardList.boardList }" var="businessInfoBoardList">
 				<tr>
 					<td>${businessInfoBoardList.no }</td>
-					<td><a href="${pageContext.request.contextPath}/board/business_detail_content.do?no=${businessInfoBoardList.no}">${businessInfoBoardList.title }</a></td>
+					<td><a href="${pageContext.request.contextPath}/board/business_detail_content.do?no=${businessInfoBoardList.no}">
+					${businessInfoBoardList.title }</a></td>
 					<td>${businessInfoBoardList.id }</td>
 					<td>${businessInfoBoardList.timePosted }</td>
 					<td>${businessInfoBoardList.hits }</td>

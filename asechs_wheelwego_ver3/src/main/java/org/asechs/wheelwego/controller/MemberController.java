@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 
 public class MemberController {
-	@Resource(name="memberServiceImpl")
+	@Resource(name="memberServiceImpl2")
 
 	private MemberService memberService;
 
@@ -50,7 +50,8 @@ public class MemberController {
 		else{
 			session.setAttribute("memberVO",memberVO);
 			if(memberVO.getMemberType().equals("seller")){
-				session.setAttribute("foodtruckNumber", memberService.findFoodTruckNumberById(memberVO.getId()));
+				session.setAttribute("foodtruckNumber",
+						memberService.findFoodTruckNumberById(memberVO.getId()));
 			}
 			return "redirect:home.do";
 		}

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BoardController {
 
-	@Resource(name="boardServiceImpl")
+	@Resource(name="boardServiceImpl2")
 	private BoardService boardService;
  
 	/**
@@ -374,7 +374,8 @@ public class BoardController {
 		 * 2017.06.21(수정완료)
 		 * 게시판 - 댓글 수정
 		 * ----------------------------------
-		 * 코드 설명 : 댓글 수정창에서 수정 버튼 클릭시 수정된 댓글 정보를 데이터 베이스에 업데이트 하는 메서드입니다.
+		 * 코드 설명 : 댓글 수정창에서 수정 버튼 클릭시 수정된 댓글 정보를 
+		 * 데이터 베이스에 업데이트 하는 메서드입니다.
 		 * 댓글 수정은 ajax 통신으로 업데이트 됩니다.
 		 * @param cvo
 		 * @return

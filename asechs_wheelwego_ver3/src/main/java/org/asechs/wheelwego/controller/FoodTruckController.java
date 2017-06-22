@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FoodTruckController {
-	@Resource(name="foodTruckServiceImpl")
+	@Resource(name="foodTruckServiceImpl2")
 	private FoodTruckService foodTruckService;
 	@Resource(name="mypageServiceImpl2")
 	private MypageService mypageService; 
@@ -47,10 +47,10 @@ public class FoodTruckController {
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByName.do")
-	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String option) {
+	public ModelAndView searchFoodTruckByName(String name, String pageNo, String latitude, String longitude,HttpServletRequest request,String _option) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
-		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");		
 		ListVO listVO =foodTruckService.filtering(option, name, pageNo,null);
 		modelAndView.addObject("pagingList", listVO);
@@ -62,18 +62,20 @@ public class FoodTruckController {
 		if(session != null){
 			MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 			if(memberVO != null){
-				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); //사용자 id의 단골트럭 목록을 보낸다.
+				modelAndView.addObject("heartWishlist",mypageService.heartWishList( memberVO.getId())); 
+				//사용자 id의 단골트럭 목록을 보낸다.
 			}
 		}
 		return modelAndView;
 	}
 	/**
-	 * 황윤상 GPS 기반 푸드트럭수동검색
+	 * 황윤상 GPS 기반 푸드트럭검색
 	 * @param name
 	 * @return
 	 */
 	@RequestMapping("searchFoodTruckByGPS.do")
-	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String option,HttpServletRequest request) {
+	public ModelAndView searchFoodTruckByGPS(String latitude, String longitude, String pageNo,String _option,HttpServletRequest request) {
+		String option = _option;
 		if(option==null)
 			option="ByDate";
 		TruckVO gpsInfo = new TruckVO();
@@ -82,8 +84,6 @@ public class FoodTruckController {
 		gpsInfo.setLongitude(Double.parseDouble(longitude));
 		
 		ModelAndView modelAndView = new ModelAndView("foodtruck/foodtruck_location_select_list.tiles");
-		//ListVO listVO1 = foodTruckService.getFoodTruckListByGPS(pageNo, gpsInfo);
-		//System.out.println(listVO1);
 		ListVO listVO =foodTruckService.filtering(option,null, pageNo,gpsInfo);
 		HttpSession session=request.getSession(false);
 		String id=null;
@@ -103,16 +103,27 @@ public class FoodTruckController {
 		return modelAndView;
 	}
 	/** 	  
-	정현지
+	정현지 & 박다혜 & 황윤상
 	2017.06.21 (수정완료)
  	푸드트럭 - 푸드트럭 상세보기 
- 	기능설명 : 1. 푸드트럭 번호(foodtruckNo)로 푸드트럭 상세정보를 TruckVO 객체로 받아온다
- 			2. 푸드트럭 번호로 작성된 리뷰 리스트를 받아온다(리뷰 리스트 pagingBean 적용)
- 			-> return 값은 푸드트럭 detail 페이지로 보낸다
+ 	--------------------------------------
+ 	1. 푸드트럭 번호에 해당하는 푸드트럭 정보를 받아와서 modelAndView 객체에 정보를 실어 보낸다.
+ 	2. 사용자가 해당 푸드트럭의 1km이내에 존재한다면 
+ 	   예약이 가능하므로 이를 판별하기 위해 bookingPossible변수를 이용한다.
+ 	   사용자가 1km이내에 있다면 bookingPossible은 ok, 1m이내에 없다면 no를 보내게 된다. 
+    3. 해당 푸드트럭이 사용자의 단골 트럭인지 함께 나타내기 위해 flag를 이용한다.
+       만약 사용자가 로그인 상태라면 단골트럭인지 검사하여 wishlistFlag값을 modelAndView 객체에 정보를 실어 보낸다.
+    4. 푸드트럭 번호에 해당하는 리뷰리스트를 불러와 modelAndView 객체에 정보를 실어 보낸다.
   */
 	   @RequestMapping("foodtruck/foodTruckAndMenuDetail.do")
 	   public ModelAndView foodTruckAndMenuDetail(String foodtruckNo,String reviewPageNo, String latitude, String longitude, HttpServletRequest request){
-	      TruckVO truckDetail = foodTruckService.foodTruckAndMenuDetail(foodtruckNo);
+	     //푸드트럭의 상세정보
+		   TruckVO truckDetail = foodTruckService.foodTruckAndMenuDetail(foodtruckNo); //푸드트럭에 해당하는 푸드트럭 정보를 받아온다.
+	      ModelAndView mv= new ModelAndView();
+	      mv.setViewName("foodtruck/foodtruck_detail.tiles");
+	      mv.addObject("truckDetailInfo", truckDetail);
+	      
+	      //1km이내에 사용자가 존재하는지 판별
 	      String bookingPossible = "no";
 	      List<String> foodtruckNumberList = foodTruckService.getFoodtruckNumberList(new TruckVO(Double.parseDouble(latitude), Double.parseDouble(longitude)));
 	      for (int i = 0; i < foodtruckNumberList.size(); i++)
@@ -123,22 +134,22 @@ public class FoodTruckController {
 	            break;
 	         }            
 	      }
-	      ModelAndView mv= new ModelAndView();
-	      mv.setViewName("foodtruck/foodtruck_detail.tiles");
+	      mv.addObject("bookingPossible", bookingPossible);
+	      
+	      //단골트럭인지 판별하기 위한 flag
 	      HttpSession session=request.getSession(false);
-	      String id=null;
 	      if(session != null){
 	         MemberVO memberVO=(MemberVO)session.getAttribute("memberVO");
 	         if(memberVO != null){
-	            id = memberVO.getId();
-	            int wishlistFlag=mypageService.getWishListFlag(id, foodtruckNo);
+	            int wishlistFlag=mypageService.getWishListFlag(memberVO.getId(), foodtruckNo);
 	            mv.addObject("wishlistFlag",wishlistFlag);
 	         }
 	      }
-	      mv.addObject("truckDetailInfo", truckDetail);
+	      
+	      //리뷰 리스트
 	      ListVO reviewList = foodTruckService.getReviewListByTruckNumber(reviewPageNo, foodtruckNo);
 	      mv.addObject("reviewlist", reviewList);
-	      mv.addObject("bookingPossible", bookingPossible);
+	      
 	      return mv;
 	   }
 	   /** 	  
@@ -212,13 +223,24 @@ public class FoodTruckController {
 		mv.addObject("bvo",bvo);
 		return mv;
 	}
-
+	/**
+	 * 정현지
+	 * 2017.06.22 수정중
+	 * 예약 - 메뉴 예약하기
+	 * ---------------------------------
+	 * 예약정보를 db에 insert 한 뒤 
+	 * 사용된 포인트와 총 결제금액을 이용하여 포인트를 차감/적립시킨다.
+	 * @param bookingVO
+	 * @param request
+	 * @param resultPoint
+	 * @param resultTotalAmount
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
 	public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
 		foodTruckService.bookingMenu(bookingVO);
 		String bookingNumber=bookingVO.getBookingNumber();
 		mypageService.calPoint(resultPoint, resultTotalAmount, Integer.parseInt(bookingNumber));
-		request.getSession(false).setAttribute("bookingNumber", bookingNumber);
 		return "redirect:../foodtruck/foodtruck_booking_confirm_result.do";
 	}
 	/**

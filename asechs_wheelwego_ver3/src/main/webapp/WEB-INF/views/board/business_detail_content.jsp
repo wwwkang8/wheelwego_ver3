@@ -49,7 +49,8 @@
 				url:"${pageContext.request.contextPath}/afterLogin_board/deletebusinessComment.do",
 				data:"commentNo="+commentNo+"&contentNo=${requestScope.detail_business.no}",
 				success:function(data){
-					location.href="${pageContext.request.contextPath}/board/business_detail_content.do?no=${requestScope.detail_business.no}";
+					location.href="${pageContext.request.contextPath}/board/business_detail_content.do?
+							no=${requestScope.detail_business.no}";
 				}
 			});//ajax
 		});
@@ -126,7 +127,8 @@
     <div class="col-md-12">
     						<div class="widget-area no-padding blank">
 								<div class="status-upload">
-									<form method="post" action="${pageContext.request.contextPath }/afterLogin_board/writebusinessComment.do" id="businessCommentForm">
+									<form method="post" action="${pageContext.request.contextPath }/afterLogin_board/writebusinessComment.do" 
+									id="businessCommentForm">
 										<textarea placeholder="댓글을 입력해주세요" name="comment" required="required"></textarea>
 										<input type="hidden" name="id" value="${sessionScope.memberVO.id }">
 										<input type="hidden" name="contentNo" value="${requestScope.detail_business.no }">

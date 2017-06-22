@@ -162,8 +162,10 @@ public class BoardServiceImpl2 implements BoardService {
 	 * ---------------------------------------
 	 * 코드 설명 : 자유게시판에 글 등록과 파일업로드를 하기 위한 메서드이다.
 	 * 글 등록 기능은 3가지의 메서드로 이루어집니다.
-	 * freeboardWrite() : 글 정보를 등록하는 메서드입니다.  글번호, 글제목, 내용, 작성자 등의 정보를 데이터베이스에 등록합니다.
-	 *  transferTo() : uploadPath(파일을 업로드할 경로), fileName을 이용하여 서버상에 MultipartFile 형식의 첨부 사진을 올려줍니다.
+	 * freeboardWrite() : 글 정보를 등록하는 메서드입니다. 
+	 * 글번호, 글제목, 내용, 작성자 등의 정보를 데이터베이스에 등록합니다.
+	 *  transferTo() : uploadPath(파일을 업로드할 경로), fileName을 이용하여 
+	 * 서버상에 MultipartFile 형식의 첨부 사진을 올려줍니다.
 	 *  freeboardWriteFileUpload() : 첨부 사진 이름을 데이터 베이스에 저장하는 메서드입니다.
 	 *  나중에 첨부 사진 이름과 경로를 이용하여 글 상세보기에서 사진을 불러올 수 있습니다.
 	 */
@@ -172,10 +174,7 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session = request.getSession(false);
 		MemberVO mvo = (MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo = boardDAO.freeboardWrite(bvo);
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
@@ -297,11 +296,8 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session = request.getSession(false);
 		MemberVO mvo = (MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo = boardDAO.businessWrite(bvo);
 
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
@@ -356,15 +352,11 @@ public class BoardServiceImpl2 implements BoardService {
 		HttpSession session=request.getSession(false);
 		MemberVO mvo=(MemberVO) session.getAttribute("memberVO");
 		bvo.setId(mvo.getId());
-		// 글 정보먼저 insert한다.
 		String contentNo=boardDAO.qnaWrite(bvo);
 		
-		// 강정호. 파일 업로드. 컨트롤러에 넣기에는 너무 길어서 서비스에 넣었습니다.
-		// 그 다음 파일 이름을 insert한다
 		//String uploadPath="C:\\Users\\KOSTA\\git\\wheelwego\\asechs_wheelwego\\src\\main\\webapp\\resources\\img\\";
 		String uploadPath=request.getSession().getServletContext().getRealPath("/resources/img/");
 		List<MultipartFile> fileList=bvo.getFile();
-		//ArrayList<String> filePath=new ArrayList<String>();
 		ArrayList<String> nameList=new ArrayList<String>();
 		for(int i=0; i<fileList.size(); i++){
 			if(fileList.isEmpty()==false){
@@ -378,7 +370,6 @@ public class BoardServiceImpl2 implements BoardService {
 						fileVO.setFilepath(fileName);
 						boardVO.setFileVO(fileVO);
 						nameList.add(fileName);
-						//filePath.add(uploadPath+fileName);
 						boardDAO.qnaWriteFileUpload(boardVO);
 					}catch(IllegalStateException | IOException e){
 						e.printStackTrace();

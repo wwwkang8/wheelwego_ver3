@@ -44,38 +44,39 @@ input[name="grade"]:checked + .star_point~label{
 </style>
 <script>
 $(document).ready(function(){
-   $("input#insertBtn2").click(function(){
-     var foodtruckNumber = $(this).attr('name');
-     var id = "${sessionScope.memberVO.id}";
-     var src = ($(this).attr('src')) ==='hearton.png'
-     
-    if(id==""){
-       alert("로그인이 필요합니다.");
-    }
-    else if(${sessionScope.memberVO.memberType=='seller'}){
-    	alert("일반회원 전용 서비스입니다.");
-    }
-    else{
-     $.ajax({
-      type:"post",
-      url:"${pageContext.request.contextPath}/afterLogin_foodtruck/registerBookMark.do",
-      data: {id: id, foodtruckNumber: foodtruckNumber}, 
-      success:function(data){
-         if(data=="on"){
-			$("#insertBtn2").attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png');
-			alert("단골트럭으로 등록!");
-			location.reload();
-         }else{
- 			$("#insertBtn2").attr('src','${pageContext.request.contextPath}/resources/upload/greyheart2.png');
-            alert("단골트럭 등록해제");         
-            location.reload();
-         }
-      }
-   });
-    }
-});
+	   $("input#insertBtn2").click(function(){
+		     var foodtruckNumber = $(this).attr('name');
+		     var id = "${sessionScope.memberVO.id}";
+		     var src = ($(this).attr('src')) ==='hearton.png'
+		     
+		    if(id==""){
+		       alert("로그인이 필요합니다.");
+		    }
+		    else if(${sessionScope.memberVO.memberType=='seller'}){
+		    	alert("일반회원 전용 서비스입니다.");
+		    }
+		    else{
+		     $.ajax({
+		      type:"post",
+		      url:"${pageContext.request.contextPath}/afterLogin_foodtruck/registerBookMark.do",
+		      data: {id: id, foodtruckNumber: foodtruckNumber}, 
+		      success:function(data){
+		         if(data=="on"){
+					$("#insertBtn2").attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png');
+					alert("단골트럭으로 등록!");
+					location.reload();
+		         }else{
+		 			$("#insertBtn2").attr('src','${pageContext.request.contextPath}/resources/upload/greyheart2.png');
+		            alert("단골트럭 등록해제");         
+		            location.reload();
+		         }
+		      }
+		   });
+		    }
+		});
 });
 </script>
+
 <!-- Header -->
 <header class="bgimg w3-display-container" id="home">
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
@@ -194,7 +195,8 @@ $(document).ready(function(){
 </form>
 </c:if>
     <!-- review 결과 table -->
-    <h5 class="w3-center w3-padding-32"><span class="w3-tag w3-wide">REVIEW LIST</span></h5>      
+    <h5 class="w3-center w3-padding-32">
+    <span class="w3-tag w3-wide">REVIEW LIST</span></h5>      
   <table class="table table-hover" id="table">
     <thead>
       <tr>
@@ -296,7 +298,8 @@ $(document).ready(function(){
         <td>${reviewVO.customerId}</td>
         <td>${reviewVO.reviewTimeposted}</td>
         <td>
-        <c:if test="${sessionScope.memberVO.id!=null && sessionScope.memberVO.id==reviewVO.customerId}">
+        <c:if test="${sessionScope.memberVO.id!=null 
+        && sessionScope.memberVO.id==reviewVO.customerId}">
         <input type="hidden" value="${reviewVO.reviewNo}" name="reviewNo">
           <input type="hidden" value="${truckDetailInfo.foodtruckNumber}" name="truckNo">
           <button type="button" class="deleteBtn btn btn-default btn-sm">
@@ -420,7 +423,7 @@ document.getElementById("myLink").click();
 
 <script>
 var HOME_PATH = window.HOME_PATH || '.';
-var position = new naver.maps.LatLng("${param.latitude}", "${param.longitude}");
+var position = new naver.maps.LatLng("${sessionScope.latitude}", "${sessionScope.longitude}");
 
 var map = new naver.maps.Map('map', {
     center: position,

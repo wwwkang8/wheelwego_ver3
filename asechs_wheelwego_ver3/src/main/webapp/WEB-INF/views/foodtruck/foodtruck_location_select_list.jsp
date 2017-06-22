@@ -27,7 +27,7 @@
 
 .col-sm-6 {
 	width: 50%;
-	height: 380px;
+	height:380%;
 }
 
 .paging a {
@@ -45,7 +45,19 @@ select .selected {
 
 <script type="text/javascript">
 
-$(document).ready(function(){
+function foodtruckDetail(){
+	var address=$(this).parent().find(".address").text();		
+	document.getElementById('address').value = address;
+	var listForm = document.getElementById("listForm"); 
+    listForm.submit();		   
+}
+
+function pagingPrevious(){
+	var pagingFormPrevious = document.getElementById("pagingFormPrevious"); 
+	pagingFormPrevious.submit();		  
+}
+
+$(document).ready(function(){	
 	var option="${requestScope.option}";
    var sel=document.getElementById("option");
    for(var i=0; i<sel.options.length; i++){
@@ -54,14 +66,6 @@ $(document).ready(function(){
       }
    }
 
-	$(".detailLink").bind("click",function(){
-		var address=$(this).parent().find(".address").text();
-		var foodtruckNo=$(this).parent().find(":input[name=foodtruckNo]").val();
-		var latitude=$(this).parent().find(":input[name=latitude]").val();
-		var longitude=$(this).parent().find(":input[name=longitude]").val();
-		$(this).attr("href","${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+foodtruckNo+"&latitude="+latitude+"&longitude="+longitude+"&address="+address);
-	});
-
    $("input#insertBtn").click(function(){
      var foodtruckNumber = $(this).attr('name');
      var insertBtn=$(this);
@@ -69,9 +73,11 @@ $(document).ready(function(){
 	var memberType="${sessionScope.memberVO.memberType}";
     if(id==""){
        alert("로그인이 필요합니다.");
+       return false;
     }
     else if(memberType=="seller"){
     	alert("일반회원 전용 서비스입니다.");
+    	return false;
     }
     else{
      $.ajax({
@@ -82,24 +88,35 @@ $(document).ready(function(){
          if(data=="on"){
          $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png'); 
             alert("단골트럭으로 등록!");
-           location.reload();  
+           //location.reload();  
          }else{
             $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/greyheart2.png');
             alert("단골트럭 등록해제");         
-            location.reload();  
+            //location.reload();  
          }
       }
    });
+     location.reload();
     }
 });
    $("#option").change(function(){
-       var optionVal=$(this).val();
+      var optionVal=$(this).val();
       var GPSflag="${requestScope.GPSflag}";
-      if(GPSflag=="false"){
-           location.href="${pageContext.request.contextPath}/searchFoodTruckByName.do?latitude=${param.latitude}&longitude=${param.longitude}&name=${param.name}&option="+optionVal;
-      }else{
-           location.href="${pageContext.request.contextPath}/searchFoodTruckByGPS.do?latitude=${param.latitude}&longitude=${param.longitude}&option="+optionVal;
-      } 
+      var listForm = document.getElementById("listForm"); 
+      var name="${requestScope.name}";
+       
+      if (name != ""){
+    	  listForm.action = "${pageContext.request.contextPath}/searchFoodTruckByName.do";
+    	  document.getElementById('name').value = name;
+      }
+      else
+          listForm.action = "${pageContext.request.contextPath}/searchFoodTruckByGPS.do";
+    
+      document.getElementById('latitude').value = "${sessionScope.latitude}";
+	  document.getElementById('longitude').value = "${sessionScope.longitude}";
+	  document.getElementById('_option').value = optionVal; 
+	  
+	  listForm.submit();	           
    });
 });
 </script>
@@ -138,37 +155,48 @@ $(document).ready(function(){
   <c:forEach items="${requestScope.pagingList.truckList}" var="truckInfo">
     <div class="col-sm-6">
       <div class="thumbnail">
-   <input type="hidden" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
-      <input type="hidden" name="latitude" value="${truckInfo.latitude}">
-      <input type="hidden" name="longitude" value="${truckInfo.longitude}">
-      <a class="detailLink" href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckInfo.foodtruckNumber}&latitude=${truckInfo.latitude}&longitude=${truckInfo.longitude}">
-        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
-        </a>
-        <c:choose>
-        <c:when test="${requestScope.heartWishlist!='[]'&& requestScope.heartWishlist!=null}">
-        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">
-        <c:choose>
-           <c:when test="${wishlistInfo.foodtruckNumber eq truckInfo.foodtruckNumber}">
-                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
-           </c:when>
-           <c:otherwise>
-              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
-           </c:otherwise>
-        </c:choose>
-        </c:forEach>
-       </c:when>
-       <c:otherwise>
-          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
-       </c:otherwise>
-       </c:choose>
-        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>
-        <strong style="font-size:15px; "><span class="glyphicon glyphicon-star" style="color:orange"> </span>&nbsp;&nbsp;${truckInfo.avgGrade}&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-heart" style="color:red"></span>&nbsp;&nbsp;${truckInfo.wishlistCount }</strong>
-        <br><p id = "${truckInfo.foodtruckName}" style="font-size:13px; color: grey;" class="address"></p>
+    
+      <form name = "listForm" id = "listForm" method="post" action="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do">
+	  	  <input type="hidden" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
+	      <input type="hidden" id = "address" name = "address" value = "">
+	      <input type="hidden" id = "_option" name = "_option" value = "">
+	      <input type="hidden" id = "name" name = "name" value = ""> 
+      	  <input type="hidden" id = "latitude" name="latitude" value="${truckInfo.latitude}">
+          <input type="hidden" id = "longitude" name="longitude" value="${truckInfo.longitude}">
+       </form>	      
+	      <a href="#" onclick="foodtruckDetail()">  
+	        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
+	        </a>
+	        <c:choose>
+	        <c:when test="${requestScope.heartWishlist!='[]'&& requestScope.heartWishlist!=null}">
+	        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">
+	        <c:choose>
+	           <c:when test="${wishlistInfo.foodtruckNumber eq truckInfo.foodtruckNumber}">
+	                 <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	                 src = "${pageContext.request.contextPath}/resources/upload/hearton.png" style="z-index: 10;">
+	           </c:when>
+	           <c:otherwise>
+	              <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	              src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	           </c:otherwise>
+	        </c:choose>
+	        </c:forEach>
+	       </c:when>
+	       <c:otherwise>
+	          <input type="image" id="insertBtn" name = "${truckInfo.foodtruckNumber}" 
+	          src = "${pageContext.request.contextPath}/resources/upload/greyheart2.png">
+	       </c:otherwise>
+	       </c:choose>
+	        <strong style="font-size:15px; ">${truckInfo.foodtruckName}</strong><br>
+	        <strong style="font-size:15px; "><span class="glyphicon glyphicon-star" style="color:orange"> </span>&nbsp;&nbsp;${truckInfo.avgGrade}&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-heart" style="color:red"></span>&nbsp;&nbsp;${truckInfo.wishlistCount }</strong>
+	        <br><p id = "${truckInfo.foodtruckName}" style="font-size:13px; color: grey;" class="address"></p>      
       </div>
     </div>
   </c:forEach>
   </div>
+  
   <p class="paging text-center" style="font-size: 17px; color:black;">
+
    <c:set var="pb" value="${requestScope.pagingList.pagingBean}"></c:set>
    <!-- 
          step2 1) 이전 페이지 그룹이 있으면 이미지 보여준다. (img/left_arrow_btn.gif)
@@ -176,9 +204,9 @@ $(document).ready(function(){
                2)  이미지에 이전 그룹의 마지막 페이지번호를 링크한다. 
                       hint)   startPageOfPageGroup-1 하면 됨        
     -->      
-   <c:if test="${pb.previousPageGroup}">
+   <c:if test="${pb.previousPageGroup}">   		
          <c:choose>
-            <c:when test="${requestScope.GPSflag==false}">
+            <c:when test="${requestScope.flag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.startPageOfPageGroup-1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">◀&nbsp; </a>
             </c:when>
             <c:otherwise>
@@ -197,7 +225,7 @@ $(document).ready(function(){
    <c:choose>
    <c:when test="${pb.nowPage!=i}">
          <c:choose>
-            <c:when test="${requestScope.GPSflag==false}">
+            <c:when test="${requestScope.flag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${i}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">${i}</a>
             </c:when>
             <c:otherwise>
@@ -214,7 +242,7 @@ $(document).ready(function(){
 
    <c:if test="${pb.nextPageGroup}">
          <c:choose>
-            <c:when test="${requestScope.GPSflag==false}">
+            <c:when test="${requestScope.flag==false}">
                <a href="${pageContext.request.contextPath}/searchFoodTruckByName.do?pageNo=${pb.endPageOfPageGroup+1}&latitude=${param.latitude}&longitude=${param.longitude}&name=${requestScope.name}&option=${requestScope.option}">▶</a>
             </c:when>
             <c:otherwise>

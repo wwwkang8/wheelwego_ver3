@@ -27,6 +27,36 @@ public class MypageServiceImpl2 implements MypageService {
    private MypageDAO mypageDAO;
    @Resource
    private FoodTruckDAO foodtruckDAO;
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step1) bookingNumber로 menuId 찾기
+	*/
+   @Override
+	public List<String> findMenuIdByBookingNumber(String bookingNumber){
+		return mypageDAO.findMenuIdByBookingNumber(bookingNumber);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step2) menuId로 foodtruckNumber 찾기
+	*/
+  @Override
+	public String findFoodTruckNumberByMenuId(String menuId){
+		return mypageDAO.findFoodTruckNumberByMenuId(menuId);
+	}
+	/** 	  
+	정현지
+	2017.06.22 (수정완료)
+	마이페이지 - 나의 주문내역 리스트 푸드트럭 이름 가져오기
+	기능설명 : step3) foodtruckNumber로 foodtruckName 찾기
+	*/
+	@Override
+	public String findFoodtruckNameByFoodTruckNumber(String foodtruckNumber){
+		return mypageDAO.findFoodtruckNameByFoodTruckNumber(foodtruckNumber);
+	}
 	/**
 	 * 김래현 황윤상
 	   2017.06.21 수정완료
@@ -156,8 +186,9 @@ public class MypageServiceImpl2 implements MypageService {
 	      tvo.setFileVO(new FileVO(tvo.getFoodtruckName(), renamedFile));
 	            try {
 	            	mypageDAO.registerFoodtruck(tvo); //FOODTRUCK Table에 저장
-	            	mypageDAO.saveFilePath(new FileVO(tvo.getFoodtruckNumber(),renamedFile)); //FOODTRUCKFILE table에 이미지경로저장
-					fm.uploadFile(truckFile,/*uploadPath+*/renamedFile); //서버 전송
+	            	 //FOODTRUCKFILE table에 이미지경로저장
+	            	mypageDAO.saveFilePath(new FileVO(tvo.getFoodtruckNumber(),renamedFile));
+					fm.uploadFile(truckFile,uploadPath+renamedFile); //서버 전송
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -207,8 +238,9 @@ public class MypageServiceImpl2 implements MypageService {
 	         try {
 		        FileManager fm=new FileManager();
 		         String renamedFile=fm.rename(truckFile,truckVO.getFoodtruckNumber()); //파일 Rename
-		         mypageDAO.updateFilePath(new FileVO(truckVO.getFoodtruckNumber(), renamedFile)); //파일 경로 update
-		         fm.uploadFile(truckFile, /*uploadPath+*/renamedFile); //서버 전송
+		         //파일 경로 update
+		         mypageDAO.updateFilePath(new FileVO(truckVO.getFoodtruckNumber(), renamedFile)); 
+		         fm.uploadFile(truckFile, uploadPath+renamedFile); //서버 전송
 		         mypageDAO.updateMyfoodtruck(truckVO); 
 	         } catch (IOException e) {
 	            e.printStackTrace();
@@ -237,19 +269,19 @@ public class MypageServiceImpl2 implements MypageService {
 	 *  
 	 *  메뉴파일이 없다면 메뉴정보만 수정한다.
 	 */
-	@Transactional
 	@Override
 	public void updateMenu(TruckVO truckVO, String uploadPath) {
 		 List<FoodVO> foodList=truckVO.getFoodList();
 		 String renamedFile=null;
-		 System.out.println(foodList);
 	      for(int i=0;i<foodList.size();i++){
 	    	  MultipartFile foodFile=foodList.get(i).getMenuFile();
 	    	  if(foodFile!=null){ 
 		         try{
 		            FileManager fm=new FileManager();
-		            renamedFile=fm.rename(foodFile,truckVO.getFoodtruckNumber()+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
-		            foodList.get(i).setFileVO(new FileVO(foodList.get(i).getMenuId(),renamedFile)); //foodList에 renamed 되어진 FileVO정보를 setting
+		          //파일 이름 수정
+		            renamedFile=fm.rename(foodFile,truckVO.getFoodtruckNumber()+"_"+foodList.get(i).getMenuId()); 
+		            //foodList에 renamed 되어진 FileVO정보를 setting
+		            foodList.get(i).setFileVO(new FileVO(foodList.get(i).getMenuId(),renamedFile));
 		            fm.uploadFile(foodFile, /*uploadPath+*/renamedFile); //서버에 전송하여 덮어씌운다.
 		            mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
 		         }
@@ -284,7 +316,8 @@ public class MypageServiceImpl2 implements MypageService {
 			ListVO pagingReviewList = new ListVO();
 	      if(reviewPageNo==null)
 	          reviewPageNo="1";
-	       PagingBean pagingBean = new PagingBean(Integer.parseInt(reviewPageNo), mypageDAO.getTotalReviewCount(customerId), customerId);
+	       PagingBean pagingBean = new PagingBean(Integer.parseInt(reviewPageNo), 
+	    		                                       mypageDAO.getTotalReviewCount(customerId), customerId);
 	       pagingReviewList.setPagingBean(pagingBean);
 	       pagingReviewList.setReviewList(mypageDAO.showMyReviewList(pagingBean));
 	       return pagingReviewList;
@@ -584,7 +617,7 @@ public class MypageServiceImpl2 implements MypageService {
 		        	 renamedFile=fm.rename(foodFile,foodtruckNumber+"_"+foodList.get(i).getMenuId()); //파일 이름 수정
 		        	 foodList.get(i).setFileVO(new FileVO(foodtruckNumber, renamedFile)); //rename된 파일 이름 setting
 		        	 mypageDAO.registerMenu(foodList.get(i)); //db에 메뉴를 등록한다.
-		            fm.uploadFile(foodFile,/* uploadPath+*/renamedFile); //서버에 파일 업로드
+		            fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 파일 업로드
 	         	}catch (Exception e) {
 	         		e.printStackTrace();
 	         	}

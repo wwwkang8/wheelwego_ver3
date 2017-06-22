@@ -25,12 +25,7 @@
   <table class="table table-hover">
     <thead>
       <tr>
-      <th></th>
-        <th>FoodTruck</th>
-        <th>Content</th>
-        <th>Score</th>
-        <th>Date</th>
-        <th></th>
+      <th></th><th>FoodTruck</th><th>Content</th><th>Score</th><th>Date</th><th></th>
       </tr>
     </thead>
     <tbody>
@@ -41,6 +36,7 @@
         <td>${reviewVO.reviewContent}</td>
         <td>
     <c:choose>
+    <%-- 별점을 radio버튼으로 하여 grade에 해당하는 별까지 true로 설정--%>
     <c:when test="${reviewVO.grade eq '1'}">
     <input type="radio" name="grade" id="star-1" value="1"/>
     <label for="star-1" class="star_point_list" style="width:10px">
@@ -186,7 +182,8 @@
        $(".updateBtn").click(function(){
           var reviewNo=$(this).parent().parent().find("input[name=reviewNo]").val();
           if(confirm("등록된 리뷰를 수정하시겠습니까?")){
-             location.href="${pageContext.request.contextPath}/afterLogin_mypage/mypage_review_update.do?reviewNo="+reviewNo;
+             location.href="${pageContext.request.contextPath}/afterLogin_mypage/mypage_review_update.do?reviewNo="
+            		              +reviewNo;
           }
        });
        $(".deleteBtn").click(function(){
@@ -200,7 +197,8 @@
                 success:function(data){
                    if(data=="deleteOk"){
                       alert("삭제하였습니다.");
-                      location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyReviewList.do?customerId=${sessionScope.memberVO.id}";
+                      location.href="${pageContext.request.contextPath}/afterLogin_mypage/showMyReviewList.do?"
+                    		                 +"customerId=${sessionScope.memberVO.id}";
                    }
                 }                
              });
