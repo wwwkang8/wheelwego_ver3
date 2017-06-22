@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.asechs.wheelwego.model.vo.BoardVO;
 import org.asechs.wheelwego.model.vo.BookingDetailVO;
 import org.asechs.wheelwego.model.vo.BookingVO;
 import org.asechs.wheelwego.model.vo.FileManager;
@@ -332,10 +333,25 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	/**
+	    * 김호겸
+	    * 2017.6.13 (수정 완료) 
+	    *마이페이지-내가 쓴 게시글 자유게시글 보기
+	    * ------------------------------------------------------ 코드설명
+	    * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	    * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	    * 페이징 빈을 set 해준다
+	    */
 	@Override
-	public ListVO showMyContentByFreeList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+	public ListVO showMyContentByFreeList(String id,String contentPageNo) {
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalFreeboardCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentByFreeList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
 	@Override
 	public void updateBookingState(BookingVO bookingVO) {
@@ -352,31 +368,79 @@ public class MypageServiceImpl2 implements MypageService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void freeboardDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.freeboardDeleteInMaypage(contentNo);
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 창업게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	 * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	 * 페이징 빈을 set 해준다
+	 */
 	@Override
 	public ListVO showMyContentBybusinessList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalbusinessCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentBybusinessList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void businessDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.businessDeleteInMaypage(contentNo);
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 보기
+	 * ------------------------------------------------------ 코드설명
+	 * 페이징 빈을 위해 총 게시물 수를 알아야 함으로 총게시물 수 메서드 뽑아낸후
+	 * 페이징 빈에 할당한다. 그 후 리스트 VO 에 해당 게시물과
+	 * 페이징 빈을 set 해준다
+	 */
 	@Override
 	public ListVO showMyContentByqnaList(String id, String contentPageNo) {
-		// TODO Auto-generated method stub
-		return null;
+		 if(contentPageNo==null)
+			 contentPageNo="1";
+	      PagingBean pagingBean = new PagingBean(Integer.parseInt(contentPageNo), mypageDAO.getTotalqnaCount(id), id);
+	     List<BoardVO> contentList=mypageDAO.showMyContentByqnaList(pagingBean);
+	     ListVO pagingContentList = new ListVO();
+	     pagingContentList.setBoardList(contentList);
+	     pagingContentList.setPagingBean(pagingBean);
+	     return pagingContentList;
 	}
+	
+	/**
+	 * 김호겸
+	 * 2017.6.13 (수정 완료) 
+	 *마이페이지-내가 쓴 게시글 QnA게시글 삭제
+	 */
 	@Override
 	public void qnaDeleteInMaypage(String contentNo) {
-		// TODO Auto-generated method stub
-		
+		mypageDAO.qnaDeleteInMaypage(contentNo);
 	}
+	
 	@Override
 	public int checkBookingState(String id) {
 		// TODO Auto-generated method stub
