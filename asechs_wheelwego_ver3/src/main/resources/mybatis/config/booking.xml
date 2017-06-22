@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sql Mapper -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+<!-- 강정호 자유게시판 -->
+	<resultMap type="boardVO" id="freeBoardListRM">
+		<result property="no" column="freeboard_no"/>
+		<result property="id" column="id"/>
+		<result property="title" column="freeboard_title"/>
+		<result property="content" column="freeboard_content"/>
+		<result property="timePosted" column="freeboard_timeposted"/>
+		<result property="hits" column="freeboard_hits"/>
+		<result property="fileVO.no" column="freeboard_no"/>
+		<result property="fileVO.filepath" column="freeboardfile_filepath"/>
+		<!-- <result property="file" column="freeboard_filename1"/> -->
+	</resultMap>
+
+	<select id="getFreeBoardList" parameterType="pagingBean" resultMap="freeBoardListRM" resultType="boardVO">
+		<!-- select freeboard_no, id, freeboard_title, freeboard_content, freeboard_timePosted, freeboard_hits
+		 from freeboard -->
+		SELECT f.freeboard_no, f.id, f.freeboard_title, f.freeboard_content, f.freeboard_timePosted, f.freeboard_hits, m.id FROM(
+		SELECT row_number() over(order by freeboard_no desc) as rnum, freeboard_no, id, freeboard_title, freeboard_content,
+		to_char(freeboard_timePosted,'YYYY.MM.DD') as freeboard_timePosted , freeboard_hits from freeboard
+		)f, member m where f.id=m.id and rnum between #{startRowNumber} and #{endRowNumber}
+		order by freeboard_no desc
+	</select>
+	
+	<select id="getFreeBoardTotalContentCount" resultType="Integer">
+		select count(*) from freeboard
+	</select>
+	
+	<select id="getFreeBoardDetail" resultMap="freeBoardListRM" resultType="boardVO" parameterType="String">
+		select freeboard_no, id, freeboard_title, freeboard_content, to_char(freeboard_timeposted,'YYYY.MM.DD HH:mm:ss') as freeboard_timeposted,
+		freeboard_hits from freeboard where freeboard_no=#{value}
+		<!-- select f.freeboard_no, f.id, f.freeboard_title, f.freeboard_content,
+		 to_char(f.freeboard_timeposted,'YYYY.MM.DD HH:mm:ss') as freeboard_timeposted,
+		 f.freeboard_hits, fi.freeboard_no, fi.freeboardfile_filepath 
+		 from freeboard f, freeboardfile fi where f.freeboard_no=fi.freeboard_no and f.freeboard_no=#{value} -->
+	</select>
+	
+	<resultMap type="fileVO" id="freeboardFileNameRM">
+		<result property="no" column="freeboard_no"/>
+		<result property="filepath" column="freeboardfile_filepath"/>
+	</resultMap>
+	<select id="getFreeBoardFilePath" resultType="fileVO" parameterType="String" resultMap="freeboardFileNameRM">
+		select freeboardfile_filepath from freeboardfile where freeboard_no=#{value}
+	</select>
+	<delete id="freeboardDelete" parameterType="String">
+		delete freeboard where freeboard_no=#{value}
+	</delete>
+	<update id="updateCount" parameterType="int">
+		update freeboard set freeboard_hits=freeboard_hits+1 where freeboard_no=#{value}
+	</update>
+		<update id="updateBoard" parameterType="boardVO">
+		update freeboard set freeboard_title=#{title},freeboard_content=#{content},freeboard_timeposted=sysdate where freeboard_no=#{no}
+	</update>
+
+	<insert id="freeboardWrite" parameterType="boardVO">
+		<selectKey keyProperty="no" resultType="String" order="BEFORE">
+			select freeboard_seq.nextval from dual
+		</selectKey>
+		insert into freeboard(freeboard_no, id, freeboard_title, freeboard_content, freeboard_timePosted, freeboard_hits)
+		values(#{no}, #{id},#{title},#{content},sysdate,#{hits})
+	</insert>
+		
+	<resultMap type="boardVO" id="freeboardWriteFileUploadRM">
+		<result property="fileVO.no" column="freeboard_no"/>
+		<result property="fileVO.filePath" column="freeboardfile_filepath"/>
+	</resultMap>
+	<insert id="freeboardWriteFileUpload" parameterType="boardVO">
+		insert into freeboardfile(freeboard_no, freeboardfile_filepath)values(#{fileVO.no},#{fileVO.filepath})
+	</insert>
+	
+	<select id="getNameById" resultType="memberVO" parameterType="boardVO">
+	select m.member_name as memberName from freeboard f, member m where m.id=f.id and f.id=#{id} and f.freeboard_no=#{no}
+	</select>
+	
+
+	<resultMap type="commentVO" id="freeboardCommentRM">
+		<result property="commentNo" column="freeboardcomment_no"/>
+		<result property="id" column="id"/>
+		<result property="contentNo" column="freeboard_no"/>
+		<result property="comment" column="freeboardcomment_content"/>
+		<result property="timePosted" column="freeboardcomment_timeposted"/>
+		<result property="parentNo" column="freeboardcomment_parent"/>
+	</resultMap>
+	<insert id="writeFreeboardComment" parameterType="commentVO">
+	<selectKey keyProperty="commentNo" resultType="Integer" order="BEFORE">
+			select freeboardcomment_seq.nextval from dual
+	</selectKey>
+		insert into freeboardcomment(freeboardcomment_no, id, freeboardcomment_content, freeboard_no,freeboardcomment_timeposted, freeboardcomment_parent)
+		values(#{commentNo},#{id},#{comment},#{contentNo},sysdate,0)
+	</insert>
+	
+	<select id="getFreeboardCommentList" parameterType="String" resultType="commentVO" resultMap="freeboardCommentRM">
+		select freeboardcomment_no, id, freeboard_no, freeboardcomment_content, to_char(freeboardcomment_timeposted,'YYYY.MM.DD HH.MM.SS') as freeboardcomment_timeposted,
+		freeboardcomment_parent from freeboardcomment where freeboard_no=#{value} order by freeboardcomment_no desc
+	</select>
+	
+	<delete id="deleteFreeboardComment" parameterType="commentVO">
+		delete from freeboardcomment where freeboardcomment_no=#{commentNo} and freeboard_no=#{contentNo}
+	</delete>
+
+	<update id="freeboardUpdateFileUpload" parameterType="boardVO">
+		update freeboardfile set freeboardfile_filepath=#{fileVO.filepath} where freeboard_no=#{fileVO.no} and freeboardfile_filepath=#{fileVO.beforefilepath}
+	</update>
+	<delete id="freeboardDeleteFile" parameterType="String">
+		delete freeboardfile where freeboard_no=#{value}
+	</delete>
+	
+	<select id="getFreeboardComment" parameterType="commentVO" resultType="commentVO" resultMap="freeboardCommentRM">
+		select freeboardcomment_no, id, freeboard_no, freeboardcomment_content, freeboardcomment_timeposted from freeboardcomment 
+		where freeboardcomment_no=#{commentNo} and freeboard_no=#{contentNo}
+	</select>
+	
+	<update id="updateFreeboardComment" parameterType="commentVO">
+		update freeboardcomment set freeboardcomment_content=#{comment} where freeboardcomment_no=#{commentNo} and freeboard_no=#{contentNo}
+	</update>
+
+<!-- 강정호창업게시판 -->
+
+<resultMap type="boardVO" id="businessInfoBoardListRM">
+		<result property="no" column="information_no"/>
+		<result property="id" column="id"/>
+		<result property="title" column="information_title"/>
+		<result property="content" column="information_content"/>
+		<result property="timePosted" column="information_timeposted"/>
+		<result property="hits" column="information_hits"/>
+	</resultMap>
+	<select id="getBusinessInfoBoardList" parameterType="pagingBean" resultMap="businessInfoBoardListRM" resultType="boardVO">
+		SELECT b.information_no, b.id, b.information_title, b.information_content, b.information_timeposted, b.information_hits, m.id FROM(
+		SELECT row_number() over(order by information_no desc) as rnum, information_no, id, information_title, information_content,
+		to_char(information_timeposted,'YYYY.MM.DD') as information_timeposted ,information_hits from information
+		)b, member m where b.id=m.id and rnum between #{startRowNumber} and #{endRowNumber}
+		order by information_no desc
+	</select>
+	
+	<select id="getBusinessInfoBoardTotalContentCount" resultType="Integer">
+		select count(*) from information
+	</select>
+	
+	<insert id="businessWrite" parameterType="boardVO">
+		<selectKey keyProperty="no" resultType="String" order="BEFORE">
+			select information_seq.nextval from dual
+		</selectKey>
+		insert into information(information_no, id, information_title, information_content, information_timeposted, information_hits)
+		values(#{no}, #{id},#{title},#{content},sysdate,#{hits})
+	</insert>
+	
+	<resultMap type="boardVO" id="businessWriteFileUploadRM">
+		<result property="fileVO.no" column="information_no"/>
+		<result property="fileVO.filepath" column="informationfile_filepath"/>
+	</resultMap>
+	<insert id="businessWriteFileUpload" parameterType="boardVO">
+		insert into informationfile(information_no, informationfile_filepath)values(#{fileVO.no},#{fileVO.filepath})
+	</insert>
+	
+	<select id="getBusinessBoardDetail" resultMap="businessInfoBoardListRM" resultType="boardVO">
+		select information_no, id, information_title, information_content, to_char(information_timeposted,'YYYY.MM.DD HH:mm:ss') as information_timeposted,
+		information_hits from information where information_no=#{value}
+	</select>
+	<resultMap type="fileVO" id="businessFileNameRM">
+		<result property="no" column="information_no"/>
+		<result property="filepath" column="informationfile_filepath"/>
+	</resultMap>
+	<select id="getBusinessFilePath" resultType="fileVO" parameterType="String" resultMap="businessFileNameRM">
+		select informationfile_filepath from informationfile where information_no=#{value}
+	</select>
+	<delete id="businessDelete" parameterType="String">
+		delete information where information_no=#{value}
+	</delete>
+	<update id="updateHitsBusiness" parameterType="int">
+		update information set information_hits=information_hits+1 where information_no=#{value}
+	</update>
+		<update id="business_updateBoard" parameterType="boardVO">
+		update information set information_title=#{title},information_content=#{content},information_timeposted=sysdate where information_no=#{no}
+	</update>
+	<select id="business_getNameById" resultType="memberVO" parameterType="boardVO">
+	select m.member_name as memberName from information f, member m where m.id=f.id and f.id=#{id} and f.information_no=#{no}
+	</select>
+	
+	<resultMap type="commentVO" id="businessCommentRM">
+		<result property="commentNo" column="informationcomment_no"/>
+		<result property="id" column="id"/>
+		<result property="contentNo" column="information_no"/>
+		<result property="comment" column="informationcomment_content"/>
+		<result property="timePosted" column="informationcomment_timeposted"/>
+		<result property="parentNo" column="informationcomment_parent"/>
+	</resultMap>
+	<select id="getbusinessCommentList" parameterType="String" resultType="commentVO" resultMap="businessCommentRM">
+		select informationcomment_no, id, information_no, informationcomment_content, 
+		to_char(informationcomment_timeposted,'YYYY.MM.DD hh.mm.ss') as informationcomment_timeposted, informationcomment_parent 
+		from informationcomment where information_no=#{value} order by informationcomment_no desc
+	</select>
+	
+	<insert id="writebusinessComment" parameterType="commentVO">
+		<selectKey keyProperty="commentNo" resultType="Integer" order="BEFORE">
+			select informationcomment_seq.nextval from dual
+		</selectKey>
+		insert into informationcomment(informationcomment_no, id, informationcomment_content, information_no, informationcomment_timeposted, informationcomment_parent)
+		values(#{commentNo},#{id},#{comment},#{contentNo},sysdate,0)
+	</insert>
+	
+	<delete id="deletebusinessComment" parameterType="commentVO">
+		delete from informationcomment where informationcomment_no=#{commentNo} and information_no=#{contentNo}
+	</delete>
+	
+	<select id="getbusinessComment" parameterType="commentVO" resultType="commentVO" resultMap="businessCommentRM">
+		select informationcomment_no, id, information_no, informationcomment_content, informationcomment_timeposted from informationcomment 
+		where informationcomment_no=#{commentNo} and information_no=#{contentNo}
+	</select>
+	
+	<update id="updatebusinessComment" parameterType="commentVO">
+		update informationcomment set informationcomment_content=#{comment} where informationcomment_no=#{commentNo} and information_no=#{contentNo}
+	</update>
+	
+<!-- 강정호Q&A게시판 -->
+
+	<select id="getQnATotalContentCount" resultType="Integer">
+		select count(*) from qna
+	</select>
+	<resultMap type="boardVO" id="QnABoardListRM">
+		<result property="no" column="qna_no"/>
+		<result property="id" column="id"/>
+		<result property="title" column="qna_title"/>
+		<result property="content" column="qna_content"/>
+		<result property="timePosted" column="qna_timeposted"/>
+		<result property="hits" column="qna_hits"/>
+	</resultMap>
+	<select id="getQnABoardList" parameterType="pagingBean" resultMap="QnABoardListRM" resultType="boardVO">
+		SELECT q.qna_no, q.id, q.qna_title, q.qna_content, q.qna_timeposted, q.qna_hits, m.id FROM(
+		SELECT row_number() over(order by qna_no desc) as rnum, qna_no, id, qna_title, qna_content,
+		to_char(qna_timeposted,'YYYY.MM.DD') as qna_timeposted , qna_hits from qna
+		)q, member m where q.id=m.id and rnum between #{startRowNumber} and #{endRowNumber}
+		order by qna_no desc
+	</select>	
+	<insert id="qnaWrite" parameterType="boardVO">
+		<selectKey keyProperty="no" resultType="String" order="BEFORE">
+			select qna_seq.nextval from dual
+		</selectKey>
+		insert into qna(qna_no, id, qna_title, qna_content, qna_timeposted, qna_hits)
+		values(#{no}, #{id},#{title},#{content},sysdate,#{hits})
+	</insert>
+	
+	<resultMap type="boardVO" id="qnaWriteFileUploadRM">
+		<result property="fileVO.no" column="qna_no"/>
+		<result property="fileVO.filepath" column="qnafile_filepath"/>
+	</resultMap>
+	<insert id="qnaWriteFileUpload" parameterType="boardVO">
+		insert into qnafile(qna_no, qnafile_filepath)values(#{fileVO.no},#{fileVO.filepath})
+	</insert>
+	
+	<resultMap type="fileVO" id="qnaFileNameRM">
+		<result property="no" column="qna_no"/>
+		<result property="filepath" column="qnafile_filepath"/>
+	</resultMap>
+	<select id="getqnaFilePath" resultType="fileVO" parameterType="String" resultMap="qnaFileNameRM">
+		select qnafile_filepath from qnafile where qna_no=#{value}
+	</select>
+	<select id="qna_getNameById" resultType="memberVO" parameterType="boardVO">
+		select m.member_name as memberName from qna f, member m where m.id=f.id and f.id=#{id} and f.qna_no=#{no}
+	</select>
+	<select id="getqnaBoardDetail" resultMap="QnABoardListRM" resultType="boardVO">
+		select qna_no, id, qna_title, qna_content, to_char(qna_timeposted,'YYYY.MM.DD HH:mm:ss') as qna_timeposted,
+		qna_hits from qna where qna_no=#{value}
+	</select>
+	<delete id="businessDeleteFile" parameterType="String">
+	delete informationfile where information_no=#{value}
+	</delete>
+	<update id="businessupdateBoard" parameterType="boardVO">
+		update information set information_title=#{title},information_content=#{content},information_timeposted=sysdate where information_no=#{no}
+	</update>
+	<delete id="qnaDeleteFile" parameterType="String">
+	delete qnafile where qna_no=#{value}
+	</delete>
+	<delete id="qnaDelete" parameterType="String">
+	delete qna where qna_no=#{value}
+	</delete>
+	<insert id="qnaupdateBoard" parameterType="boardVO">
+	update qna set qna_title=#{title},qna_content=#{content},qna_timeposted=sysdate where qna_no=#{no}
+	</insert>
+		<update id="updateHitsqna" parameterType="int">
+		update qna set qna_hits=qna_hits+1 where qna_no=#{value}
+	</update>	
+	<resultMap type="commentVO" id="qnaCommentRM">
+		<result property="commentNo" column="qnacomment_no"/>
+		<result property="id" column="id"/>
+		<result property="contentNo" column="qna_no"/>
+		<result property="comment" column="qnacomment_content"/>
+		<result property="timePosted" column="qnacomment_timeposted"/>
+		<result property="parentNo" column="qnacomment_parent"/>
+	</resultMap>
+	
+	<select id="getqnaCommentList" parameterType="String" resultType="commentVO" resultMap="qnaCommentRM">
+		select qnacomment_no, id, qna_no, qnacomment_content, to_char(qnacomment_timeposted,'YYYY.MM.DD HH.MM.SS') as qnacomment_timeposted,
+		qnacomment_parent from qnacomment where qna_no=#{value} order by qnacomment_no desc
+	</select>
+	
+	<insert id="writeqnaComment" parameterType="commentVO">
+		<selectKey keyProperty="commentNo" resultType="Integer" order="BEFORE">
+			select qnacomment_seq.nextval from dual
+		</selectKey>
+		insert into qnacomment(qnacomment_no, id, qnacomment_content, qna_no, qnacomment_timeposted, qnacomment_parent)
+		values(#{commentNo},#{id},#{comment},#{contentNo},sysdate,0)
+	</insert>
+	
+	<delete id="deleteqnaComment" parameterType="commentVO">
+		delete from qnacomment where qnacomment_no=#{commentNo} and qna_no=#{contentNo}
+	</delete>
+	
+	<select id="getqnaComment" parameterType="commentVO" resultType="commentVO" resultMap="qnaCommentRM">
+		select qnacomment_no, id, qna_no, qnacomment_content, qnacomment_timeposted from qnacomment 
+		where qnacomment_no=#{commentNo} and qna_no=#{contentNo}
+	</select>
+	
+	<update id="updateqnaComment" parameterType="commentVO">
+		update qnacomment set qnacomment_content=#{comment} where qnacomment_no=#{commentNo} and qna_no=#{contentNo}
+	</update>
+	
+	<!-- -호겸 마이페이지에서 게시물 보기 sql -->
+	<select id="showMyContentByFreeList" resultMap="freeBoardListRM" parameterType="pagingBean">
+select freeboard_no, id, freeboard_title, freeboard_content, freeboard_timePosted, freeboard_hits from(
+select row_number() over(order by f.freeboard_timePosted desc) as rnum,  f.freeboard_no, f.id, f.freeboard_title, f.freeboard_content, to_char(f.freeboard_timePosted,'YYYY.MM.DD.HH.MM HH:MM:SS') as freeboard_timePosted, f.freeboard_hits
+from freeboard f, member m where f.id=#{searchWord} and f.id=m.id ) where rnum between #{startRowNumber} and #{endRowNumber} 
+	</select>
+	<!-- -호겸 마이페이지에서 게시물 보기 sql -->
+	<select id="showMyContentBybusinessList" resultMap="businessInfoBoardListRM" parameterType="pagingBean">
+select information_no, id, information_title, information_content, information_timePosted, information_hits from(
+select row_number() over(order by f.information_timePosted desc) as rnum,  f.information_no, f.id, f.information_title, f.information_content, to_char(f.information_timePosted,'YYYY.MM.DD.HH.MM HH:MM:SS') as information_timePosted, f.information_hits
+from information f, member m where f.id=#{searchWord} and f.id=m.id ) where rnum between #{startRowNumber} and #{endRowNumber} 
+	</select>
+	<!-- -호겸 마이페이지에서 게시물 보기 sql -->
+	<select id="showMyContentByqnaList" resultMap="QnABoardListRM" parameterType="pagingBean">
+select qna_no, id, qna_title, qna_content, qna_timePosted, qna_hits from(
+select row_number() over(order by f.qna_timePosted desc) as rnum,  f.qna_no, f.id, f.qna_title, f.qna_content, to_char(f.qna_timePosted,'YYYY.MM.DD.HH.MM HH:MM:SS') as qna_timePosted, f.qna_hits 
+from qna f, member m where f.id=#{searchWord} and f.id=m.id ) where rnum between #{startRowNumber} and #{endRowNumber} 
+	</select>
+
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
