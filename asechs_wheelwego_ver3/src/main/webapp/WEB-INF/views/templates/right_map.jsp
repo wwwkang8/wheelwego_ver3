@@ -48,7 +48,7 @@ for (var i = 0; i < foodTruckInfo.length; i++)
 
 var markers = [];
 var infoWindows = [];
-`
+
 for (var i=0, ii=latlngs.length; i<ii; i++) {
     var icon = {
             url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
