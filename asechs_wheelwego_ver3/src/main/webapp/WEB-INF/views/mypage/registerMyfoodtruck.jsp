@@ -86,6 +86,7 @@
 	  $("#registerBtn").click(function(){
 		  var file=$("#file").val();
 		  var foodtruckNumber=$("input[name=foodtruckNumber]").val();
+		  //등록하려는 푸드트럭의 번호가 이미 등록된 번호인지 check한다.
 		  $.ajax({
 			  type:"post",
 			  url:"${pageContext.request.contextPath}/afterLogin_mypage/checkFoodtruckNumber.do",

@@ -19,7 +19,7 @@
                     <div class="col-sm-4 col-lg-4 col-md-4" style="border:1px solid lightgray; padding-right:10px; height:350px;">
                         <div class="thumbnail">
                             <div class="caption">
-                                <h4 style="color: orange;">예약번호 : ${bookingList.bookingNumber}</h4>
+                                <h4 style="color: orange;"><span>No.${bookingList.bookingNumber}</span><span style="float: right;">${bookingList.foodtruckName}</span></h4>       
                             </div>
                             <div class="table" style="padding: 15px;">
                                 <table>

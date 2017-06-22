@@ -7,19 +7,24 @@
         <c:choose>
         	<c:when test="${menuList!='[]'}">
         	<br>
-       <form class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/updateMenu.do" enctype="multipart/form-data">
+       <form class="menuForm" onsubmit="return checkFunction()" method="post" 
+       action="${pageContext.request.contextPath}/afterLogin_mypage/updateMenu.do" enctype="multipart/form-data">
 			<input type="hidden" name="foodtruckNumber" value="${sessionScope.foodtruckNumber}">
         	<c:forEach items="${menuList}" var="foodVO" begin="0" end="2" varStatus="status">
         <table style="border: none; padding: 15px" class="table table-hover">
          	<tr>
-         		<td>${status.index+1}<input type="hidden" name="foodList[${status.index}].menuId" value="${foodVO.menuId}" required="required">
+         		<td>${status.index+1}<input type="hidden" name="foodList[${status.index}].menuId" 
+         		value="${foodVO.menuId}" required="required">
          		</td>
-         		<td><input type="text" name="foodList[${status.index}].menuName" class="menuName" placeholder="메뉴이름" value="${foodVO.menuName}" required="required"></td>
-         		<td><input type="text" name="foodList[${status.index}].menuPrice" class="menuPrice"  placeholder="가격" value="${foodVO.menuPrice}" required="required"></td>
+         		<td><input type="text" name="foodList[${status.index}].menuName" class="menuName" 
+         		placeholder="메뉴이름" value="${foodVO.menuName}" required="required"></td>
+         		<td><input type="text" name="foodList[${status.index}].menuPrice" class="menuPrice" 
+         		 placeholder="가격" value="${foodVO.menuPrice}" required="required"></td>
          		<td><input type="file" name="foodList[${status.index}].menuFile" class="menuFile" >
          		</td>
          		<td>
-         			<img style="width: 150px; height: 100px" class="menuImg" alt="" src="${pageContext.request.contextPath}/resources/upload/${foodVO.fileVO.filepath}">
+         			<img style="width: 150px; height: 100px" class="menuImg" alt="" 
+         			src="${pageContext.request.contextPath}/resources/upload/${foodVO.fileVO.filepath}">
          		</td>
          		<td>
          			<button type="button" class="resetBtn btn btn-warning" >reset</button>
@@ -30,6 +35,7 @@
          		<button type="submit" class="checkBtn btn btn-warning" >수정</button>
          	</form>
         	</c:when>
+        	
         	<c:otherwise>
          <form  class="menuForm" onsubmit="return checkFunction()" method="post" action="${pageContext.request.contextPath}/afterLogin_mypage/registerMenuList.do" enctype="multipart/form-data">
        	 <input type="hidden" name="foodtruckNumber" value="${sessionScope.foodtruckNumber}">

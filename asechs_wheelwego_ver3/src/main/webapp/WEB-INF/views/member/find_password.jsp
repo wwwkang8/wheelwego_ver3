@@ -35,12 +35,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
    $("#findpwBtn").click(function(){
-
       var id=$("#id").val();
 	  var name=$("#memberName").val();
 	  var tel = $("#phoneNumber").val();
 	  var pw = $("#password").val();
-
        $.ajax({
             type:"POST",
             url:"${pageContext.request.contextPath}/forgetMemberPassword.do",            

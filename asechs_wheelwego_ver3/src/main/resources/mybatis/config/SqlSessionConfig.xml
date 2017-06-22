@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="mybatis/config/member.xml"/>	
 		<mapper resource="mybatis/config/foodtruck.xml"/>
 		<mapper resource="mybatis/config/board.xml"/>	
-				<mapper resource="mybatis/config/file.xml"/>	
+				<mapper resource="mybatis/config/booking.xml"/>	
 		<mapper resource="mybatis/config/mypage.xml"/>		
 
 	</mappers>

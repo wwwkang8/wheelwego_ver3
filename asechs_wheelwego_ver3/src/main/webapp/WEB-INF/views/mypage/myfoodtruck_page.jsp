@@ -75,6 +75,7 @@
    <div id="insertForm"></div>
   <script type="text/javascript">
   $(document).ready(function(){
+	  //파일 미리보기 함수
       function readURL(input) {
           if (input.files && input.files[0]) {
               var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
@@ -87,7 +88,7 @@
               reader.readAsDataURL(input.files[0]);
               //File내용을 읽어 dataURL형식의 문자열로 저장
           }
-      }//readURL()--
+      }//readURL()
 
       //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
       $("#file").change(function(){
@@ -96,7 +97,8 @@
 
       $("#deleteTruckBtn").click(function(){
     	  if(confirm("트럭을 삭제하시겠습니까?")){
-    	  location.href="${pageContext.request.contextPath}/afterLogin_mypage/deleteMyTruck.do?foodtruckNumber=${truckVO.foodtruckNumber}";
+    	  location.href="${pageContext.request.contextPath}/afterLogin_mypage"
+    	  						+"/deleteMyTruck.do?foodtruckNumber=${truckVO.foodtruckNumber}";
     	  }
       });
       

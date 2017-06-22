@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BoardController {
 
-	@Resource(name="boardServiceImpl")
+	@Resource(name="boardServiceImpl2")
 	private BoardService boardService;
  
 	/**

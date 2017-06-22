@@ -24,7 +24,7 @@
     <tbody>
     <c:forEach items="${pointList.pointList}" var="pointVO" varStatus="status">
       <tr>
-        <td>${pointVO.foodtruckName}</a></td>
+        <td>${pointVO.foodtruckName}</td>
         <td>
         	<c:choose>
         		<c:when test="${pointVO.pointType=='add'}">
