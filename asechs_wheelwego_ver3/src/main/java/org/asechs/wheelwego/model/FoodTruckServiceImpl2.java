@@ -148,7 +148,11 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 	      pagingList.setPagingBean(pagingbean);
 	      return pagingList;
 	}
-
+	/**
+	 * 정현지
+	 * 2017.06.22 수정중
+	 * 예약 - 메뉴 예약하기
+	 */
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {
 		foodTruckDAO.bookingMenu(bookingVO);		
@@ -185,12 +189,16 @@ public class FoodTruckServiceImpl2 implements FoodTruckService {
 	public String getBookingStateBybookingNumber(String bookingNumber) {
 		return foodTruckDAO.getBookingStateBybookingNumber(Integer.parseInt(bookingNumber));
 	}
-
+	/**
+	 * 황윤상
+	 * 2017.06.22 수정중
+	 * 푸드트럭 - gps정보의 반경 1km 내 해당하는 푸드트럭 번호 리스트를 가져온다.
+	 */
 	@Override
-	public List<String> getFoodtruckNumberList(TruckVO truckVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getFoodtruckNumberList(TruckVO gpsInfo) {
+		return foodTruckDAO.getFoodtruckNumberList(gpsInfo);
 	}
+	
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중

@@ -181,7 +181,6 @@ public class MypageController {
     */
    @RequestMapping("afterLogin_mypage/deleteMyTruck.do")
    public String deleteMyTruck(HttpServletRequest request,String foodtruckNumber) {
-	   System.out.println("트럭삭제");
       mypageService.deleteMyTruck(foodtruckNumber);
       request.getSession(false).removeAttribute("foodtruckNumber");
       return "redirect:/afterLogin_mypage/mypage.do";
@@ -233,8 +232,8 @@ public class MypageController {
    }
    /**
     * 황윤상
-    * 2017.06.22 수정중
-    * 마이페이지 -
+    * 2017.06.22 수정완료
+    * 마이페이지 - 사업자의 gps정보가 존재하는 확인
     * @param sellerId
     * @return
     */
@@ -246,7 +245,10 @@ public class MypageController {
    /**
     * 황윤상
     * 2017.06.22 수정중
-    * 마이페이지 -    * @param sellerId
+    * 마이페이지 - 사업자 위치정보 설정
+    * -----------------------------------------
+    * 사업자가 푸드트럭의 위치를 설정할 때 Database에 위치 정보를 update해준다.
+    * @param sellerId
     * @param latitude
     * @param longitude
     * @return
@@ -269,7 +271,9 @@ public class MypageController {
    /**
     * 황윤상
     * 2017.06.22 수정중
-    * 마이페이지 -
+    * 마이페이지 - 사업자 위치정보 설정
+    * ----------------------------------------
+    * 사용자가 푸드트럭의 위치를 해제할 때 gps정보를 null로 처리하기 위한 컨트롤러
     * @param sellerId
     * @return
     */
@@ -283,16 +287,7 @@ public class MypageController {
       
       return "redirect:../afterLogin_mypage/mypage.do";
    }
-   /**
-    * 황윤상
-    * 2017.06.22 수정중
-    * 마이페이지 -
-    * @return
-    */
-   @RequestMapping("afterLogin_mypage/test.do")
-   public String test() {
-      return "mypage/test";
-   }
+
    /**
     * 박다혜
     * 2017.06.22 수정중

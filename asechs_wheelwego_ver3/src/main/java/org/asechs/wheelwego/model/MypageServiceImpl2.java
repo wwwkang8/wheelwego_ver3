@@ -242,7 +242,6 @@ public class MypageServiceImpl2 implements MypageService {
 	public void updateMenu(TruckVO truckVO, String uploadPath) {
 		 List<FoodVO> foodList=truckVO.getFoodList();
 		 String renamedFile=null;
-		 System.out.println(foodList);
 	      for(int i=0;i<foodList.size();i++){
 	    	  MultipartFile foodFile=foodList.get(i).getMenuFile();
 	    	  if(foodFile!=null){ 

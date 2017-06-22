@@ -44,7 +44,6 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		System.out.println("***********핸들러 인터셉터 실행************"+request.getRequestURI());
 		HttpSession session=request.getSession(false);
 		if(session != null && session.getAttribute("memberVO")!=null){
-			System.out.println("인터셉터 true");
 			return true;
 		}else{
 			response.sendRedirect(request.getContextPath()+"/home.do");
