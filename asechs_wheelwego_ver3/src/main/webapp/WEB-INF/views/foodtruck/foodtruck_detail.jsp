@@ -194,7 +194,8 @@ $(document).ready(function(){
 </form>
 </c:if>
     <!-- review 결과 table -->
-    <h5 class="w3-center w3-padding-32"><span class="w3-tag w3-wide">REVIEW LIST</span></h5>      
+    <h5 class="w3-center w3-padding-32">
+    <span class="w3-tag w3-wide">REVIEW LIST</span></h5>      
   <table class="table table-hover" id="table">
     <thead>
       <tr>
@@ -296,7 +297,8 @@ $(document).ready(function(){
         <td>${reviewVO.customerId}</td>
         <td>${reviewVO.reviewTimeposted}</td>
         <td>
-        <c:if test="${sessionScope.memberVO.id!=null && sessionScope.memberVO.id==reviewVO.customerId}">
+        <c:if test="${sessionScope.memberVO.id!=null 
+        && sessionScope.memberVO.id==reviewVO.customerId}">
         <input type="hidden" value="${reviewVO.reviewNo}" name="reviewNo">
           <input type="hidden" value="${truckDetailInfo.foodtruckNumber}" name="truckNo">
           <button type="button" class="deleteBtn btn btn-default btn-sm">
