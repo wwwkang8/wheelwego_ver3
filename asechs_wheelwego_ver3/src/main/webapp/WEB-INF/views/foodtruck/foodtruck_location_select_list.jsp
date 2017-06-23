@@ -46,7 +46,9 @@ select .selected {
 <script type="text/javascript">
 
 function foodtruckDetail(){
-	var address=$(this).parent().find(".address").text();		
+	var address=$(this).parent().find(".address").text();
+	var foodtruckNo=$(this).parent().find(":input[name=foodtruckNo]").val();
+	document.getElementById('address').value = address;
 	document.getElementById('address').value = address;
 	var listForm = document.getElementById("listForm"); 
     listForm.submit();		   
@@ -65,6 +67,14 @@ $(document).ready(function(){
          sel.options[i].selected = true;
       }
    }
+
+	$(".detailLink").bind("click",function(){
+		var address=$(this).parent().find(".address").text();
+		var foodtruckNo=$(this).parent().find(":input[name=foodtruckNo]").val();
+		var latitude=$(this).parent().find(":input[name=latitude]").val();
+		var longitude=$(this).parent().find(":input[name=longitude]").val();
+		$(this).attr("href","${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+foodtruckNo+"&latitude="+latitude+"&longitude="+longitude+"&address="+address);
+	});
 
    $("input#insertBtn").click(function(){
      var foodtruckNumber = $(this).attr('name');
@@ -89,7 +99,7 @@ $(document).ready(function(){
          $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/hearton.png'); 
             alert("단골트럭으로 등록!");
            //location.reload();  
-         }else{
+         }else{	
             $(insertBtn).attr('src','${pageContext.request.contextPath}/resources/upload/greyheart2.png');
             alert("단골트럭 등록해제");         
             //location.reload();  
@@ -155,18 +165,28 @@ $(document).ready(function(){
   <c:forEach items="${requestScope.pagingList.truckList}" var="truckInfo">
     <div class="col-sm-6">
       <div class="thumbnail">
-    
+      
       <form name = "listForm" id = "listForm" method="post" action="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do">
+   	  <input type="hidden" id = "foodtruckNo" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
+      <input type="hidden" id = "latitude" name="latitude" value="${truckInfo.latitude}">
+      <input type="hidden" id = "longitude" name="longitude" value="${truckInfo.longitude}">      
+      <input type="hidden" id = "_option" name = "_option" value = "">
+      </form>
+    
+<%--       <form name = "listForm" id = "listForm" method="post" action="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do">
 	  	  <input type="hidden" name="foodtruckNo" value="${truckInfo.foodtruckNumber}">
 	      <input type="hidden" id = "address" name = "address" value = "">
 	      <input type="hidden" id = "_option" name = "_option" value = "">
 	      <input type="hidden" id = "name" name = "name" value = ""> 
       	  <input type="hidden" id = "latitude" name="latitude" value="${truckInfo.latitude}">
           <input type="hidden" id = "longitude" name="longitude" value="${truckInfo.longitude}">
-       </form>	      
-	      <a href="#" onclick="foodtruckDetail()">  
+       </form>	  --%>     
+<%-- 	      <a href="#" onclick="foodtruckDetail()">  
 	        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
-	        </a>
+	        </a> --%>
+      <a class="detailLink" href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckInfo.foodtruckNumber}&latitude=${truckInfo.latitude}&longitude=${truckInfo.longitude}">
+        <img src="${pageContext.request.contextPath}/resources/upload/${truckInfo.fileVO.filepath}" style="width:300px;height:220px;">
+      </a>	        
 	        <c:choose>
 	        <c:when test="${requestScope.heartWishlist!='[]'&& requestScope.heartWishlist!=null}">
 	        <c:forEach items="${requestScope.heartWishlist}" var="wishlistInfo">

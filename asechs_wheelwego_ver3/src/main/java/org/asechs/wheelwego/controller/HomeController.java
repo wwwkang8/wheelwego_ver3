@@ -48,6 +48,7 @@ public class HomeController {
 	 */	
 	@RequestMapping("home.do")
 	public String home() {
+		System.out.println("home.do 수행");
 		return "member/getLocation";
 	}
 	
