@@ -23,7 +23,7 @@
 		<tr>
 			<th>NO</th>
 			<th>Title</th>
-			<th>timePosted</th>
+			<th>Time</th>
 			<th>hits</th>
 			<th></th>
 		</tr>
@@ -106,7 +106,7 @@
        });// click
        $(".deleteBtn").click(function(){
     	   var contentNo=$(this).parent().parent().children(".no").text();
-          if(confirm("등록된 리뷰를 삭제하시겠습니까?")){
+          if(confirm("등록된 게시물을 삭제하시겠습니까?")){
              $.ajax({
                 url:"${pageContext.request.contextPath}/afterLogin_mypage/freeboardDeleteInMaypage.do",
                 type:"post",

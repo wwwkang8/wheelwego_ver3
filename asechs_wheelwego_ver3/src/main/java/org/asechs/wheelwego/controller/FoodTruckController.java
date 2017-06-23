@@ -214,7 +214,7 @@ public class FoodTruckController {
  	기능설명 : 주문한 메뉴를 BookingVO 객체로 받아오고(bvo), session으로부터 id를 받아와 포인트 내역을 받아온다(myPoint)
  			-> 주문 메뉴 / 포인트 내역을 주문 내역 페이지에서 확인할 수 있다
   */
-	@RequestMapping(value = "afterLogin_foodtruck/foodtruck_booking_confirm.do", method = RequestMethod.POST)
+/*	@RequestMapping(value = "afterLogin_foodtruck/foodtruck_booking_confirm.do", method = RequestMethod.POST)
 	public ModelAndView foodtruck_booking_confirm(BookingVO bvo,HttpServletRequest request){
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("foodtruck/foodtruck_booking_confirm.tiles");
@@ -222,7 +222,7 @@ public class FoodTruckController {
 		mv.addObject("myPoint", mypageService.getMyPoint(memberVO.getId()));   
 		mv.addObject("bvo",bvo);
 		return mv;
-	}
+	}*/
 	/**
 	 * 정현지
 	 * 2017.06.22 수정중
@@ -236,13 +236,13 @@ public class FoodTruckController {
 	 * @param resultTotalAmount
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
+/*	@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
 	public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
 		foodTruckService.bookingMenu(bookingVO);
 		String bookingNumber=bookingVO.getBookingNumber();
 		mypageService.calPoint(resultPoint, resultTotalAmount, Integer.parseInt(bookingNumber));
 		return "redirect:../foodtruck/foodtruck_booking_confirm_result.do";
-	}
+	}*/
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중
@@ -250,12 +250,12 @@ public class FoodTruckController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("afterLogin_foodtruck/getRecentlyBookingNumberBySellerId.do")
+/*	@RequestMapping("afterLogin_foodtruck/getRecentlyBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getRecentlybookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getRecentlyBookingNumberBySellerId(id);
 		return bookingNumber;
-	}
+	}*/
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중
@@ -263,12 +263,12 @@ public class FoodTruckController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberBySellerId.do")
+/*	@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberBySellerId.do")
 	@ResponseBody
 	public Object getPreviousbookingNumberBySellerId(String id){
 		int bookingNumber=foodTruckService.getPreviousBookingNumberBySellerId(id);
 		return bookingNumber;
-	}
+	}*/
 	/**
 	 * 박다혜
 	 * 2017.06.22 수정중
@@ -281,7 +281,7 @@ public class FoodTruckController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("afterLogin_foodtruck/getBookingStateBybookingNumber.do")
+/*	@RequestMapping("afterLogin_foodtruck/getBookingStateBybookingNumber.do")
 	@ResponseBody
 	public String getBookingStateBybookingNumber(String bookingNumber,HttpServletRequest request){
 		String state=foodTruckService.getBookingStateBybookingNumber(bookingNumber);
@@ -291,7 +291,7 @@ public class FoodTruckController {
 		}
 		else
 			return "fail";
-	}
+	}*/
 	/**
 	 * 황윤상
 	 * 2017.06.22 수정중
@@ -303,13 +303,13 @@ public class FoodTruckController {
 	 * @param request
 	 * @return
 	 */
-	   @RequestMapping("afterLogin_foodtruck/checkBooking.do")
+/*	   @RequestMapping("afterLogin_foodtruck/checkBooking.do")
 	   @ResponseBody
 	   public String checkBooking(HttpServletRequest request) {
 	      MemberVO memberVO = (MemberVO) request.getSession(false).getAttribute("memberVO");      
 	      int count = mypageService.checkBookingState(memberVO.getId());
 	      return (count==0) ? "ok":"no";
-	   }
+	   }*/
 	   /**
 	    * 박다혜
 	    * 2017.06.22 수정중
@@ -321,10 +321,10 @@ public class FoodTruckController {
 	    * @param id
 	    * @return
 	    */
-		@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberByCustomerId.do")
+/*		@RequestMapping("afterLogin_foodtruck/getPreviousBookingNumberByCustomerId.do")
 		@ResponseBody
 		public String getPreviousBookingNumberByCustomerId(String id){
 			String bookingNumber=foodTruckService.getPreviousBookingNumberByCustomerId(id);
 			return bookingNumber;
-		}
+		}*/
 }

@@ -7,6 +7,7 @@ select * from BOOKING_DETAIL
 select * from CUSTOMER
 select * from 
 select * from SELLER
+select * from menu;
 select customer_id from booking where booking_number='61'
 -- 주문 번호로 BOOKING_DETAIL DB에서 menu_id select
 -- menu_id로 MENU DB에서 foodtruck_number select

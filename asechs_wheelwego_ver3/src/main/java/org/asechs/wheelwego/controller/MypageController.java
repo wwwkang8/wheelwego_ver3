@@ -1,6 +1,5 @@
 package org.asechs.wheelwego.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -425,7 +424,7 @@ public class MypageController {
    * @param request
    * @return
    */
-   @RequestMapping("afterLogin_mypage/sellerBookingList.do")
+/*   @RequestMapping("afterLogin_mypage/sellerBookingList.do")
    public String sellerBookingList(Model model, HttpServletRequest request){
 	   String sellerId=request.getParameter("sellerId");
 	   String pageNo=request.getParameter("pageNo");
@@ -442,7 +441,7 @@ public class MypageController {
 	   model.addAttribute("truckNumber", foodTruckNumber);
 	   return "mypage/mypage_seller_booking_list.tiles";
 	   
-   }
+   }*/
    /** 	  
 	정현지
 	2017.06.22 (수정완료)
@@ -452,7 +451,7 @@ public class MypageController {
 			주문번호로 푸드트럭 이름을 가져와 setting 해준다
 			주문 내역은 마이페이지 - 주문 내역 리스트에서 확인할 수 있다
     */
-   @RequestMapping("afterLogin_mypage/customerBookingList.do")
+/*   @RequestMapping("afterLogin_mypage/customerBookingList.do")
    public String customerBookingList(Model model, String customerId, String pageNo){
 	    ListVO listVO = mypageService.customerBookingList(pageNo, customerId);
 	    List<BookingVO> myBookingList = listVO.getBookingMenuList();
@@ -471,7 +470,7 @@ public class MypageController {
 	    model.addAttribute("myBookingList", myBookingList);
 	    model.addAttribute("listVO", listVO);
 	    return "mypage/mypage_customer_order_list.tiles";
-	   }
+	   }*/
    /**
     * 강정호
     * 2017.06.22(수정완료)
@@ -479,7 +478,7 @@ public class MypageController {
     * ----------------------------------------
     * 코드 설명 : 주문 상태를 결제 완료에서 "조리중", "조리완료"로 변경해주는 메서드
     */
-   @RequestMapping(value="afterLogin_mypage/updateState.do",method=RequestMethod.POST)
+/*   @RequestMapping(value="afterLogin_mypage/updateState.do",method=RequestMethod.POST)
    @ResponseBody
    public BookingVO updateBookingState(HttpServletRequest request){
 	   String bookingState=request.getParameter("bookingState");
@@ -489,7 +488,7 @@ public class MypageController {
 	   bookingVO.setBookingNumber(bookingNumber);
 	   mypageService.updateBookingState(bookingVO);
 	   return bookingVO;
-   }
+   }*/
    /**
     * 박다혜
     * 2016.06.21 (수정 완료)
@@ -503,7 +502,7 @@ public class MypageController {
     * @param nowPage
     * @return
     */
-   @RequestMapping("afterLogin_mypage/showMyPointList.do")
+/*   @RequestMapping("afterLogin_mypage/showMyPointList.do")
    public ModelAndView showMyPointList(String customerId, String nowPage){
 	   ListVO pointList=mypageService.getPointListById(customerId, nowPage);
 	   ModelAndView mv=new ModelAndView("mypage/mypage_point_list.tiles");
@@ -512,5 +511,5 @@ public class MypageController {
 	   mv.addObject("myPoint", point);
 	   return mv;
    }
-   
+   */
 }
