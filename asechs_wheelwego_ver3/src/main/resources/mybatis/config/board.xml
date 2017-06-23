@@ -329,9 +329,13 @@ from freeboard f, member m where f.id=#{searchWord} and f.id=m.id ) where rnum b
 	</select>
 	<!-- -호겸 마이페이지에서 게시물 보기 sql -->
 	<select id="showMyContentBybusinessList" resultMap="businessInfoBoardListRM" parameterType="pagingBean">
-select information_no, id, information_title, information_content, information_timePosted, information_hits from(
-select row_number() over(order by f.information_timePosted desc) as rnum,  f.information_no, f.id, f.information_title, f.information_content, to_char(f.information_timePosted,'YYYY.MM.DD.HH.MM HH:MM:SS') as information_timePosted, f.information_hits
-from information f, member m where f.id=#{searchWord} and f.id=m.id ) where rnum between #{startRowNumber} and #{endRowNumber} 
+select information_no, id, information_title, information_content, information_timePosted, information_hits
+ from( select row_number() over(order by f.information_timePosted desc) as rnum, 
+  f.information_no, f.id, f.information_title, f.information_content, 
+  to_char(f.information_timePosted,'YYYY.MM.DD.HH.MM HH:MM:SS') as information_timePosted, f.information_hits
+from information f, member m
+ where f.id=#{searchWord} and f.id=m.id ) 
+ where rnum between #{startRowNumber} and #{endRowNumber} 
 	</select>
 	<!-- -호겸 마이페이지에서 게시물 보기 sql -->
 	<select id="showMyContentByqnaList" resultMap="QnABoardListRM" parameterType="pagingBean">

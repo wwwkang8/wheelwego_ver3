@@ -19,13 +19,14 @@ public class BookingDAOImpl implements BookingDAO {
 	private SqlSessionTemplate sqlSessionTemplate;
 	/**
 	 * 정현지
-	 * 2017.06.22 수정중
+	 * 2017.06.22 수정완료
 	 * 예약 - 메뉴 예약하기
 	 * -----------------------------
 	 *  예약 정보를
 	 *  1. booking 테이블에 booking_number, customer_id, booking_Date를 insert한다.
 	 *  2. 예약정보로부터 상세 예약 정보리스트를 불러와 booking_number를 setting하고
-	 *     사용자로부터 입력받은 ,menu_id,menu_quantity를 booking_number와 함께 bookingDetail 테이블에 insert한다.
+	 *     사용자로부터 입력받은 ,menu_id,menu_quantity를 booking_number와 
+	 *     함께 bookingDetail 테이블에 insert한다.
 	 */
 	@Override
 	public void bookingMenu(BookingVO bookingVO) {

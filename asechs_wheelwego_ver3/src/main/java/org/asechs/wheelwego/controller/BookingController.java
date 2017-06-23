@@ -121,7 +121,8 @@ public class BookingController {
 			 * @return
 			 */
 			@RequestMapping(method = RequestMethod.POST, value="afterLogin_foodtruck/bookingMenu.do")
-			public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,String resultPoint,String resultTotalAmount){
+			public String bookingMenu(BookingVO bookingVO,HttpServletRequest request,
+					                                            String resultPoint,String resultTotalAmount){
 				bookingService.bookingMenu(bookingVO);
 				String bookingNumber=bookingVO.getBookingNumber();
 				bookingService.calPoint(resultPoint, resultTotalAmount, Integer.parseInt(bookingNumber));
@@ -131,7 +132,8 @@ public class BookingController {
 			정현지
 			2017.06.21 (수정완료)
 		 	예약 - 주문 후 주문 내역 확인
-		 	기능설명 : 주문한 메뉴를 BookingVO 객체로 받아오고(bvo), session으로부터 id를 받아와 포인트 내역을 받아온다(myPoint)
+		 	기능설명 : 주문한 메뉴를 BookingVO 객체로 받아오고(bvo),
+		 	 session으로부터 id를 받아와 포인트 내역을 받아온다(myPoint)
 		 			-> 주문 메뉴 / 포인트 내역을 주문 내역 페이지에서 확인할 수 있다
 		  */
 			@RequestMapping(value = "afterLogin_foodtruck/foodtruck_booking_confirm.do", method = RequestMethod.POST)
@@ -170,7 +172,8 @@ public class BookingController {
 				   
 				   if(bookingNumberList.getBookingNumberList().isEmpty()==false){
 					   for(int i=0; i<bookingNumberList.getBookingNumberList().size(); i++){
-						   List<BookingDetailVO> bookingDetailVO=bookingService.getBookingDetailVO(bookingNumberList.getBookingNumberList().get(i));
+						   List<BookingDetailVO> bookingDetailVO=
+								   bookingService.getBookingDetailVO(bookingNumberList.getBookingNumberList().get(i));
 						   bookingNumberList.getBookingNumberList().get(i).setBookingDetail(bookingDetailVO);
 					   }
 				   }

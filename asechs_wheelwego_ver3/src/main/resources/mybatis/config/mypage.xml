@@ -167,7 +167,9 @@ select foodtruck_name from foodtruck where foodtruck_number=#{value}
    </select>
 
 <delete id="deleteWishList" parameterType="wishListVO">
-   delete from wishlist where customer_id = #{customerId} and foodtruck_number = #{foodtruckNumber}
+   delete from wishlist 
+   where customer_id = #{customerId} 
+   and foodtruck_number = #{foodtruckNumber}
 </delete>
 <select id="showMyReviewList" resultMap="reviewRM" parameterType="pagingBean">
 select review_no, foodtruck_number,foodtruck_name, customer_id, review_content, review_timeposted, grade from(
