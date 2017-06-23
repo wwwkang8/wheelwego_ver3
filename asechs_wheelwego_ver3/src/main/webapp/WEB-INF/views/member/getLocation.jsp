@@ -5,7 +5,9 @@
 	if (!navigator.geolocation) {
 		alert("지오로케이션을 지원하지 않습니다!");
 		document.getElementById('latitude').value = "37.566824";
-		document.getElementById('longitude').value= "126.978522";		
+		document.getElementById('longitude').value= "126.978522";
+		var gpsForm = document.getElementById("gpsForm");
+		gpsForm.submit();
 	}
 	function success(position) {
 		var latitude = position.coords.latitude;
@@ -13,18 +15,17 @@
 		
 		document.getElementById('latitude').value = latitude;
 		document.getElementById('longitude').value= longitude;
-		alert(latitude);
-		alert(longitude);
 		var gpsForm = document.getElementById("gpsForm"); 
-		alert(latitude + " " + longitude);
-		gpsForm.submit();	
+		gpsForm.submit();
 	};
 	function error() {
 		alert("사용자의 위치를 찾을 수 없습니다!");
 		document.getElementById('latitude').value = "37.566824";
-		document.getElementById('longitude').value= "126.978522";			
+		document.getElementById('longitude').value= "126.978522";	
+		var gpsForm = document.getElementById("gpsForm");
+		gpsForm.submit();		
 	};
-	navigator.geolocation.getCurrentPosition(success, error);
+	navigator.geolocation.getCurrentPosition(success, error);		
 </script>
 
 <form method="post" action="${pageContext.request.contextPath}/main.do" id="gpsForm">

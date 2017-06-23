@@ -179,7 +179,7 @@ from review r, foodtruck t
 where r.customer_id=#{searchWord}  
 and r.foodtruck_number=t.foodtruck_number )
  where rnum between #{startRowNumber} and #{endRowNumber}
-</select>
+</select>	
 <update id="updateMyReview" parameterType="reviewVO"> 
    update review set review_content=#{reviewContent}, grade=#{grade} where review_no=#{reviewNo}
 </update>
