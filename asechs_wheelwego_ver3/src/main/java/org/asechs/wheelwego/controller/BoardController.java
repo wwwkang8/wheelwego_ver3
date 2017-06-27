@@ -211,15 +211,15 @@ public class BoardController {
 			return "null";
 		}
 
-		/**
-		 * 강정호
-		 * 2017.06.21 (수정완료)
-		 * 게시판 - 창업정보게시판 게시물 목록 보기
-		 * ----------------------------------------------
-		 * 코드 설명 : 사용자가 창업게시판 접속할 때 게시물 목록을 페이지 번호와 같이 보여준다.
-		 * @param pageNo
-		 * @return
-		 */
+	/**
+	 * 강정호
+	 * 2017.06.21 (수정완료)
+	 * 게시판 - 창업정보게시판 게시물 목록 보기
+	 * ----------------------------------------------
+	 * 코드 설명 : 사용자가 창업게시판 접속할 때 게시물 목록을 페이지 번호와 같이 보여준다.
+	 * @param pageNo
+	 * @return
+	 */
 	@RequestMapping("business_list.do")
 	public ModelAndView businessInfoBoardList(String pageNo) {
 		return new ModelAndView("board/business_list.tiles", "businessInfoBoardList",
