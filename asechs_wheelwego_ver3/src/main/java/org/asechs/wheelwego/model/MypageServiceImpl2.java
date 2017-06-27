@@ -282,7 +282,7 @@ public class MypageServiceImpl2 implements MypageService {
 		            renamedFile=fm.rename(foodFile,truckVO.getFoodtruckNumber()+"_"+foodList.get(i).getMenuId()); 
 		            //foodList에 renamed 되어진 FileVO정보를 setting
 		            foodList.get(i).setFileVO(new FileVO(foodList.get(i).getMenuId(),renamedFile));
-		            fm.uploadFile(foodFile, /*uploadPath+*/renamedFile); //서버에 전송하여 덮어씌운다.
+		            fm.uploadFile(foodFile, uploadPath+renamedFile); //서버에 전송하여 덮어씌운다.
 		            mypageDAO.updateMenu(foodList.get(i)); //메뉴정보 수정
 		         }
 		         catch (Exception e) {

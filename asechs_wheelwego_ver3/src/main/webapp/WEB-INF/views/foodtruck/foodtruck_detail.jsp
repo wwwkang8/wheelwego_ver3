@@ -395,7 +395,8 @@ document.getElementById("myLink").click();
                 +"&reviewTimeposted="+d.toString(),
                 success:function(result){
                 	alert("등록되었습니다.");
-                	location.href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckDetailInfo.foodtruckNumber}";   	
+                	location.reload();
+                	//location.href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo=${truckDetailInfo.foodtruckNumber}";   	
                 }
             })
          }
@@ -412,7 +413,8 @@ document.getElementById("myLink").click();
  					success:function(data){
  						if(data=="deleteOk"){
  							alert("삭제하였습니다.");
- 							location.href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+truckNo;
+ 							location.reload();
+ 							//location.href="${pageContext.request.contextPath}/foodtruck/foodTruckAndMenuDetail.do?foodtruckNo="+truckNo;
  						}
  					} 					
  				});
